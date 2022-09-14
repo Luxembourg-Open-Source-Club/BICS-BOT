@@ -19,12 +19,17 @@ async def on_ready():
     print("------------")
 
 
-@bot.command()
-async def enrol(ctx):
-    view = select_menus.ChannelSelectionView()
-    await ctx.send(
-        "Please make the selection of the courses you desired to access", view=view
-    )
+@bot.slash_command()
+async def enrol(interaction: nextcord.Interaction):
+    view = select_menus.CourseSelectionView()
+    await interaction.send("Select the courses!", view=view, ephemeral=True)
+    await view.wait()
+    if view.value is None:
+        print("Timed out...")
+    elif view.value:
+        print("Confirmed...")
+    else:
+        print("Cancelled...")
 
 
 bot.run(TOKEN)
