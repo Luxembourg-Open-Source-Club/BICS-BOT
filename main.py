@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-from re import sub
-import discord
-from discord.ext import commands
-from discord.ui import Select, View
-=======
 import nextcord
 from nextcord.ext import commands
 import random
->>>>>>> main
 
 TOKEN = "MTAxOTMzMDAwMTI5MzgxMTcyMg.GvqXBX.xgY_EZJhXyWhnbaevfu2MYD4Qsw4XuBXra6PEQ"
 
