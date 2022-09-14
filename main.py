@@ -1,4 +1,3 @@
-from typing import List
 import nextcord
 from nextcord.ext import commands
 from course_selection import DropdownView
@@ -22,6 +21,7 @@ async def on_ready():
 
 @bot.slash_command()
 async def enrol(interaction: nextcord.Interaction):
+    print(f"User {interaction.user} has entered the command")
     view = DropdownView()
     await interaction.send("Select the courses!", view=view, ephemeral=True)
 
