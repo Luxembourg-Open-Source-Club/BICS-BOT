@@ -1,6 +1,7 @@
+from typing import List
 import nextcord
 from nextcord.ext import commands
-import select_menus
+from course_selection import DropdownView
 
 TOKEN = "MTAxOTMzMDAwMTI5MzgxMTcyMg.GvqXBX.xgY_EZJhXyWhnbaevfu2MYD4Qsw4XuBXra6PEQ"
 
@@ -21,15 +22,8 @@ async def on_ready():
 
 @bot.slash_command()
 async def enrol(interaction: nextcord.Interaction):
-    view = select_menus.CourseSelectionView()
+    view = DropdownView()
     await interaction.send("Select the courses!", view=view, ephemeral=True)
-    await view.wait()
-    if view.value is None:
-        print("Timed out...")
-    elif view.value:
-        print("Confirmed...")
-    else:
-        print("Cancelled...")
 
 
 bot.run(TOKEN)
