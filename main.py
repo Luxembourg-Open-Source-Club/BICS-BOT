@@ -1,6 +1,6 @@
 import nextcord
 from nextcord.ext import commands
-import random
+import select_menus
 
 TOKEN = "MTAxOTMzMDAwMTI5MzgxMTcyMg.GvqXBX.xgY_EZJhXyWhnbaevfu2MYD4Qsw4XuBXra6PEQ"
 
@@ -20,24 +20,11 @@ async def on_ready():
 
 
 @bot.command()
-async def menu(ctx):
-    menu = Select(
-        options=[
-            discord.SelectOption(label="Item 1", description="this is an item!"),
-            discord.SelectOption(label="Item 2", description="this is an item!"),
-            discord.SelectOption(label="Item 3", description="this is an item!"),
-        ],
-        max_values=3,
+async def enrol(ctx):
+    view = select_menus.ChannelSelectionView()
+    await ctx.send(
+        "Please make the selection of the courses you desired to access", view=view
     )
-    view = View()
-    view.add_item(menu)
-    await ctx.send("Choose an Item!", view=view)
-
-    async def my_callb(interaction):
-        await interaction.response.send_message(f"You chose the values:")
-        print(interaction.data)
-
-    menu.callback = my_callb
 
 
 bot.run(TOKEN)
