@@ -1,13 +1,19 @@
+<<<<<<< HEAD
 from re import sub
 import discord
 from discord.ext import commands
 from discord.ui import Select, View
+=======
+import nextcord
+from nextcord.ext import commands
+import random
+>>>>>>> main
 
 TOKEN = "MTAxOTMzMDAwMTI5MzgxMTcyMg.GvqXBX.xgY_EZJhXyWhnbaevfu2MYD4Qsw4XuBXra6PEQ"
 
 description = "BICS bot that manages the access to courses channels."
 
-intents = discord.Intents.default()
+intents = nextcord.Intents.default()
 intents.members = True
 intents.message_content = True
 
