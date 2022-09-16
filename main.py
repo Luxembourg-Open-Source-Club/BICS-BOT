@@ -3,13 +3,11 @@ from dotenv import load_dotenv
 import nextcord
 from nextcord.ext import commands, application_checks
 import log_setup as log
+from server_ids import *
 
 # - Embeds
 from embeds.welcome_embed import Welcome_embed
 from embeds.help_embed import Help_embed
-
-BICS_GUILD_ID = 753535223798562886
-BICS_CLONE_GUILD_ID = 1014558774532509777
 
 load_dotenv()
 log.setup_nextcord_logging()
@@ -59,7 +57,7 @@ async def on_member_join(member: nextcord.Member):
     guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID], description="Show bot commands"
 )
 async def help(interaction: nextcord.Interaction):
-    await interaction.response.send_message(embed=Help_embed())
+    await interaction.response.send_message(embed=Help_embed(), ephemeral=True)
 
 
 @bot.slash_command(
@@ -74,11 +72,43 @@ async def intro(
         choices=["year-1", "year-2", "year-3", "abroad"],
     ),
 ):
-    if interaction.channel_id == 1019964291597746237:
-        await interaction.response.send_message(f"Hello {name} {surname}: year:{year}")
+    if interaction.channel_id == INTRO_CHANNEL_ID:
+        user = interaction.user
+        user_roles = user.roles
+
+        if len(user_roles) > 1:
+            # - Means the user already has at least one role
+            await interaction.response.send_message(
+                f"You have already introduced yourself!", ephemeral=True
+            )
+        else:
+            # - Getting the roles
+            year1_role = interaction.guild.get_role(YEAR1_ROLE_ID)
+            year2_role = interaction.guild.get_role(YEAR2_ROLE_ID)
+            year3_role = interaction.guild.get_role(YEAR3_ROLE_ID)
+            abroad_role = interaction.guild.get_role(ABROAD_ROLE_ID)
+
+            if year == "year-1":
+                await user.add_roles(year1_role)
+            elif year == "year-2":
+                await user.add_roles(year2_role)
+            elif year == "year-3":
+                await user.add_roles(year3_role)
+            else:
+                await user.add_roles(abroad_role)
+
+            # - Changing the nickname to Name + Surname initial
+            await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
+
+            await interaction.response.send_message(
+                f"Welcome on board {name} {surname}. Your role has been updated and you are all set 😉. In case of any question, or your name has not correctly been changed, feel free to ping an <@&{ADMIN_ROLE_ID}>",
+                ephemeral=True,
+            )
     else:
+        # - Trying to type the command outside the right channel
         await interaction.response.send_message(
-            f"Oops something went wrong! Make sure you are on <#1019964291597746237> to send the **/intro** command"
+            f"Oops something went wrong! Make sure you are on <#{INTRO_CHANNEL_ID}> to send the **/intro** command",
+            ephemeral=True,
         )
 
 
