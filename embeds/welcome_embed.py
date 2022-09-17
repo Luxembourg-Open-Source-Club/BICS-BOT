@@ -20,8 +20,7 @@ class Welcome_embed(Embed):
     def getting_started_field(self):
         return """
                 **1.** In order to get granted the full server access, you will need to get a role.
-                To do so, head to **#💡starting-up** channel and present yourself with your name and what year you will be in. **Feel free to ping an @Admin!** \n
-                **2.** Change your server name to your **real** name (ex: first name + first letter of last name). This way anyone can identify you easily 😉.\n
-                **3.** Take a look at **#🧭nav-guide**. It contains some relevant descriptions of the channels.\n
-                **4.** Enjoy🙃
+                To do so, use the **/intro** command and enter you **name**, **surname** and **year**. (In case you are and erasmus student or a global exchange student choose erasmus as the year)\n
+                **2.** Take a look at **#🧭nav-guide**. It contains some relevant descriptions of the currently available channels.\n
+                **3.** Enjoy🙃
         """
