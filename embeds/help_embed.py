@@ -16,7 +16,7 @@ class Help_embed(Embed):
             inline=False,
         )
         self.add_field(
-            name=f"/intro ",
+            name=f"/intro (only for new members)",
             value=f""" - *Only works in <#{INTRO_CHANNEL_ID}>*\n - Enter this command in order to get a role and introduce yourself.""",
             inline=False,
         )
