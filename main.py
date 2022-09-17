@@ -69,7 +69,7 @@ async def intro(
     surname: str = nextcord.SlashOption(description="Surname", required=True),
     year: str = nextcord.SlashOption(
         description="The year you will be (in case of erasmus/global exchange choose **erasmus**)",
-        choices=["year-1", "erasmus"],
+        choices=["year-1", "alumni", "erasmus"],
     ),
 ):
     if interaction.channel_id == INTRO_CHANNEL_ID:
@@ -86,9 +86,12 @@ async def intro(
             # - Getting the roles
             year1_role = nextcord.utils.get(interaction.guild.roles, name="Year1")
             erasmus_role = nextcord.utils.get(interaction.guild.roles, name="Incoming")
+            alumni_role = nextcord.utils.get(interaction.guild.roles, name="Alumni")
 
             if year == "year-1":
                 await user.add_roles(year1_role)
+            elif year == "alumni":
+                await user.add_roles(alumni_role)
             else:
                 await user.add_roles(erasmus_role)
 
