@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 from dotenv import load_dotenv
 import nextcord
@@ -112,4 +113,4 @@ async def intro(
         )
 
 
-bot.run(os.getenv("BOT_TESTER_TOKEN"))
+bot.run("MTAyMDQwMjkwNDkxMTMxNDk3NQ.Gz9-PU.zCq7rFddaM08bV3ih0x36wtJiJwJ_yPod9UsUA")
