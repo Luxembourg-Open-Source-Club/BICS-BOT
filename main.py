@@ -57,6 +57,7 @@ async def on_member_join(member: nextcord.Member):
     guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID], description="Show bot commands"
 )
 async def help(interaction: nextcord.Interaction):
+    LOGGER.info(f"{interaction.user.display_name} has typed the command /help")
     await interaction.response.send_message(embed=Help_embed(), ephemeral=True)
 
 
@@ -72,6 +73,7 @@ async def intro(
         choices=["year-1", "alumni", "erasmus"],
     ),
 ):
+    LOGGER.info(f"{interaction.user.display_name} has typed the command /intro")
     if interaction.channel_id == INTRO_CHANNEL_ID:
         user = interaction.user
         user_roles = user.roles
@@ -115,6 +117,7 @@ async def intro(
     description="Links that might be useful",
 )
 async def useful_links(interaction: nextcord.Interaction):
+    LOGGER.info(f"{interaction.user.display_name} has typed the command /useful_links")
     await interaction.response.send_message(embed=Useful_links(), ephemeral=True)
 
 
@@ -122,6 +125,7 @@ async def useful_links(interaction: nextcord.Interaction):
     guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID], description="Get the role of gamer"
 )
 async def gamer(interaction: nextcord.Interaction):
+    LOGGER.info(f"{interaction.user.display_name} has typed the command /gamer")
     user = interaction.user
     user_roles = user.roles
     gamer_role = nextcord.utils.get(interaction.guild.roles, name="Gamer")
