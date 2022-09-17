@@ -20,3 +20,13 @@ class Help_embed(Embed):
             value=f""" - *Only works in <#{INTRO_CHANNEL_ID}>*\n - Enter this command in order to get a role and introduce yourself.""",
             inline=False,
         )
+        self.add_field(
+            name=f"/gamer",
+            value=f""" - Gives yourself the Gamer role and discuss with other gamers in the server.""",
+            inline=False,
+        )
+        self.add_field(
+            name=f"/useful_links",
+            value=f""" - Shows some links that might be useful for you, such as the BSP enrolment form""",
+            inline=False,
+        )
