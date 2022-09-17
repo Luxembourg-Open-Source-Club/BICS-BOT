@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import nextcord
-from nextcord.ext import commands, application_checks
+from nextcord.ext import commands
 import log_setup as log
 from server_ids import *
 
@@ -23,11 +23,9 @@ def get_intents():
     return intents
 
 
-bot_description = """This is the BOT built to work with the BICS student server.\n 
-                     It's purpose is to automate the server in someways such as
-                     let a user make a selection of the courses he/she attends, welcoming new members and much more.\n 
-                     Currently the bot is under development and it is only serving as a wecoming user."""
-
+bot_description = """**BICS-THE-BOT** is a bot made for the BICS Student Server.\n
+                    It's purpose is to automate the server in someways such as let a user make a selection of the courses he/she attends, welcoming new members and much more.
+                    This bot is currently under development and thus it is not up to its full potential. In order to find out what is currently available try the **/help** command."""
 bot = commands.Bot(
     command_prefix="!", description=bot_description, intents=get_intents()
 )
@@ -68,8 +66,8 @@ async def intro(
     name: str = nextcord.SlashOption(description="Name", required=True),
     surname: str = nextcord.SlashOption(description="Surname", required=True),
     year: str = nextcord.SlashOption(
-        description="The year you will be/are in (in case of erasmus/global exchange choose **abroad**)",
-        choices=["year-1", "year-2", "year-3", "abroad"],
+        description="The year you will be (in case of erasmus/global exchange choose **erasmus**)",
+        choices=["year-1", "erasmus"],
     ),
 ):
     if interaction.channel_id == INTRO_CHANNEL_ID:
@@ -79,23 +77,18 @@ async def intro(
         if len(user_roles) > 1:
             # - Means the user already has at least one role
             await interaction.response.send_message(
-                f"You have already introduced yourself!", ephemeral=True
+                f"You have already introduced yourself! In case you have a role that you think should be changed feel free to ping an <@&{ADMIN_ROLE_ID}>",
+                ephemeral=True,
             )
         else:
             # - Getting the roles
             year1_role = interaction.guild.get_role(YEAR1_ROLE_ID)
-            year2_role = interaction.guild.get_role(YEAR2_ROLE_ID)
-            year3_role = interaction.guild.get_role(YEAR3_ROLE_ID)
-            abroad_role = interaction.guild.get_role(ABROAD_ROLE_ID)
+            erasmus_role = interaction.guild.get_role(ABROAD_ROLE_ID)
 
-            if year == "year-1":
-                await user.add_roles(year1_role)
-            elif year == "year-2":
-                await user.add_roles(year2_role)
-            elif year == "year-3":
-                await user.add_roles(year3_role)
-            else:
-                await user.add_roles(abroad_role)
+            # if year == "year-1":
+            #     await user.add_roles(year1_role)
+            # else:
+            #     await user.add_roles(erasmus_role)
 
             # - Changing the nickname to Name + Surname initial
             await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
@@ -112,4 +105,5 @@ async def intro(
         )
 
 
+# bot.run(os.getenv("BOT_TOKEN"))
 bot.run(os.getenv("BOT_TESTER_TOKEN"))
