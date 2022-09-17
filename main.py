@@ -86,10 +86,10 @@ async def intro(
             year1_role = interaction.guild.get_role(YEAR1_ROLE_ID)
             erasmus_role = interaction.guild.get_role(ABROAD_ROLE_ID)
 
-            # if year == "year-1":
-            #     await user.add_roles(year1_role)
-            # else:
-            #     await user.add_roles(erasmus_role)
+            if year == "year-1":
+                await user.add_roles(year1_role)
+            else:
+                await user.add_roles(erasmus_role)
 
             # - Changing the nickname to Name + Surname initial
             await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
