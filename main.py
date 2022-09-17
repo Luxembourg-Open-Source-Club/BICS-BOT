@@ -9,6 +9,7 @@ from server_ids import *
 # - Embeds
 from embeds.welcome_embed import Welcome_embed
 from embeds.help_embed import Help_embed
+from embeds.useful_links_embed import Useful_links
 
 load_dotenv()
 log.setup_nextcord_logging()
@@ -83,8 +84,8 @@ async def intro(
             )
         else:
             # - Getting the roles
-            year1_role = interaction.guild.get_role(YEAR1_ROLE_ID)
-            erasmus_role = interaction.guild.get_role(ABROAD_ROLE_ID)
+            year1_role = nextcord.utils.get(interaction.guild.roles, name="Year1")
+            erasmus_role = nextcord.utils.get(interaction.guild.roles, name="Incoming")
 
             if year == "year-1":
                 await user.add_roles(year1_role)
@@ -102,6 +103,41 @@ async def intro(
         # - Trying to type the command outside the right channel
         await interaction.response.send_message(
             f"Oops something went wrong! Make sure you are on <#{INTRO_CHANNEL_ID}> to send the **/intro** command",
+            ephemeral=True,
+        )
+
+
+@bot.slash_command(
+    guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID],
+    description="Links that might be useful",
+)
+async def useful_links(interaction: nextcord.Interaction):
+    await interaction.response.send_message(embed=Useful_links(), ephemeral=True)
+
+
+@bot.slash_command(
+    guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID], description="Get the role of gamer"
+)
+async def gamer(interaction: nextcord.Interaction):
+    user = interaction.user
+    user_roles = user.roles
+    gamer_role = nextcord.utils.get(interaction.guild.roles, name="Gamer")
+
+    if len(user_roles) == 1:
+        # - Means the user already has at least one role
+        await interaction.response.send_message(
+            f"You haven't yet introduced yourself! Make sure you use the **/intro** command",
+            ephemeral=True,
+        )
+    elif gamer_role in user_roles:
+        await interaction.response.send_message(
+            f"You already have the role Gamer!",
+            ephemeral=True,
+        )
+    else:
+        await user.add_roles(gamer_role)
+        await interaction.response.send_message(
+            f"You now have the Gamer role!",
             ephemeral=True,
         )
 
