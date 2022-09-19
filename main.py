@@ -70,7 +70,7 @@ async def intro(
     surname: str = nextcord.SlashOption(description="Surname", required=True),
     year: str = nextcord.SlashOption(
         description="The year you will be (in case of erasmus/global exchange choose **erasmus**)",
-        choices=["year-1", "alumni", "erasmus"],
+        choices=["year-1", "year-2", "year-3", "alumni", "erasmus"],
     ),
 ):
     LOGGER.info(f"{interaction.user.display_name} has typed the command /intro")
@@ -86,12 +86,18 @@ async def intro(
             )
         else:
             # - Getting the roles
-            year1_role = nextcord.utils.get(interaction.guild.roles, name="Year1")
+            year1_role = nextcord.utils.get(interaction.guild.roles, name="Year 1")
+            year2_role = nextcord.utils.get(interaction.guild.roles, name="Year 2")
+            year3_role = nextcord.utils.get(interaction.guild.roles, name="Year 3")
             erasmus_role = nextcord.utils.get(interaction.guild.roles, name="Incoming")
             alumni_role = nextcord.utils.get(interaction.guild.roles, name="Alumni")
 
             if year == "year-1":
                 await user.add_roles(year1_role)
+            elif year == "year-2":
+                await user.add_roles(year2_role)
+            elif year == "year-3":
+                await user.add_roles(year3_role)
             elif year == "alumni":
                 await user.add_roles(alumni_role)
             else:
@@ -101,8 +107,7 @@ async def intro(
             await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
 
             await interaction.response.send_message(
-                f"Welcome on board {name} {surname}. Your role has been updated and you are all set 😉. In case of any question, or your name has not correctly been changed, feel free to ping an <@&{ADMIN_ROLE_ID}>",
-                ephemeral=True,
+                f"Welcome on board @{user.display_name}. Your role has been updated and you are all set 😉. In case of any question, feel free to ping an <@&{ADMIN_ROLE_ID}>",
             )
     else:
         # - Trying to type the command outside the right channel
