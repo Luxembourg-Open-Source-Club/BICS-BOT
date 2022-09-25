@@ -103,5 +103,5 @@ async def reload(ctx):
 
 load_extensions()
 
-# bot.run(os.getenv("BOT_TOKEN"))
-bot.run(os.getenv("BOT_TESTER_TOKEN"))
+bot.run(os.getenv("BOT_TOKEN"))
+# bot.run(os.getenv("BOT_TESTER_TOKEN"))

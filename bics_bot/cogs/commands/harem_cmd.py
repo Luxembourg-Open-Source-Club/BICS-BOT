@@ -16,7 +16,7 @@ class HaremCmd(commands.Cog):
         guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID],
         description="Get the role of harem",
     )
-    async def gamer(self, interaction: nextcord.Interaction):
+    async def harem(self, interaction: nextcord.Interaction):
         user = interaction.user
         user_roles = user.roles
         role = nextcord.utils.get(interaction.guild.roles, name="Harem")
