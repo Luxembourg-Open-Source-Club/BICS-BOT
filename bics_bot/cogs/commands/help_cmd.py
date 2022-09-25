@@ -13,7 +13,8 @@ class HelpCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID], description="Introduce yourself"
+        guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID],
+        description="List of available commands for the bics bot",
     )
     async def help(self, interaction: nextcord.Interaction):
         await interaction.response.send_message(embed=Help_embed(), ephemeral=True)
