@@ -22,11 +22,16 @@ class Help_embed(Embed):
         )
         self.add_field(
             name=f"/gamer",
-            value=f""" - Gives yourself the Gamer role and discuss with other gamers in the server.""",
+            value=f""" - Gives yourself the Gamer role which gives you access to a gamer channel where you can interact with other gamers in the server.""",
             inline=False,
         )
         self.add_field(
             name=f"/useful_links",
             value=f""" - Shows some links that might be useful for you, such as the BSP enrolment form""",
+            inline=False,
+        )
+        self.add_field(
+            name=f"/harem",
+            value=f""" - Gives yourself the Harem role which gives you acess to the harem channel, where you can collect harem cards.""",
             inline=False,
         )

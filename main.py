@@ -69,8 +69,8 @@ async def intro(
     name: str = nextcord.SlashOption(description="Name", required=True),
     surname: str = nextcord.SlashOption(description="Surname", required=True),
     year: str = nextcord.SlashOption(
-        description="The year you will be (in case of erasmus/global exchange choose **erasmus**)",
-        choices=["year-1", "year-2", "year-3", "alumni", "erasmus"],
+        description="The year you will be in. In case you plan on comming to the uni, choose **incoming**",
+        choices=["year-1", "year-2", "year-3", "alumni", "erasmus", "incoming"],
     ),
 ):
     LOGGER.info(f"{interaction.user.display_name} has typed the command /intro")
@@ -89,8 +89,9 @@ async def intro(
             year1_role = nextcord.utils.get(interaction.guild.roles, name="Year 1")
             year2_role = nextcord.utils.get(interaction.guild.roles, name="Year 2")
             year3_role = nextcord.utils.get(interaction.guild.roles, name="Year 3")
-            erasmus_role = nextcord.utils.get(interaction.guild.roles, name="Incoming")
+            erasmus_role = nextcord.utils.get(interaction.guild.roles, name="Erasmus")
             alumni_role = nextcord.utils.get(interaction.guild.roles, name="Alumni")
+            incoming_role = nextcord.utils.get(interaction.guild.roles, name="Incoming")
 
             if year == "year-1":
                 await user.add_roles(year1_role)
@@ -105,9 +106,8 @@ async def intro(
 
             # - Changing the nickname to Name + Surname initial
             await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
-
-            await interaction.response.send_message(
-                f"Welcome on board @{user.display_name}. Your role has been updated and you are all set 😉. In case of any question, feel free to ping an <@&{ADMIN_ROLE_ID}>",
+            await user.send(
+                f"`Welcome on board {name.capitalize()} {surname.capitalize()}! Your role has been updated and you are all set 😉. In case of any question, feel free to ping an @Admin`"
             )
     else:
         # - Trying to type the command outside the right channel
@@ -143,13 +143,42 @@ async def gamer(interaction: nextcord.Interaction):
         )
     elif gamer_role in user_roles:
         await interaction.response.send_message(
-            f"You already have the role Gamer!",
+            f"The role Gamer has been removed",
             ephemeral=True,
         )
+        await user.remove_roles(role)
     else:
         await user.add_roles(gamer_role)
         await interaction.response.send_message(
             f"You now have the Gamer role!",
+            ephemeral=True,
+        )
+
+
+@bot.slash_command(
+    guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID], description="Get the role of harem"
+)
+async def harem(interaction: nextcord.Interaction):
+    LOGGER.info(f"{interaction.user.display_name} has typed the command /harem")
+    user = interaction.user
+    user_roles = user.roles
+    role = nextcord.utils.get(interaction.guild.roles, name="Harem")
+
+    if len(user_roles) == 1:
+        await interaction.response.send_message(
+            f"You haven't yet introduced yourself! Make sure you use the **/intro** command first",
+            ephemeral=True,
+        )
+    elif role in user_roles:
+        await interaction.response.send_message(
+            f"The role Harem has been removed",
+            ephemeral=True,
+        )
+        await user.remove_roles(role)
+    else:
+        await user.add_roles(role)
+        await interaction.response.send_message(
+            f"You now have the Harem role!",
             ephemeral=True,
         )
 
