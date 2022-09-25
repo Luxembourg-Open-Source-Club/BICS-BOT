@@ -8,7 +8,7 @@ from server_ids import *
 
 class Help_embed(Embed):
     def __init__(self):
-        title = "Help"
+        title = "World"
         super().__init__(colour=Colour.blue(), title=title)
         self.add_field(
             name="/help",
