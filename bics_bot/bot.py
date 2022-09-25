@@ -40,7 +40,7 @@ async def unload(ctx, extension):
 
 for filename in os.listdir("./cogs/"):
     print(filename)
-    if filename.endswith(".py"):
+    if filename.endswith(".py") and filename != "__init__.py":
         bot.load_extension(f"cogs.{filename[:-3]}")
 
 
