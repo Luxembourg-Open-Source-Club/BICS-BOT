@@ -56,7 +56,7 @@ class IntroCmd(commands.Cog):
                     await user.add_roles(year3_role)
                 elif year == "alumni":
                     await user.add_roles(alumni_role)
-                elif year == "incomming":
+                elif year == "incoming":
                     await user.add_roles(incoming_role)
                 else:
                     await user.add_roles(erasmus_role)
