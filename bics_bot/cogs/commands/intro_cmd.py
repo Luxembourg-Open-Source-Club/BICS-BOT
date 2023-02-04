@@ -22,7 +22,7 @@ class IntroCmd(commands.Cog):
         surname: str = nextcord.SlashOption(description="Surname", required=True),
         year: str = nextcord.SlashOption(
             description="The year you will be in. In case you plan on comming to the uni, choose **incoming**",
-            choices=["year-1", "year-2", "year-3", "alumni", "erasmus", "incoming"],
+            choices=["year-1", "year-2", "year-3", "alumni", "erasmus", "incoming"]
         ),
     ):
         if interaction.channel_id == INTRO_CHANNEL_ID:
@@ -33,7 +33,7 @@ class IntroCmd(commands.Cog):
                 # - Means the user already has at least one role
                 await interaction.response.send_message(
                     f"You have already introduced yourself! In case you have a role that you think should be changed feel free to ping an <@&{ADMIN_ROLE_ID}>",
-                    ephemeral=True,
+                    ephemeral=True
                 )
             else:
                 # - Getting the roles
@@ -63,14 +63,15 @@ class IntroCmd(commands.Cog):
 
                 # - Changing the nickname to Name + Surname initial
                 await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
-                await user.send(
-                    f"`Welcome on board {name.capitalize()} {surname.capitalize()}! Your role has been updated and you are all set 😉. In case of any question, feel free to ping an @Admin`"
+                await interaction.response.send_message(
+                    f"Welcome on board {name.capitalize()} {surname.capitalize()}! Your role has been updated and you are all set 😉. In case of any question, feel free to ping an <@&{ADMIN_ROLE_ID}>",
+                    ephemeral=True
                 )
         else:
             # - Trying to type the command outside the right channel
             await interaction.response.send_message(
                 f"Oops something went wrong! Make sure you are on <#{INTRO_CHANNEL_ID}> to send the **/intro** command",
-                ephemeral=True,
+                ephemeral=True
             )
 
 
