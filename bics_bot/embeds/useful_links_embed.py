@@ -1,9 +1,5 @@
 from nextcord import Embed
 from nextcord import Colour
-import sys
-
-sys.path.append("../")
-from server_ids import *
 
 
 class Useful_links(Embed):
