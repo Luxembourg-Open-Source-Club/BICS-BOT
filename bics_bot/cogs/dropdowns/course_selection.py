@@ -1,8 +1,10 @@
+from nextcord.ext import commands
+from nextcord import SelectOption, application_command
+import nextcord
+from nextcord.ui import Select, View
+
 BICS_GUILD_ID = 753535223798562886
 BICS_CLONE_GUILD_ID = 1014558774532509777
-
-ADMIN_ROLE_ID = 755865578291462246
-INTRO_CHANNEL_ID = 986297535272484894
 
 courses_list = [
     "Web Development 1",
@@ -44,7 +46,7 @@ courses_list = [
     "Computational Science 3",
     "Data Science for Humanities",
     "Security 2",
-    "Software Engineering 2",
+    "Software Engineering 2"
 ]
 
 courses_dict = {
@@ -89,3 +91,37 @@ courses_dict = {
     "Security 2": "#985958450162970624",
     "Software Engineering 2": "#985958402620534795",
 }
+
+
+class DropdownView(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @application_command.slash_command(
+        guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID],
+        description="Courses Selection.",
+    )
+    async def courses(self, interaction: nextcord.Interaction):
+        user = interaction.user
+        user_roles = user.roles
+        print("LEN", len(courses_list))
+
+        if len(user_roles) == 1:
+            # - Means the user already has at least one role
+            await interaction.response.send_message(
+                f"You haven't yet introduced yourself! Make sure you use the **/intro** command first",
+                ephemeral=True,
+            )
+        else:
+            options_ = []
+            for course in courses_list:
+                options_.append(SelectOption(label=course))
+            menu = Select(options=options_,
+                          max_values=len(courses_list))
+            view = View()
+            view.add_item(menu)
+            await interaction.response.send_message(view=view)
+
+
+def setup(client):
+    client.add_cog(DropdownView(client))

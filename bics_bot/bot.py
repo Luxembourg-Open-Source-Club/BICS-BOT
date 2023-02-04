@@ -7,9 +7,6 @@ import log_setup as log
 from server_ids import *
 
 load_dotenv()
-log.setup_nextcord_logging()
-
-LOGGER = log.get_bot_logger()
 
 
 def get_intents():
@@ -28,6 +25,10 @@ def load_extensions():
     for filename in os.listdir("./cogs/commands"):
         if filename.endswith(".py") and filename != "__init__.py":
             bot.load_extension(f"cogs.commands.{filename[:-3]}")
+
+    for filename in os.listdir("./cogs/dropdowns"):
+        if filename.endswith(".py") and filename != "__init__.py":
+            bot.load_extension(f"cogs.dropdowns.{filename[:-3]}")
 
 
 bot_description = """**BICS-THE-BOT** is a bot made for the BICS Student Server.\n
@@ -98,5 +99,6 @@ async def reload(ctx):
 
 load_extensions()
 
-bot.run(os.getenv("BOT_TOKEN"))
+# bot.run(os.getenv("BOT_TOKEN"))
+bot.run("MTAxOTg5MDc2MzU5NDc0Nzk2NQ.GN8uvs.LNKJaCS9KQnUSxDobdu8U8iLtTJBC0CCwmXK7M")
 # bot.run(os.getenv("BOT_TESTER_TOKEN"))
