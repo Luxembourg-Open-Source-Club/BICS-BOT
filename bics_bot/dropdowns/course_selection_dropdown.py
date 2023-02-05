@@ -23,15 +23,18 @@ class DropdownItem1(nextcord.ui.Select):
         for value in text_channels["courses"]["year1"]["winter"]:
             if value["name"] in enrolled_courses:
                 enrolled = True
+            else:
+                enrolled = False
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 1 course", emoji="⛄", default=enrolled
                 )
             )
-        enrolled = False
         for value in text_channels["courses"]["year1"]["summer"]:
             if value["name"] in enrolled_courses:
                 enrolled = True
+            else:
+                enrolled = False
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 2 course", emoji="☀️", default=enrolled
@@ -55,15 +58,18 @@ class DropdownItem2(nextcord.ui.Select):
         for value in text_channels["courses"]["year2"]["winter"]:
             if value["name"] in enrolled_courses:
                 enrolled = True
+            else:
+                enrolled = False
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 3 course", emoji="⛄", default=enrolled
                 )
             )
-        enrolled = False
         for value in text_channels["courses"]["year2"]["summer"]:
             if value["name"] in enrolled_courses:
                 enrolled = True
+            else:
+                enrolled = False
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 4 course", emoji="☀️", default=enrolled
@@ -88,15 +94,18 @@ class DropdownItem3(nextcord.ui.Select):
         for value in text_channels["courses"]["year3"]["winter"]:
             if value["name"] in enrolled_courses:
                 enrolled = True
+            else:
+                enrolled = False
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 5 course", emoji="⛄", default=enrolled
                 )
             )
-        enrolled = False
         for value in text_channels["courses"]["year3"]["summer"]:
             if value["name"] in enrolled_courses:
                 enrolled = True
+            else:
+                enrolled = False
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 6 course", emoji="☀️", default=enrolled
