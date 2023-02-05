@@ -137,11 +137,18 @@ class DropdownView(nextcord.ui.View):
         self.stop()
 
     async def give_course_permissions(self, courses:list[list[str]], user:nextcord.Interaction.user, guild:nextcord.Guild):
-        for year in courses:
-            for course in year:
-                for text_channel in guild.text_channels:
-                    if text_channel.name != course:
-                        continue
-                    await text_channel.set_permissions(target=user, read_messages=True,
-                                                              send_messages=True)
-        print('done')
+        for text_channel in guild.text_channels:
+            if not self.is_course_channel(text_channel.category.id):
+                continue
+            for year in courses:
+                for course in year:
+                    if course == text_channel.name:
+                        await text_channel.set_permissions(target=user, read_messages=True,
+                                                            send_messages=True)
+                    else:
+                        await text_channel.set_permissions(target=user, read_messages=False,
+                                                            send_messages=False)
+
+    
+    def is_course_channel(self, category_id): #from left to right: sem6-1
+        return category_id == 985956666971402240 or category_id == 985956596414808105 or category_id == 939222837082865725 or category_id == 860599769940361267 or category_id == 889981953934254101 or category_id == 755869390951677992
