@@ -2,7 +2,7 @@ import nextcord
 from nextcord import application_command
 from nextcord.ext import commands
 
-from bics_bot.config.server_ids import GUILD_BICS_ID
+from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
 
 
 class GamerCmd(commands.Cog):
@@ -10,7 +10,7 @@ class GamerCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID],
+        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Get the role of gamer",
     )
     async def gamer(self, interaction: nextcord.Interaction):
