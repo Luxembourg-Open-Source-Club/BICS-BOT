@@ -24,9 +24,9 @@ def load_extensions():
         if filename.endswith(".py") and filename != "__init__.py":
             bot.load_extension(f"cogs.commands.{filename[:-3]}")
 
-    for filename in os.listdir("./cogs/dropdowns"):
-        if filename.endswith(".py") and filename != "__init__.py":
-            bot.load_extension(f"cogs.dropdowns.{filename[:-3]}")
+    # for filename in os.listdir("./cogs/dropdowns"):
+    #     if filename.endswith(".py") and filename != "__init__.py":
+    #         bot.load_extension(f"cogs.dropdowns.{filename[:-3]}")
 
 
 bot_description = """**BICS-THE-BOT** is a bot made for the BICS Student Server.\n
