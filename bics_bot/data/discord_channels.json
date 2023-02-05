@@ -1,63 +1,66 @@
 {
   "courses": {
-    "year1": {
-      "winter": [
-        "linear-algebra-1",
-        "programming-fundamentals-1",
-        "discrete-maths-1",
-        "analysis-for-applications",
-        "bsp-1",
-        "web-dev-1"
-      ],
-      "summer": [
-        "linear-algebra-2",
-        "programming-fundamentals-2",
-        "networking-and-communication",
-        "computer-infrastructure",
-        "theoretical-cs-1"
-      ]
-    },
-    "year2": {
-      "winter": [
-        "security-1",
-        "algorithms-and-complexity",
-        "information-management-1",
-        "programming-fundamentals-3",
-        "discrete-maths-2"
-      ],
-      "summer": [
-        "theoretical-cs-2",
-        "information-management-2",
-        "intelligent-systems-1",
-        "programming-languages",
-        "online-course"
-      ]
-    },
-    "year3": {
-      "winter": [
-        "computational-science-2",
-        "human-computer-interactions",
-        "natural-language-processing",
-        "software-engineering-1",
-        "web-dev-2"
-      ],
-      "summer": [
-        "software-engineering-2",
-        "security-2",
-        "data-science-for-humanities",
-        "computational-science-3",
-        "intelligent-systems-2",
-        "user-centered-design"
-      ]
-    }
+      "year1": {
+          "winter": [
+              {"name": "web-development-1", "id": "887777232129507408"},
+              {"name": "bsp-1", "id": "753552513692860426"},
+              {"name": "analysis-for-applications-1", "id": "753552381743988787"},
+              {"name": "discrete-maths-1", "id": "753552413360783371"},
+              {"name": "programming-fundamentals-1", "id": "753552472852660274"},
+              {"name": "linear-algebra-1", "id": "753552440615370762"}
+          ],
+          "summer": [
+              {"name": "linear-algebra-2", "id": "808339998398742528"},
+              {"name": "programming-fundamentals-2", "id": "808338944705298473"},
+              {"name": "networking-and-communication", "id": "808339920287432714"},
+              {"name": "computer-infrastructures-1", "id": "808339964941041664"},
+              {"name": "theoretical-cs-1", "id": "808338690056519750"}
+          ]
+      },
+      "year2": {
+          "winter": [
+              {"name": "security-1", "id": "888144273395056720"},
+              {"name": "algorithms-and-complexity", "id": "888144413497380895"},
+              {"name": "information-management-1", "id": "888144526034751549"},
+              {"name": "programming-fundamentals-3", "id": "888144574768361553"},
+              {"name": "discrete-maths-2", "id": "888144768587161600"}
+          ],
+          "summer": [
+              {"name": "theoretical-cs-2", "id": "939222927918923816"},
+              {"name": "information-management-2", "id": "939222959065792532"},
+              {"name": "intelligent-systems-1", "id": "939222983132712991"},
+              {"name": "programming-languages", "id": "943453508319969341"},
+              {"name": "online-course", "id": "1024024091751100466"}
+          ]
+      },
+      "year3": {
+          "winter": [
+              {"name": "computational-science-1", "id": "985957321446424586"},
+              {"name": "computational-science-2", "id": "985957424190095390"},
+              {"name": "human-computer-interactions", "id": "985957576279724182"},
+              {"name": "natural-language-processing", "id": "985957640268042290"},
+              {"name": "software-engineering-1", "id": "985957970246508577"},
+              {"name": "web-development-2", "id": "985958042669559928"}
+          ],
+          "summer": [
+              {"name": "software-engineering-2", "id": "985958402620534795"},
+              {"name": "security-2", "id": "985958450162970624"},
+              {"name": "data-science-for-humanities", "id": "985958503111872614"},
+              {"name": "computational-science-3", "id": "985958555800727582"},
+              {"name": "intelligent-systems-2", "id": "985958634573930546"},
+              {"name": "user-centered-design", "id": "985958699573059685"}
+          ]
+      }
   },
   "chill": [
-    "off-topic",
-    "spicy-meatball",
-    "events",
-    "games",
-    "music",
-    "movies-and-series",
-    "anime"
+      {"name": "off-topic", "id": "753713299295698995"},
+      {"name": "spicy-meatball", "id": "766650660363698206"},
+      {"name": "events", "id": "894616231515144192"},
+      {"name": "games", "id": "769267690199973898"},
+      {"name": "music", "id": "828712154667417620"},
+      {"name": "movies-and-series", "id": "985955014474354778"},
+      {"name": "anime", "id": "889478669930729492"},
+      {"name": "bot-commands", "id": "755429522542821386"},
+      {"name": "harem", "id": "1021342523031027753"}
   ]
 }
