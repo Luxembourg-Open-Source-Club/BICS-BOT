@@ -20,8 +20,7 @@ class IntroCmd(commands.Cog):
             description="Surname", required=True),
         year: str = nextcord.SlashOption(
             description="The year you will be in. In case you plan on comming to the uni, choose **incoming**",
-            choices=["year-1", "year-2", "year-3",
-                     "alumni", "erasmus", "incoming"]
+            choices=["year-1", "year-2", "year-3", "alumni", "erasmus", "incoming"]
         ),
     ):
         if interaction.channel_id == INTRO_CHANNEL_ID:
