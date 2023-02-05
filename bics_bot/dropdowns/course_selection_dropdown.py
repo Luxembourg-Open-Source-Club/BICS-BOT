@@ -11,8 +11,6 @@ with open(PATH) as f:
     text_channels = json.load(f)
 
 class DropdownItem1(nextcord.ui.Select):
-    chosen_options = []
-
     def __init__(self, enrolled_courses):
         super().__init__(
             placeholder="Year 1",
@@ -23,16 +21,19 @@ class DropdownItem1(nextcord.ui.Select):
 
     def _get_options(self, enrolled_courses):
         options = []
+        enrolled = False
         for value in text_channels["courses"]["year1"]["winter"]:
-            enrolled = value["name"] in enrolled_courses
+            if value["name"] in enrolled_courses:
+                enrolled = True
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 1 course", emoji="⛄", default=enrolled
                 )
             )
-
+        enrolled = False
         for value in text_channels["courses"]["year1"]["summer"]:
-            enrolled = value["name"] in enrolled_courses
+            if value["name"] in enrolled_courses:
+                enrolled = True
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 2 course", emoji="☀️", default=enrolled
@@ -40,13 +41,8 @@ class DropdownItem1(nextcord.ui.Select):
             )
         return options
 
-    async def callback(self, interaction: nextcord.Interaction):
-        self.chosen_options = self.values
-
 
 class DropdownItem2(nextcord.ui.Select):
-    chosen_options = []
-
     def __init__(self, enrolled_courses):
         super().__init__(
             placeholder="Year 2",
@@ -57,16 +53,19 @@ class DropdownItem2(nextcord.ui.Select):
 
     def _get_options(self, enrolled_courses):
         options = []
+        enrolled = False
         for value in text_channels["courses"]["year2"]["winter"]:
-            enrolled = value["name"] in enrolled_courses
+            if value["name"] in enrolled_courses:
+                enrolled = True
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 3 course", emoji="⛄", default=enrolled
                 )
             )
-
+        enrolled = False
         for value in text_channels["courses"]["year2"]["summer"]:
-            enrolled = value["name"] in enrolled_courses
+            if value["name"] in enrolled_courses:
+                enrolled = True
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 4 course", emoji="☀️", default=enrolled
@@ -74,14 +73,10 @@ class DropdownItem2(nextcord.ui.Select):
             )
         return options
 
-    async def callback(self, interaction: nextcord.Interaction):
-        self.chosen_options = self.values
-
 
 class DropdownItem3(nextcord.ui.Select):
-    chosen_options = []
-
     def __init__(self, enrolled_courses):
+        self.chosen_options = []
         super().__init__(
             placeholder="Year 3",
             min_values=0,
@@ -91,25 +86,25 @@ class DropdownItem3(nextcord.ui.Select):
 
     def _get_options(self, enrolled_courses):
         options = []
+        enrolled = False
         for value in text_channels["courses"]["year3"]["winter"]:
-            enrolled = value["name"] in enrolled_courses
+            if value["name"] in enrolled_courses:
+                enrolled = True
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 5 course", emoji="⛄", default=enrolled
                 )
             )
-
+        enrolled = False
         for value in text_channels["courses"]["year3"]["summer"]:
-            enrolled = value["name"] in enrolled_courses
+            if value["name"] in enrolled_courses:
+                enrolled = True
             options.append(
                 nextcord.SelectOption(
                     label=value["name"], description="Semester 6 course", emoji="☀️", default=enrolled
                 )
             )
         return options
-
-    async def callback(self, interaction: nextcord.Interaction):
-        self.chosen_options = self.values
 
 
 class DropdownView(nextcord.ui.View):
@@ -122,22 +117,24 @@ class DropdownView(nextcord.ui.View):
         self.add_item(self.item2)
         self.add_item(self.item3)
 
-    # ------------------------------------------------------------------------
     @nextcord.ui.button(label="Confirm", style=nextcord.ButtonStyle.green, row=3)
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        embed = Courses_embed(self.item1.values, self.item2.values, self.item3.values)
+        courses = [self.item1.values, self.item2.values, self.item3.values]
+        embed = Courses_embed(courses)
+        # self.give_course_permissions(interaction.user)
         await interaction.response.send_message(embed=embed, ephemeral=True)
         self.stop()
 
-    # ------------------------------------------------------------------------
     @nextcord.ui.button(
         label="Cancel", style=nextcord.ButtonStyle.red, row=3, custom_id="cancel-btn"
     )
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        embed = Courses_embed(self.item1.values, self.item2.values, self.item3.values)
-        await interaction.response.send_message("Canceled. Below are your current courses:", embed=embed, ephemeral=True)
+        await interaction.response.send_message("Canceled operation. No changes made.", ephemeral=True)
         self.stop()
+
+    # def give_course_permissions(self, user:nextcord.Interaction.user):
+    #     pass
