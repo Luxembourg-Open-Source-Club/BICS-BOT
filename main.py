@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 import nextcord
 from nextcord.ext import commands
 
+from bics_bot.utils.file_manipulation import read_txt
+
+
 load_dotenv()
 
 
@@ -25,14 +28,9 @@ def load_extensions(bot: commands.Bot):
             bot.load_extension(f"bics_bot.cogs.commands.{filename[:-3]}")
 
 
-bot_description = """**BICS-THE-BOT** is a bot made for the BICS Student Server.\n
-                    It's purpose is to automate the server in someways such as let a user make a selection of the courses he/she attends, welcoming new members and much more.
-                    This bot is currently under development and thus it is not up to its full potential. In order to find out what is currently available try the **/help** command."""
-
-
 def main():
     bot = commands.Bot(
-        command_prefix="!", description=bot_description, intents=get_intents()
+        command_prefix="!", description=read_txt("./bics_bot/texts/bot_description.txt"), intents=get_intents()
     )
 
     load_extensions(bot)
