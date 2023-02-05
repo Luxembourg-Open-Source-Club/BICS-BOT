@@ -39,7 +39,8 @@ class CoursesCmd(commands.Cog):
         else:
             enrolled_courses = self.get_courses_enrolled(user, guild)
             view = DropdownView(enrolled_courses=enrolled_courses)
-            await interaction.response.send_message(view=view, ephemeral=True)
+            disclaimer_message = """ATTENTION\n\nIf you do not make any new choices in a the dropdown menus, the courses that \"seem\" like they are chosen in that menu will be reset. If you do not want to lose access to those courses; go in that dropdown menu, and select, then unselect a course, so that your chosen courses are updated."""
+            await interaction.response.send_message(content=disclaimer_message, view=view, ephemeral=True)
 
     def get_courses_enrolled(self, user:nextcord.Interaction.user, guild:nextcord.Guild):
         enrolled = []
