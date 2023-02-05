@@ -15,7 +15,7 @@ def get_intents():
     return intents
 
 
-def load_extensions():
+def load_extensions(bot: commands.Bot):
     for filename in os.listdir("./bics_bot/cogs/events"):
         if filename.endswith(".py") and filename != "__init__.py":
             bot.load_extension(f"bics_bot.cogs.events.{filename[:-3]}")
@@ -28,10 +28,17 @@ def load_extensions():
 bot_description = """**BICS-THE-BOT** is a bot made for the BICS Student Server.\n
                     It's purpose is to automate the server in someways such as let a user make a selection of the courses he/she attends, welcoming new members and much more.
                     This bot is currently under development and thus it is not up to its full potential. In order to find out what is currently available try the **/help** command."""
-bot = commands.Bot(
-    command_prefix="!", description=bot_description, intents=get_intents()
-)
 
-load_extensions()
 
-bot.run(os.getenv("BOT_TOKEN"))
+def main():
+    bot = commands.Bot(
+        command_prefix="!", description=bot_description, intents=get_intents()
+    )
+
+    load_extensions(bot)
+
+    bot.run(os.getenv("BOT_TOKEN"))
+
+
+if __name__ == "__main__":
+    main()
