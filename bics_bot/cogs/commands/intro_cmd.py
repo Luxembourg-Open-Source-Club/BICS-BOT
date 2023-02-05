@@ -1,4 +1,3 @@
-from aiohttp.helpers
 import nextcord
 from nextcord.ext import commands
 from nextcord import application_command
