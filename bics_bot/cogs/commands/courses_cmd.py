@@ -51,4 +51,5 @@ class CoursesCmd(commands.Cog):
 
 
 def setup(client):
+    """Function used to setup nextcord cogs"""
     client.add_cog(CoursesCmd(client))

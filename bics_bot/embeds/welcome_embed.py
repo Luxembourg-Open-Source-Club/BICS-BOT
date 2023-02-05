@@ -2,7 +2,11 @@ from nextcord import Embed
 from nextcord import Colour
 
 
-class Welcome_embed(Embed):
+class WelcomeEmbed(Embed):
+    """
+    Discord embed which contains a welcome message to a new user.
+    """
+
     def __init__(self, user_name, server_name):
         title = "Welcome on board👋"
         description = f"""Hey **@{user_name}** and welcome to **{server_name}**, the **official BICS** discord server!\n

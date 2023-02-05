@@ -1,4 +1,5 @@
 """Contains general server ids"""
+
 # Guilds
 GUILD_BICS_ID = 753535223798562886
 GUILD_BICS_CLONE_ID = 1071868591487590460

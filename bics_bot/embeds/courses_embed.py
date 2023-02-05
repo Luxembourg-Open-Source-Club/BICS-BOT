@@ -2,7 +2,11 @@ from nextcord import Embed
 from nextcord import Colour
 
 
-class Courses_embed(Embed):
+class CoursesSelectionEmbed(Embed):
+    """
+    Discord embed that is sent showing the user the courses he has chosen.
+    """
+
     def __init__(self, courses: list[str]):
         super().__init__(colour=Colour.blue(), title="Enrolled Courses")
         if len(courses[0]) > 0:

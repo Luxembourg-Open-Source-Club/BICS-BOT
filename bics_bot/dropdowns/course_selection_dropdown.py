@@ -1,4 +1,4 @@
-from bics_bot.embeds.courses_embed import Courses_embed
+from bics_bot.embeds.courses_embed import CoursesSelectionEmbed
 import nextcord
 import json
 
@@ -129,7 +129,7 @@ class DropdownView(nextcord.ui.View):
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
         courses = [self.item1.values, self.item2.values, self.item3.values]
-        embed = Courses_embed(courses)
+        embed = CoursesSelectionEmbed(courses)
         await self.give_course_permissions(courses, interaction.user, interaction.guild)
         await interaction.response.send_message(embed=embed, ephemeral=True)
         self.stop()

@@ -2,7 +2,11 @@ from nextcord import Embed
 from nextcord import Colour
 
 
-class Useful_links(Embed):
+class UsefulLinksEmbed(Embed):
+    """
+    Discord embed that contains useful links for the BICS.
+    """
+
     def __init__(self):
         title = "Useful links"
         super().__init__(colour=Colour.blue(), title=title)
