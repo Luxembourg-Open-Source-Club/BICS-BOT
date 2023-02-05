@@ -1,10 +1,7 @@
 import nextcord
-import sys
 from nextcord.ext import commands
 
-sys.path.append("../../")
-from server_ids import *
-from embeds.welcome_embed import Welcome_embed
+from bics_bot.embeds.welcome_embed import Welcome_embed
 
 
 class OnEvents(commands.Cog):

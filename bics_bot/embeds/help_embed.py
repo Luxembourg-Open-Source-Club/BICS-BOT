@@ -1,9 +1,7 @@
 from nextcord import Embed
 from nextcord import Colour
-import sys
 
-sys.path.append("../")
-from server_ids import *
+from bics_bot.config.server_ids import CHANNEL_INTRO_ID
 
 
 class Help_embed(Embed):
@@ -17,7 +15,7 @@ class Help_embed(Embed):
         )
         self.add_field(
             name=f"/intro (only for new members)",
-            value=f""" - *Only works in <#{INTRO_CHANNEL_ID}>*\n - Enter this command in order to get a role and introduce yourself.""",
+            value=f""" - *Only works in <#{CHANNEL_INTRO_ID}>*\n - Enter this command in order to get a role and introduce yourself.""",
             inline=False,
         )
         self.add_field(
