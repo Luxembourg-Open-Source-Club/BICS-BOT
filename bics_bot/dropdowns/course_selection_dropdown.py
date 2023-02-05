@@ -1,64 +1,37 @@
 import nextcord
 import json
 
-PATH = "./discord_channels.json"
+PATH = "./data/discord_channels.json"
 
 with open(PATH) as f:
-    json_file = json.load(f)
-
-
-def get_year_1_winter_courses():
-    return json_file["courses"]["year1"]["winter"]
-
-
-def get_year_1_summer_courses():
-    return json_file["courses"]["year1"]["summer"]
-
-
-def get_year_2_winter_courses():
-    return json_file["courses"]["year2"]["winter"]
-
-
-def get_year_2_summer_courses():
-    return json_file["courses"]["year2"]["summer"]
-
-
-def get_year_3_winter_courses():
-    return json_file["courses"]["year3"]["winter"]
-
-
-def get_year_3_summer_courses():
-    return json_file["courses"]["year3"]["summer"]
-
-
-def get_chill_channels():
-    return json_file["chill"]
-
+    text_channels = json.load(f)
 
 class DropdownItem1(nextcord.ui.Select):
     chosen_options = []
 
-    def __init__(self):
+    def __init__(self, enrolled_courses):
         super().__init__(
             placeholder="Year 1",
             min_values=0,
-            max_values=len(self._get_options()),
-            options=self._get_options(),
+            max_values=len(self._get_options(enrolled_courses)),
+            options=self._get_options(enrolled_courses),
         )
 
-    def _get_options(self):
+    def _get_options(self, enrolled_courses):
         options = []
-        for value in get_year_1_winter_courses():
+        for value in text_channels["courses"]["year1"]["winter"]:
+            enrolled = value["name"] in enrolled_courses
             options.append(
                 nextcord.SelectOption(
-                    label=value, description="Semester 1 course", emoji="⛄"
+                    label=value["name"], description="Semester 1 course", emoji="⛄", default=enrolled
                 )
             )
 
-        for value in get_year_1_summer_courses():
+        for value in text_channels["courses"]["year1"]["summer"]:
+            enrolled = value["name"] in enrolled_courses
             options.append(
                 nextcord.SelectOption(
-                    label=value, description="Semester 2 course", emoji="☀️"
+                    label=value["name"], description="Semester 2 course", emoji="☀️", default=enrolled
                 )
             )
         return options
@@ -70,27 +43,29 @@ class DropdownItem1(nextcord.ui.Select):
 class DropdownItem2(nextcord.ui.Select):
     chosen_options = []
 
-    def __init__(self):
+    def __init__(self, enrolled_courses):
         super().__init__(
             placeholder="Year 2",
             min_values=0,
-            max_values=len(self._get_options()),
-            options=self._get_options(),
+            max_values=len(self._get_options(enrolled_courses)),
+            options=self._get_options(enrolled_courses),
         )
 
-    def _get_options(self):
+    def _get_options(self, enrolled_courses):
         options = []
-        for value in get_year_2_winter_courses():
+        for value in text_channels["courses"]["year2"]["winter"]:
+            enrolled = value["name"] in enrolled_courses
             options.append(
                 nextcord.SelectOption(
-                    label=value, description="Semester 3 course", emoji="⛄"
+                    label=value["name"], description="Semester 3 course", emoji="⛄", default=enrolled
                 )
             )
 
-        for value in get_year_2_summer_courses():
+        for value in text_channels["courses"]["year2"]["summer"]:
+            enrolled = value["name"] in enrolled_courses
             options.append(
                 nextcord.SelectOption(
-                    label=value, description="Semester 4 course", emoji="☀️"
+                    label=value["name"], description="Semester 4 course", emoji="☀️", default=enrolled
                 )
             )
         return options
@@ -102,27 +77,29 @@ class DropdownItem2(nextcord.ui.Select):
 class DropdownItem3(nextcord.ui.Select):
     chosen_options = []
 
-    def __init__(self):
+    def __init__(self, enrolled_courses):
         super().__init__(
             placeholder="Year 3",
             min_values=0,
-            max_values=len(self._get_options()),
-            options=self._get_options(),
+            max_values=len(self._get_options(enrolled_courses)),
+            options=self._get_options(enrolled_courses),
         )
 
-    def _get_options(self):
+    def _get_options(self, enrolled_courses):
         options = []
-        for value in get_year_3_winter_courses():
+        for value in text_channels["courses"]["year3"]["winter"]:
+            enrolled = value["name"] in enrolled_courses
             options.append(
                 nextcord.SelectOption(
-                    label=value, description="Semester 5 course", emoji="⛄"
+                    label=value["name"], description="Semester 5 course", emoji="⛄", default=enrolled
                 )
             )
 
-        for value in get_year_3_summer_courses():
+        for value in text_channels["courses"]["year3"]["summer"]:
+            enrolled = value["name"] in enrolled_courses
             options.append(
                 nextcord.SelectOption(
-                    label=value, description="Semester 6 course", emoji="☀️"
+                    label=value["name"], description="Semester 6 course", emoji="☀️", default=enrolled
                 )
             )
         return options
@@ -132,11 +109,11 @@ class DropdownItem3(nextcord.ui.Select):
 
 
 class DropdownView(nextcord.ui.View):
-    def __init__(self):
+    def __init__(self, enrolled_courses:list[str]):
         super().__init__()
-        self.item1 = DropdownItem1()
-        self.item2 = DropdownItem2()
-        self.item3 = DropdownItem3()
+        self.item1 = DropdownItem1(enrolled_courses)
+        self.item2 = DropdownItem2(enrolled_courses)
+        self.item3 = DropdownItem3(enrolled_courses)
         self.add_item(self.item1)
         self.add_item(self.item2)
         self.add_item(self.item3)
