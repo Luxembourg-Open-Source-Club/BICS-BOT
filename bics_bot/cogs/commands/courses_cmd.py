@@ -1,7 +1,6 @@
 from nextcord.ext import commands
-from nextcord import SelectOption, application_command
+from nextcord import application_command
 import nextcord
-from nextcord.ui import Select, View
 import sys, json
 from dropdowns.course_selection_dropdown import DropdownView
 
@@ -40,7 +39,7 @@ class CoursesCmd(commands.Cog):
         else:
             enrolled_courses = self.get_courses_enrolled(user, guild)
             view = DropdownView(enrolled_courses=enrolled_courses)
-            await interaction.response.send_message(view=view)
+            await interaction.response.send_message(view=view, ephemeral=True)
 
     def get_courses_enrolled(self, user:nextcord.Interaction.user, guild:nextcord.Guild):
         enrolled = []
