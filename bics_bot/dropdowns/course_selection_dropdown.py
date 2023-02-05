@@ -123,7 +123,7 @@ class DropdownView(nextcord.ui.View):
     ):
         courses = [self.item1.values, self.item2.values, self.item3.values]
         embed = Courses_embed(courses)
-        # self.give_course_permissions(interaction.user)
+        await self.give_course_permissions(courses, interaction.user, interaction.guild)
         await interaction.response.send_message(embed=embed, ephemeral=True)
         self.stop()
 
@@ -136,5 +136,12 @@ class DropdownView(nextcord.ui.View):
         await interaction.response.send_message("Canceled operation. No changes made.", ephemeral=True)
         self.stop()
 
-    # def give_course_permissions(self, user:nextcord.Interaction.user):
-    #     pass
+    async def give_course_permissions(self, courses:list[list[str]], user:nextcord.Interaction.user, guild:nextcord.Guild):
+        for year in courses:
+            for course in year:
+                for text_channel in guild.text_channels:
+                    if text_channel.name != course:
+                        continue
+                    await text_channel.set_permissions(target=user, read_messages=True,
+                                                              send_messages=True)
+        print('done')
