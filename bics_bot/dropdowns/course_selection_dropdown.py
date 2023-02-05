@@ -1,5 +1,9 @@
+import sys
 import nextcord
 import json
+sys.path.append("../../")
+from server_ids import *
+from embeds.courses_embed import Courses_embed
 
 PATH = "./data/discord_channels.json"
 
@@ -123,25 +127,8 @@ class DropdownView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        embed = nextcord.Embed(title="Selected Courses Summary")
-        value1 = ""
-        value2 = ""
-        value3 = ""
-        for opt in self.item1.chosen_options:
-            value1 += f"- {opt}\n"
-        for opt in self.item2.chosen_options:
-            value2 += f"- {opt}\n"
-        for opt in self.item3.chosen_options:
-            value3 += f"- {opt}\n"
-
-        if not value1 == "":
-            embed.add_field(name="Year 1 Courses", value=value1, inline=False)
-        if not value2 == "":
-            embed.add_field(name="Year 2 Courses", value=value2, inline=False)
-        if not value3 == "":
-            embed.add_field(name="Year 3 Courses", value=value3, inline=False)
-
-        await interaction.response.send_message(ephemeral=True, embed=embed)
+        embed = Courses_embed(self.item1.values, self.item2.values, self.item3.values)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
         self.stop()
 
     # ------------------------------------------------------------------------
@@ -151,6 +138,6 @@ class DropdownView(nextcord.ui.View):
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-
-        await interaction.response.send_message("Canceled", ephemeral=True, view=self)
+        embed = Courses_embed(self.item1.values, self.item2.values, self.item3.values)
+        await interaction.response.send_message("Canceled. Below are your current courses:", embed=embed, ephemeral=True)
         self.stop()
