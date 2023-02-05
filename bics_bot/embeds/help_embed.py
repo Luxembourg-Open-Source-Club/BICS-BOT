@@ -4,7 +4,11 @@ from nextcord import Colour
 from bics_bot.config.server_ids import CHANNEL_INTRO_ID
 
 
-class Help_embed(Embed):
+class HelpEmbed(Embed):
+    """
+    Discord embed that shows the bot's available commands.
+    """
+
     def __init__(self):
         title = "Available bot commands"
         super().__init__(colour=Colour.blue(), title=title)

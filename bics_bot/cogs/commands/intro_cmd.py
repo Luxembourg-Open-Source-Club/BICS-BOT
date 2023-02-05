@@ -7,6 +7,8 @@ from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, CHANN
 
 
 class IntroCmd(commands.Cog):
+    """This class represents the command /useful_links"""
+
     def __init__(self, client):
         self.client = client
 
@@ -26,12 +28,13 @@ class IntroCmd(commands.Cog):
                      "alumni", "erasmus", "incoming"]
         ),
     ):
+        # Only allow the /intro command to be used inside the starting-up text channel
         if interaction.channel_id == CHANNEL_INTRO_ID:
             user = interaction.user
             user_roles = user.roles
 
             if len(user_roles) > 1:
-                # - Means the user already has at least one role
+                #  Means the user already has introduced once.
                 await interaction.response.send_message(
                     f"You have already introduced yourself! In case you have a role that you think should be changed feel free to ping an <@&{ROLE_ADMIN_ID}>",
                     ephemeral=True
@@ -53,6 +56,7 @@ class IntroCmd(commands.Cog):
                     interaction.guild.roles, name="Incoming"
                 )
 
+                # Adding the chosen role to the user
                 if year == "year-1":
                     await user.add_roles(year1_role)
                 elif year == "year-2":
@@ -73,7 +77,7 @@ class IntroCmd(commands.Cog):
                     ephemeral=True
                 )
         else:
-            # - Trying to type the command outside the right channel
+            # - Trying to type the command outside the starting-up text channel
             await interaction.response.send_message(
                 f"Oops something went wrong! Make sure you are on <#{CHANNEL_INTRO_ID}> to send the **/intro** command",
                 ephemeral=True
@@ -81,4 +85,5 @@ class IntroCmd(commands.Cog):
 
 
 def setup(client):
+    """Function used to setup nextcord cogs"""
     client.add_cog(IntroCmd(client))

@@ -14,7 +14,7 @@ def setup_nextcord_logging():
 
 
 def get_bot_logger():
-    logger = logging.Logger("BICS-THE-BOT", logging.INFO)
+    logger = logging.Logger("BICS-BOT", logging.INFO)
     handler = logging.FileHandler(
         filename="./logs/bot_logs.log", encoding="utf-8", mode="w"
     )
