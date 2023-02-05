@@ -1,11 +1,8 @@
 import nextcord
-import sys
-
 from nextcord.ext import commands
 from nextcord import application_command
 
-sys.path.append("../../../")
-from server_ids import *
+from bics_bot.config.server_ids import GUILD_BICS_ID
 
 
 class IntroCmd(commands.Cog):
@@ -13,13 +10,14 @@ class IntroCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[BICS_GUILD_ID, BICS_CLONE_GUILD_ID], description="Introduce yourself"
+        guild_ids=[GUILD_BICS_ID], description="Introduce yourself"
     )
     async def intro(
         self,
         interaction: nextcord.Interaction,
         name: str = nextcord.SlashOption(description="Name", required=True),
-        surname: str = nextcord.SlashOption(description="Surname", required=True),
+        surname: str = nextcord.SlashOption(
+            description="Surname", required=True),
         year: str = nextcord.SlashOption(
             description="The year you will be in. In case you plan on comming to the uni, choose **incoming**",
             choices=["year-1", "year-2", "year-3", "alumni", "erasmus", "incoming"]
@@ -37,13 +35,17 @@ class IntroCmd(commands.Cog):
                 )
             else:
                 # - Getting the roles
-                year1_role = nextcord.utils.get(interaction.guild.roles, name="Year 1")
-                year2_role = nextcord.utils.get(interaction.guild.roles, name="Year 2")
-                year3_role = nextcord.utils.get(interaction.guild.roles, name="Year 3")
+                year1_role = nextcord.utils.get(
+                    interaction.guild.roles, name="Year 1")
+                year2_role = nextcord.utils.get(
+                    interaction.guild.roles, name="Year 2")
+                year3_role = nextcord.utils.get(
+                    interaction.guild.roles, name="Year 3")
                 erasmus_role = nextcord.utils.get(
                     interaction.guild.roles, name="Erasmus"
                 )
-                alumni_role = nextcord.utils.get(interaction.guild.roles, name="Alumni")
+                alumni_role = nextcord.utils.get(
+                    interaction.guild.roles, name="Alumni")
                 incoming_role = nextcord.utils.get(
                     interaction.guild.roles, name="Incoming"
                 )
