@@ -12,7 +12,7 @@ to interact with the server as well.
 > This repo contains a python package **bics_bot** which is where all the logic is implemented. For this reason, you will need to install the package locally.
 For this reason I advice you to install it using a python virtual environment.
 
-1. Set up a python virtual environment (*ingore this command if you don't want to*)
+1. Set up a python virtual environment (*ignore this command if you don't want to*)
     - `python3 -m env env`
 1. Install the dependencies
     - `pip install -r requirements.txt`
