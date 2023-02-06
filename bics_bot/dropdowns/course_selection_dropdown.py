@@ -1,6 +1,8 @@
-from bics_bot.embeds.courses_embed import CoursesSelectionEmbed
 import nextcord
 import json
+from bics_bot.embeds.courses_embed import CoursesSelectionEmbed
+from bics_bot.config.server_ids import *
+from bics_bot.utils.channels_utils import retrieve_courses_text_channels_by_year
 
 PATH = "./bics_bot/data/discord_channels.json"
 
@@ -116,24 +118,58 @@ class DropdownItem3(nextcord.ui.Select):
 
 class DropdownView(nextcord.ui.View):
     def __init__(self, enrolled_courses: list[str]):
-        super().__init__()
+        super().__init__(timeout=None)
         self.item1 = DropdownItem1(enrolled_courses)
         self.item2 = DropdownItem2(enrolled_courses)
         self.item3 = DropdownItem3(enrolled_courses)
         self.add_item(self.item1)
         self.add_item(self.item2)
         self.add_item(self.item3)
+        self.enrolled_courses = enrolled_courses
 
     @nextcord.ui.button(label="Confirm", style=nextcord.ButtonStyle.green, row=3)
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        _courses = [self.item1.values, self.item2.values, self.item3.values] #list with year data
-        courses = {} #dict without year data
-        for course in _courses:
-            courses[tuple(course)] = True
-        embed = CoursesSelectionEmbed(_courses)
-        await self.give_course_permissions(courses, interaction.user, interaction.guild)
+        courses_text_channels = retrieve_courses_text_channels_by_year(
+            interaction.guild)
+        year1_selected_courses = self.item1.values
+        year2_selected_courses = self.item2.values
+        year3_selected_courses = self.item3.values
+
+        if year1_selected_courses == []:
+            new = []
+            for c in courses_text_channels["year1"]:
+                if c in self.enrolled_courses:
+                    new.append(c)
+            await self.give_course_permissions(new, interaction.user, interaction.guild)
+
+        else:
+            await self.give_course_permissions(year1_selected_courses, interaction.user, interaction.guild)
+
+        if year2_selected_courses == []:
+            new = []
+            for c in courses_text_channels["year2"]:
+                if c in self.enrolled_courses:
+                    new.append(c)
+            await self.give_course_permissions(new, interaction.user, interaction.guild)
+
+        else:
+            await self.give_course_permissions(year2_selected_courses, interaction.user, interaction.guild)
+
+        if year3_selected_courses == []:
+            new = []
+            for c in courses_text_channels["year3"]:
+                if c in self.enrolled_courses:
+                    new.append(c)
+            await self.give_course_permissions(new, interaction.user, interaction.guild)
+
+        else:
+            await self.give_course_permissions(year3_selected_courses, interaction.user, interaction.guild)
+
+        embed = CoursesSelectionEmbed(
+            [year1_selected_courses, year2_selected_courses, year3_selected_courses])
+        # await self.give_course_permissions(courses, interaction.user, interaction.guild)
         await interaction.response.send_message(embed=embed, ephemeral=True)
         self.stop()
 
@@ -148,18 +184,20 @@ class DropdownView(nextcord.ui.View):
 
     async def give_course_permissions(self, courses: dict[str], user: nextcord.Interaction.user, guild: nextcord.Guild):
         for text_channel in guild.text_channels:
-            if self.is_enrollable(courses, text_channel, user):
-                await text_channel.set_permissions(target=user, read_messages=True,
-                                                    send_messages=True)
-            elif self.is_unenrollable(courses, text_channel, user):
-                await text_channel.set_permissions(target=user, read_messages=False,
-                                                    send_messages=False)
+            if text_channel.name in courses:
+                if not text_channel.permissions_for(user).read_messages:
+                    print(f"enroll {text_channel}")
+                    await text_channel.set_permissions(target=user, read_messages=True,
+                                                       send_messages=True)
+                else:
+                    print(f"unenroll {text_channel}")
+                    await text_channel.set_permissions(target=user, read_messages=False,
+                                                       send_messages=False)
 
     def is_course_channel(self, category_id):  # from left to right: sem6-1
-        return category_id == 985956666971402240 or category_id == 985956596414808105 or category_id == 939222837082865725 or category_id == 860599769940361267 or category_id == 889981953934254101 or category_id == 755869390951677992
-    
-    def is_enrollable(self, courses:dict[str], channel:nextcord.TextChannel, user:nextcord.Interaction.user):
-        return courses.get(channel.name) and not channel.permissions_for(user).read_messages
+        category_ids = [CATEGORY_SEMESTER_1_ID, CATEGORY_SEMESTER_2_ID, CATEGORY_SEMESTER_3_ID,
+                        CATEGORY_SEMESTER_4_ID, CATEGORY_SEMESTER_5_ID, CATEGORY_SEMESTER_6_ID]
+        return category_id in category_ids
 
-    def is_unenrollable(self, courses:dict[str], channel:nextcord.TextChannel, user:nextcord.Interaction.user):
-        return courses.get(channel.name) and channel.permissions_for(user).read_messages
+    def is_enrollable(self, courses: dict[str], channel: nextcord.TextChannel, user: nextcord.Interaction.user):
+        return channel.name in courses and not channel.permissions_for(user).read_messages
