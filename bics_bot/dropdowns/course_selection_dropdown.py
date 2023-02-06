@@ -131,7 +131,7 @@ class DropdownView(nextcord.ui.View):
         _courses = [self.item1.values, self.item2.values, self.item3.values] #list with year data
         courses = {} #dict without year data
         for course in _courses:
-            courses[course] = True
+            courses[tuple(course)] = True
         embed = CoursesSelectionEmbed(courses)
         await self.give_course_permissions(courses, interaction.user, interaction.guild)
         await interaction.response.send_message(embed=embed, ephemeral=True)
