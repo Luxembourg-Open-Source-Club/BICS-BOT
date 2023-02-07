@@ -15,10 +15,7 @@ class Year1CoursesDropdown(nextcord.ui.Select):
     def __init__(self):
         options = self._get_options()
         super().__init__(
-            placeholder="Year 1",
-            min_values=0,
-            max_values=len(options),
-            options=options
+            placeholder="Year 1", min_values=0, max_values=len(options), options=options
         )
 
     def _get_options(self):
@@ -42,10 +39,7 @@ class Year2CoursesDropdown(nextcord.ui.Select):
     def __init__(self):
         options = self._get_options()
         super().__init__(
-            placeholder="Year 2",
-            min_values=0,
-            max_values=len(options),
-            options=options
+            placeholder="Year 2", min_values=0, max_values=len(options), options=options
         )
 
     def _get_options(self):
@@ -68,20 +62,26 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 class Year3CoursesDropdown(nextcord.ui.Select):
     def __init__(self):
         options = self._get_options()
-        super().__init__(placeholder="Year 3", min_values=0,
-                         max_values=len(options), options=options,)
+        super().__init__(
+            placeholder="Year 3",
+            min_values=0,
+            max_values=len(options),
+            options=options,
+        )
 
     def _get_options(self):
         options = []
         for value in text_channels["courses"]["year3"]["winter"]:
             options.append(
                 nextcord.SelectOption(
-                    label=value["name"], description="Semester 5 course", emoji="⛄")
+                    label=value["name"], description="Semester 5 course", emoji="⛄"
+                )
             )
         for value in text_channels["courses"]["year3"]["summer"]:
             options.append(
                 nextcord.SelectOption(
-                    label=value["name"], description="Semester 6 course", emoji="☀️")
+                    label=value["name"], description="Semester 6 course", emoji="☀️"
+                )
             )
         return options
 
@@ -110,21 +110,27 @@ class CoursesDropdownView(nextcord.ui.View):
         await self.give_course_permissions(year2_selected_courses, interaction)
         await self.give_course_permissions(year3_selected_courses, interaction)
 
-        embed = GeneralStatusEmbed(f"{'Enrolled' if self.operation else 'Unrolled'} Status",
-                                   f"You have been successfully {'**enrolled**' if self.operation else '**unrolled**'} from the selected courses!")
+        embed = GeneralStatusEmbed(
+            f"{'Enrollment' if self.operation else 'Unrollment'} Status",
+            f"You have been successfully {'**enrolled**' if self.operation else '**unrolled**'} from the selected courses!",
+        )
         await interaction.response.send_message(embed=embed, ephemeral=True)
         self.stop()
 
-    @ nextcord.ui.button(
+    @nextcord.ui.button(
         label="Cancel", style=nextcord.ButtonStyle.red, row=3, custom_id="cancel-btn"
     )
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        await interaction.response.send_message("Canceled operation. No changes made.", ephemeral=True)
+        await interaction.response.send_message(
+            "Canceled operation. No changes made.", ephemeral=True
+        )
         self.stop()
 
-    async def give_course_permissions(self, courses: dict[str], interaction: Interaction):
+    async def give_course_permissions(
+        self, courses: dict[str], interaction: Interaction
+    ):
         for text_channel in interaction.guild.text_channels:
             if text_channel.name in courses:
                 if self.operation and text_channel.name not in self.enrolled_courses:
@@ -133,9 +139,11 @@ class CoursesDropdownView(nextcord.ui.View):
                     await self.unroll_course(interaction.user, text_channel)
 
     async def enroll_course(self, user, text_channel):
-        await text_channel.set_permissions(target=user, read_messages=True,
-                                           send_messages=True)
+        await text_channel.set_permissions(
+            target=user, read_messages=True, send_messages=True
+        )
 
     async def unroll_course(self, user, text_channel):
-        await text_channel.set_permissions(target=user, read_messages=False,
-                                           send_messages=False)
+        await text_channel.set_permissions(
+            target=user, read_messages=False, send_messages=False
+        )
