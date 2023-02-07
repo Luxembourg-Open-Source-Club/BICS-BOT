@@ -33,7 +33,7 @@ class CoursesCmd(commands.Cog):
                 ephemeral=True,
             )
         else:
-            if not user.get_role(ROLE_ADMIN_ID) and not user.get_role(ROLE_YEAR3_ID):
+            if not user.get_role(ROLE_ADMIN_ID) or not user.get_role(ROLE_YEAR3_ID):
                 await interaction.response.send_message(
                     content="Sorry, this is not yet available for use :)",
                     ephemeral=True,
@@ -65,7 +65,7 @@ class CoursesCmd(commands.Cog):
                 ephemeral=True,
             )
         else:
-            if not user.get_role(ROLE_ADMIN_ID) and not user.get_role(ROLE_YEAR3_ID):
+            if not user.get_role(ROLE_ADMIN_ID) or not user.get_role(ROLE_YEAR3_ID):
                 await interaction.response.send_message(
                     content="Sorry, this is not yet available for use :)",
                     ephemeral=True,
