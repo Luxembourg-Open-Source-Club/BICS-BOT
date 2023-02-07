@@ -49,7 +49,7 @@ class CoursesCmd(commands.Cog):
         guild_ids=[GUILD_BICS_ID],
         description="Courses Selection.",
     )
-    async def unroll(self, interaction: nextcord.Interaction):
+    async def unenroll(self, interaction: nextcord.Interaction):
         user = interaction.user
         guild = interaction.guild
 
@@ -64,7 +64,7 @@ class CoursesCmd(commands.Cog):
             view = CoursesDropdownView(enrolled_courses, False)
             await interaction.response.send_message(
                 embed=GeneralStatusEmbed(
-                    "Unrollment Process",
+                    "Unenrollment Process",
                     read_txt("./bics_bot/texts/unrollment.txt"),
                 ),
                 view=view,
