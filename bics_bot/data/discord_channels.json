@@ -93,6 +93,10 @@
         {
           "name": "online-course",
           "id": "1024024091751100466"
+        },
+        {
+          "name": "software-foundations",
+          "id": "1072574258481479790"
         }
       ]
     },
@@ -147,10 +151,6 @@
         {
           "name": "user-centered-design",
           "id": "985958699573059685"
-        }
-              {
-          "name": "software-foundations",
-          "id": "1072574258481479790"
         }
       ]
     }
