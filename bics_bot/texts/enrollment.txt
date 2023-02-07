@@ -1,0 +1,4 @@
+Please select the courses you want to enroll to. After having selecting them, press the confirm **button**.
+Once the confirm button has been pressed, all the selected courses should now be visible.
+
+In case you desire to unroll a course, please use the command `/unroll`.
