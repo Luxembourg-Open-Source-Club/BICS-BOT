@@ -3,7 +3,12 @@ from nextcord import application_command
 import nextcord
 
 from bics_bot.dropdowns.course_selection_dropdown import CoursesDropdownView
-from bics_bot.config.server_ids import GUILD_BICS_ID, ROLE_ADMIN_ID, ROLE_BOT_DEV_ID, ROLE_YEAR3_ID
+from bics_bot.config.server_ids import (
+    GUILD_BICS_ID,
+    ROLE_ADMIN_ID,
+    ROLE_BOT_DEV_ID,
+    ROLE_YEAR3_ID,
+)
 from bics_bot.embeds.courses_embed import GeneralStatusEmbed
 from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
 from bics_bot.utils.file_manipulation import read_txt
@@ -28,12 +33,22 @@ class CoursesCmd(commands.Cog):
                 ephemeral=True,
             )
         else:
-            if not user.get_role(ROLE_ADMIN_ID) and not user.get_role(ROLE_BOT_DEV_ID):
-                await interaction.response.send_message(content="Sorry, this is not yet available for use :)", ephemeral=True)
+            if not user.get_role(ROLE_ADMIN_ID) and not user.get_role(ROLE_YEAR3_ID):
+                await interaction.response.send_message(
+                    content="Sorry, this is not yet available for use :)",
+                    ephemeral=True,
+                )
             else:
                 enrolled_courses = self.get_courses_enrolled(user, guild)
                 view = CoursesDropdownView(enrolled_courses, True)
-                await interaction.response.send_message(embed=GeneralStatusEmbed("Enrollment Process", read_txt("./bics_bot/texts/enrollment.txt")), view=view, ephemeral=True)
+                await interaction.response.send_message(
+                    embed=GeneralStatusEmbed(
+                        "Enrollment Process",
+                        read_txt("./bics_bot/texts/enrollment.txt"),
+                    ),
+                    view=view,
+                    ephemeral=True,
+                )
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID],
@@ -51,17 +66,32 @@ class CoursesCmd(commands.Cog):
             )
         else:
             if not user.get_role(ROLE_ADMIN_ID) and not user.get_role(ROLE_YEAR3_ID):
-                await interaction.response.send_message(content="Sorry, this is not yet available for use :)", ephemeral=True)
+                await interaction.response.send_message(
+                    content="Sorry, this is not yet available for use :)",
+                    ephemeral=True,
+                )
             else:
                 enrolled_courses = self.get_courses_enrolled(user, guild)
                 view = CoursesDropdownView(enrolled_courses, False)
-                await interaction.response.send_message(embed=GeneralStatusEmbed("Unrollment Process", read_txt("./bics_bot/texts/unrollment.txt")), view=view, ephemeral=True)
+                await interaction.response.send_message(
+                    embed=GeneralStatusEmbed(
+                        "Unrollment Process",
+                        read_txt("./bics_bot/texts/unrollment.txt"),
+                    ),
+                    view=view,
+                    ephemeral=True,
+                )
 
-    def get_courses_enrolled(self, user: nextcord.Interaction.user, guild: nextcord.Guild) -> list[str]:
+    def get_courses_enrolled(
+        self, user: nextcord.Interaction.user, guild: nextcord.Guild
+    ) -> list[str]:
         enrolled = []
         channels = guild.text_channels
         for channel in channels:
-            if channel.name in retrieve_courses_text_channels_names(guild) and user in channel.members:
+            if (
+                channel.name in retrieve_courses_text_channels_names(guild)
+                and user in channel.members
+            ):
                 enrolled.append(channel.name)
         return enrolled
 
