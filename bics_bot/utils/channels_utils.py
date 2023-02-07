@@ -37,10 +37,17 @@ def retrieve_courses_text_channels_by_year(guild: nextcord.Interaction.guild) ->
     ids = [CATEGORY_SEMESTER_1_ID, CATEGORY_SEMESTER_2_ID, CATEGORY_SEMESTER_3_ID,
            CATEGORY_SEMESTER_4_ID, CATEGORY_SEMESTER_5_ID, CATEGORY_SEMESTER_6_ID]
     categories = guild.by_category()
-    text_channels = {}
+    text_channels = {"year1": [], "year2": [], "year3": []}
     for category in categories:
         if category[0].id in ids:
-            text_channels[f"year{category[0].name[-1]}"] = [
-                text_channel.name for text_channel in category[1]]
+            if (category[0].name[-1]) == "1" or category[0].name[-1] == "2":
+                text_channels[f"year1"] += [
+                    text_channel.name for text_channel in category[1]]
+            if (category[0].name[-1]) == "3" or category[0].name[-1] == "4":
+                text_channels[f"year2"] += [
+                    text_channel.name for text_channel in category[1]]
+            if (category[0].name[-1]) == "5" or category[0].name[-1] == "6":
+                text_channels[f"year3"] += [
+                    text_channel.name for text_channel in category[1]]
 
     return text_channels
