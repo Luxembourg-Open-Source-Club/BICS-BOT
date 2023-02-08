@@ -2,7 +2,7 @@ import nextcord
 import json
 
 from nextcord.interactions import Interaction
-from bics_bot.embeds.courses_embed import GeneralStatusEmbed
+from bics_bot.embeds.courses_embed import CoursesEmbed
 from bics_bot.config.server_ids import *
 
 PATH = "./bics_bot/data/discord_channels.json"
@@ -110,7 +110,7 @@ class CoursesDropdownView(nextcord.ui.View):
         await self.give_course_permissions(year2_selected_courses, interaction)
         await self.give_course_permissions(year3_selected_courses, interaction)
 
-        embed = GeneralStatusEmbed(
+        embed = CoursesEmbed(
             f"{'Enrollment' if self.operation else 'Unenrollment'} Status",
             f"You have been successfully {'**enrolled**' if self.operation else '**unenrolled**'} from the selected courses!",
         )
@@ -139,11 +139,7 @@ class CoursesDropdownView(nextcord.ui.View):
                     await self.unroll_course(interaction.user, text_channel)
 
     async def enroll_course(self, user, text_channel):
-        await text_channel.set_permissions(
-            target=user, read_messages=True, send_messages=True
-        )
+        await text_channel.set_permissions(target=user, read_messages=True)
 
     async def unroll_course(self, user, text_channel):
-        await text_channel.set_permissions(
-            target=user, read_messages=False, send_messages=False
-        )
+        await text_channel.set_permissions(target=user, read_messages=False)
