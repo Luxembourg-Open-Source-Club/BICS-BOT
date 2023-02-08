@@ -63,7 +63,7 @@ class CoursesCmd(commands.Cog):
             enrolled_courses = self.get_courses_enrolled(user, guild)
             view = CoursesDropdownView(enrolled_courses, False)
             await interaction.response.send_message(
-                embed=GeneralStatusEmbed(
+                embed=CoursesEmbed(
                     "Unenrollment Process",
                     read_txt("./bics_bot/texts/unrollment.txt"),
                 ),
