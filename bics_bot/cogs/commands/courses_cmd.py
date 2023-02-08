@@ -9,7 +9,7 @@ from bics_bot.config.server_ids import (
     ROLE_BOT_DEV_ID,
     ROLE_YEAR3_ID,
 )
-from bics_bot.embeds.courses_embed import GeneralStatusEmbed
+from bics_bot.embeds.courses_embed import CoursesEmbed
 from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
 from bics_bot.utils.file_manipulation import read_txt
 
