@@ -37,7 +37,7 @@ class CoursesCmd(commands.Cog):
             enrolled_courses = self.get_courses_enrolled(user, guild)
             view = CoursesDropdownView(enrolled_courses, True)
             await interaction.response.send_message(
-                embed=GeneralStatusEmbed(
+                embed=CoursesEmbed(
                     "Enrollment Process",
                     read_txt("./bics_bot/texts/enrollment.txt"),
                 ),
