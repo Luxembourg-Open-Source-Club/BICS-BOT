@@ -136,10 +136,10 @@ class CoursesDropdownView(nextcord.ui.View):
                 if self.operation and text_channel.name not in self.enrolled_courses:
                     await self.enroll_course(interaction.user, text_channel)
                 elif text_channel.name in self.enrolled_courses:
-                    await self.unroll_course(interaction.user, text_channel)
+                    await self.unenroll_course(interaction.user, text_channel)
 
     async def enroll_course(self, user, text_channel):
         await text_channel.set_permissions(target=user, read_messages=True)
 
-    async def unroll_course(self, user, text_channel):
-        await text_channel.set_permissions(target=user, read_messages=False)
+    async def unenroll_course(self, user, text_channel):
+        await text_channel.set_permissions(target=user, overwrite=None)
