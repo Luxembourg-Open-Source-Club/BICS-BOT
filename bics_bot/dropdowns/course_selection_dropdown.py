@@ -12,89 +12,185 @@ with open(PATH) as f:
 
 
 class Year1CoursesDropdown(nextcord.ui.Select):
-    def __init__(self):
-        options = self._get_options()
-        super().__init__(
-            placeholder="Year 1", min_values=0, max_values=len(options), options=options
-        )
+    def __init__(self, enrolled_courses:dict[str, bool], enroll:bool):
+        self._options = self._get_options(enrolled_courses, enroll)
 
-    def _get_options(self):
+    def build(self):
+        super().__init__(
+                placeholder="Year 1",
+                min_values=0,
+                max_values=len(self._options),
+                options=self._options,
+            )
+
+    def _get_options(self, enrolled_courses:dict[str, bool], enroll:bool):
+        if enroll:
+            return self.enrolling(enrolled_courses)
+        else:
+            return self.unenrolling(enrolled_courses)
+
+    def enrolling(self, enrolled_courses:dict[str, bool]):
         options = []
         for value in text_channels["courses"]["year1"]["winter"]:
-            options.append(
-                nextcord.SelectOption(
-                    label=value["name"], description="Semester 1 course", emoji="⛄"
+            if value["name"] not in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 1 course", emoji="⛄"
+                    )
                 )
-            )
         for value in text_channels["courses"]["year1"]["summer"]:
-            options.append(
-                nextcord.SelectOption(
-                    label=value["name"], description="Semester 2 course", emoji="☀️"
+            if value["name"] not in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 2 course", emoji="☀️"
+                    )
                 )
-            )
+        return options
+
+    def unenrolling(self, enrolled_courses:dict[str, bool]):
+        options = []
+        for value in text_channels["courses"]["year1"]["winter"]:
+            if value["name"] in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 1 course", emoji="⛄"
+                    )
+                )
+        for value in text_channels["courses"]["year1"]["summer"]:
+            if value["name"] in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 2 course", emoji="☀️"
+                    )
+                )
         return options
 
 
 class Year2CoursesDropdown(nextcord.ui.Select):
-    def __init__(self):
-        options = self._get_options()
-        super().__init__(
-            placeholder="Year 2", min_values=0, max_values=len(options), options=options
-        )
+    def __init__(self, enrolled_courses:dict[str, bool], enroll:bool):
+        self._options = self._get_options(enrolled_courses, enroll)
 
-    def _get_options(self):
+    def build(self):
+        super().__init__(
+                placeholder="Year 2",
+                min_values=0,
+                max_values=len(self._options),
+                options=self._options,
+            )
+
+    def _get_options(self, enrolled_courses:dict[str, bool], enroll:bool):
+        if enroll:
+            return self.enrolling(enrolled_courses)
+        else:
+            return self.unenrolling(enrolled_courses)
+
+    def enrolling(self, enrolled_courses:dict[str, bool]):
         options = []
         for value in text_channels["courses"]["year2"]["winter"]:
-            options.append(
-                nextcord.SelectOption(
-                    label=value["name"], description="Semester 3 course", emoji="⛄"
+            if value["name"] not in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 3 course", emoji="⛄"
+                    )
                 )
-            )
         for value in text_channels["courses"]["year2"]["summer"]:
-            options.append(
-                nextcord.SelectOption(
-                    label=value["name"], description="Semester 4 course", emoji="☀️"
+            if value["name"] not in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 4 course", emoji="☀️"
+                    )
                 )
-            )
+        return options
+
+    def unenrolling(self, enrolled_courses:dict[str, bool]):
+        options = []
+        for value in text_channels["courses"]["year2"]["winter"]:
+            if value["name"] in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 3 course", emoji="⛄"
+                    )
+                )
+        for value in text_channels["courses"]["year2"]["summer"]:
+            if value["name"] in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 4 course", emoji="☀️"
+                    )
+                )
         return options
 
 
 class Year3CoursesDropdown(nextcord.ui.Select):
-    def __init__(self):
-        options = self._get_options()
-        super().__init__(
-            placeholder="Year 3",
-            min_values=0,
-            max_values=len(options),
-            options=options,
-        )
+    def __init__(self, enrolled_courses:dict[str, bool], enroll:bool):
+        self._options = self._get_options(enrolled_courses, enroll)
 
-    def _get_options(self):
+    def build(self):
+        super().__init__(
+                placeholder="Year 3",
+                min_values=0,
+                max_values=len(self._options),
+                options=self._options,
+            )
+
+    def _get_options(self, enrolled_courses:dict[str, bool], enroll:bool):
+        if enroll:
+            return self.enrolling(enrolled_courses)
+        else:
+            return self.unenrolling(enrolled_courses)
+
+    def enrolling(self, enrolled_courses:dict[str, bool]):
         options = []
         for value in text_channels["courses"]["year3"]["winter"]:
-            options.append(
-                nextcord.SelectOption(
-                    label=value["name"], description="Semester 5 course", emoji="⛄"
+            if value["name"] not in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 5 course", emoji="⛄"
+                    )
                 )
-            )
         for value in text_channels["courses"]["year3"]["summer"]:
-            options.append(
-                nextcord.SelectOption(
-                    label=value["name"], description="Semester 6 course", emoji="☀️"
+            if value["name"] not in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 6 course", emoji="☀️"
+                    )
                 )
-            )
+        return options
+
+    def unenrolling(self, enrolled_courses:dict[str, bool]):
+        options = []
+        for value in text_channels["courses"]["year3"]["winter"]:
+            if value["name"] in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 5 course", emoji="⛄"
+                    )
+                )
+        for value in text_channels["courses"]["year3"]["summer"]:
+            if value["name"] in enrolled_courses:
+                options.append(
+                    nextcord.SelectOption(
+                        label=value["name"], description="Semester 6 course", emoji="☀️"
+                    )
+                )
         return options
 
 
 class CoursesDropdownView(nextcord.ui.View):
-    def __init__(self, enrolled_courses: list[str], enroll):
+    def __init__(self, enrolled_courses:dict[str, bool], enroll):
         super().__init__(timeout=5000)
-        self.year1_dropdown = Year1CoursesDropdown()
-        self.year2_dropdown = Year2CoursesDropdown()
-        self.year3_dopdown = Year3CoursesDropdown()
-        self.add_item(self.year1_dropdown)
-        self.add_item(self.year2_dropdown)
-        self.add_item(self.year3_dopdown)
+        self.year1_dropdown = Year1CoursesDropdown(enrolled_courses, enroll)
+        self.year2_dropdown = Year2CoursesDropdown(enrolled_courses, enroll)
+        self.year3_dropdown = Year3CoursesDropdown(enrolled_courses, enroll)
+        if len(self.year1_dropdown._options) > 0:
+            self.year1_dropdown.build()
+            self.add_item(self.year1_dropdown)
+        if len(self.year2_dropdown._options) > 0:
+            self.year2_dropdown.build()
+            self.add_item(self.year2_dropdown)
+        if len(self.year3_dropdown._options) > 0:
+            self.year3_dropdown.build()
+            self.add_item(self.year3_dropdown)
         self.enrolled_courses = enrolled_courses
         self.operation = enroll
 
@@ -102,14 +198,13 @@ class CoursesDropdownView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        year1_selected_courses = self.year1_dropdown.values
-        year2_selected_courses = self.year2_dropdown.values
-        year3_selected_courses = self.year3_dopdown.values
-
-        await self.give_course_permissions(year1_selected_courses, interaction)
-        await self.give_course_permissions(year2_selected_courses, interaction)
-        await self.give_course_permissions(year3_selected_courses, interaction)
-
+        if len(self.year1_dropdown._options) > 0:
+            await self.give_course_permissions(self.year1_dropdown.values, interaction)
+        if len(self.year2_dropdown._options) > 0:
+            await self.give_course_permissions(self.year2_dropdown.values, interaction)
+        if len(self.year3_dropdown._options) > 0:
+            await self.give_course_permissions(self.year3_dropdown.values, interaction)
+            
         embed = CoursesEmbed(
             f"{'Enrollment' if self.operation else 'Unenrollment'} Status",
             f"You have been successfully {'**enrolled**' if self.operation else '**unenrolled**'} from the selected courses!",
