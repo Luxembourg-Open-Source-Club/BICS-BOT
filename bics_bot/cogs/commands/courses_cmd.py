@@ -73,15 +73,15 @@ class CoursesCmd(commands.Cog):
 
     def get_courses_enrolled(
         self, user: nextcord.Interaction.user, guild: nextcord.Guild
-    ) -> list[str]:
-        enrolled = []
+    ) -> dict[str, bool]:
+        enrolled:dict[str, bool] = {}
         channels = guild.text_channels
         for channel in channels:
             if (
                 channel.name in retrieve_courses_text_channels_names(guild)
                 and user in channel.members
             ):
-                enrolled.append(channel.name)
+                enrolled[channel.name] = True
         return enrolled
 
 
