@@ -65,7 +65,7 @@ class CoursesCmd(commands.Cog):
             await interaction.response.send_message(
                 embed=CoursesEmbed(
                     "Unenrollment Process",
-                    read_txt("./bics_bot/texts/unrollment.txt"),
+                    read_txt("./bics_bot/texts/unenrollment.txt"),
                 ),
                 view=view,
                 ephemeral=True,
