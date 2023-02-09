@@ -13,13 +13,15 @@ with open(PATH) as f:
 
 class Year1CoursesDropdown(nextcord.ui.Select):
     def __init__(self, enrolled_courses:dict[str, bool], enroll:bool):
-        options = self._get_options(enrolled_courses, enroll)
+        self._options = self._get_options(enrolled_courses, enroll)
+
+    def build(self):
         super().__init__(
-            placeholder="Year 1",
-            min_values=0,
-            max_values=len(options),
-            options=options,
-        )
+                placeholder="Year 1",
+                min_values=0,
+                max_values=len(self._options),
+                options=self._options,
+            )
 
     def _get_options(self, enrolled_courses:dict[str, bool], enroll:bool):
         if enroll:
@@ -66,13 +68,15 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
 class Year2CoursesDropdown(nextcord.ui.Select):
     def __init__(self, enrolled_courses:dict[str, bool], enroll:bool):
-        options = self._get_options(enrolled_courses, enroll)
+        self._options = self._get_options(enrolled_courses, enroll)
+
+    def build(self):
         super().__init__(
-            placeholder="Year 2",
-            min_values=0,
-            max_values=len(options),
-            options=options,
-        )
+                placeholder="Year 2",
+                min_values=0,
+                max_values=len(self._options),
+                options=self._options,
+            )
 
     def _get_options(self, enrolled_courses:dict[str, bool], enroll:bool):
         if enroll:
@@ -119,13 +123,15 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 
 class Year3CoursesDropdown(nextcord.ui.Select):
     def __init__(self, enrolled_courses:dict[str, bool], enroll:bool):
-        options = self._get_options(enrolled_courses, enroll)
+        self._options = self._get_options(enrolled_courses, enroll)
+
+    def build(self):
         super().__init__(
-            placeholder="Year 3",
-            min_values=0,
-            max_values=len(options),
-            options=options,
-        )
+                placeholder="Year 3",
+                min_values=0,
+                max_values=len(self._options),
+                options=self._options,
+            )
 
     def _get_options(self, enrolled_courses:dict[str, bool], enroll:bool):
         if enroll:
@@ -176,11 +182,14 @@ class CoursesDropdownView(nextcord.ui.View):
         self.year1_dropdown = Year1CoursesDropdown(enrolled_courses, enroll)
         self.year2_dropdown = Year2CoursesDropdown(enrolled_courses, enroll)
         self.year3_dropdown = Year3CoursesDropdown(enrolled_courses, enroll)
-        if len(self.year1_dropdown.options) > 0:
+        if len(self.year1_dropdown._options) > 0:
+            self.year1_dropdown.build()
             self.add_item(self.year1_dropdown)
-        if len(self.year2_dropdown.options) > 0:
+        if len(self.year2_dropdown._options) > 0:
+            self.year2_dropdown.build()
             self.add_item(self.year2_dropdown)
-        if len(self.year3_dropdown.options) > 0:
+        if len(self.year3_dropdown._options) > 0:
+            self.year3_dropdown.build()
             self.add_item(self.year3_dropdown)
         self.enrolled_courses = enrolled_courses
         self.operation = enroll
@@ -189,10 +198,13 @@ class CoursesDropdownView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        await self.give_course_permissions(self.year1_dropdown.values, interaction)
-        await self.give_course_permissions(self.year2_dropdown.values, interaction)
-        await self.give_course_permissions(self.year3_dropdown.values, interaction)
-
+        if len(self.year1_dropdown._options) > 0:
+            await self.give_course_permissions(self.year1_dropdown.values, interaction)
+        if len(self.year2_dropdown._options) > 0:
+            await self.give_course_permissions(self.year2_dropdown.values, interaction)
+        if len(self.year3_dropdown._options) > 0:
+            await self.give_course_permissions(self.year3_dropdown.values, interaction)
+            
         embed = CoursesEmbed(
             f"{'Enrollment' if self.operation else 'Unenrollment'} Status",
             f"You have been successfully {'**enrolled**' if self.operation else '**unenrolled**'} from the selected courses!",
