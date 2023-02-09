@@ -72,7 +72,7 @@ class IntroCmd(commands.Cog):
                 # - Changing the nickname to Name + Surname initial
                 await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
                 await interaction.response.send_message(
-                    f"Welcome on board {name.capitalize()} {surname.capitalize()}! Your role has been updated and you are all set 😉. In case of any question, feel free to ping an <@&{ADMIN_ROLE_ID}>",
+                    f"Welcome on board {name.capitalize()} {surname.capitalize()}! Your role has been updated and you are all set 😉. In case of any question, feel free to ping an <@&{ROLE_ADMIN_ID}>",
                     ephemeral=True
                 )
         else:
