@@ -12,9 +12,14 @@ class UpdateYearCmd(commands.Cog):
                    GUILD_BICS_CLONE_ID], description="Update your year from 1->2, etc."
     )
     async def update(self, interaction:nextcord.Interaction):
+        user = interaction.user
+        for role in user.roles:
+            if role.name=="Erasmus":
+                await interaction.response.send_message("Sorry, this command is available for full UniLu students, not Erasmus :(",
+                ephemeral=True)
+                return
         old_role = ''
         new_role = ''
-        user = interaction.user
         for role in user.roles:
             if role.name == "Incoming":
                 old_role = role
