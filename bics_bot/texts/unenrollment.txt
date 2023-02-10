@@ -1,0 +1,6 @@
+Please select the courses you want to unenroll. After having selecting them, press the confirm **button**.
+Once the confirm button has been pressed, all the selected courses should not longer be visible.
+
+In case you desire to enroll to a course, please use the command `/enroll`.
+
+ONLINE COURSE IS IN YEAR 2

@@ -1,0 +1,2 @@
+**BICS-BOT** is a bot made for the BICS Student Server.
+It's purpose is to automate the server in someways such as let a user make a selection of the courses he/she attends, welcoming new members and much more.
