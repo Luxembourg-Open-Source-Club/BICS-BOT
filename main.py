@@ -35,7 +35,7 @@ def main():
 
     load_extensions(bot)
 
-    bot.run(os.getenv("BOT_TOKEN"))
+    bot.run(os.getenv("TOKEN_BOT"))
 
 
 if __name__ == "__main__":
