@@ -6,11 +6,20 @@ from nextcord.ext import commands
 
 from bics_bot.utils.file_manipulation import read_txt
 
-
+#Loading the bot tokens from your .env folder.
 load_dotenv()
 
 
-def get_intents():
+def get_intents() -> nextcord.Intents:
+    """
+    Loading the intents of the bot. Intents are the capabilities of the bot.
+    
+    Args:
+        None
+        
+    Returns:
+        intents: The intent settings chosen.
+    """
     # - Loading intents
     intents = nextcord.Intents.default()
     intents.members = True
@@ -19,6 +28,16 @@ def get_intents():
 
 
 def load_extensions(bot: commands.Bot):
+    """
+    Loading up the cogs from cogs/commands and cogs/events. Read about cogs 
+    from the Nextcord docs to understand what they are and how they work.
+
+    Args:
+        bot: the bot object
+
+    Returns:
+        None
+    """
     for filename in os.listdir("./bics_bot/cogs/events"):
         if filename.endswith(".py") and filename != "__init__.py":
             bot.load_extension(f"bics_bot.cogs.events.{filename[:-3]}")
