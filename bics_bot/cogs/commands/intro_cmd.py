@@ -8,7 +8,7 @@ from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, CHANN
 class IntroCmd(commands.Cog):
     """
     This class represents the command `/intro`.
-    
+
     The `/intro` command is used for newcomers to get a student role, 
     and change their server username to comply with the server format. 
     Format Example: John Doe -> John D
@@ -31,7 +31,7 @@ class IntroCmd(commands.Cog):
         surname: str = nextcord.SlashOption(
             description="Surname", required=True),
         year: str = nextcord.SlashOption(
-            description="The year you will be in. In case you plan on comming to the university and are not yet enrolled, choose **incoming**",
+            description="The year you will be in. In case you plan on joining the University choose **incoming**",
             choices=["year-1", "year-2", "year-3",
                      "alumni", "erasmus", "incoming"]
         ),
