@@ -1,13 +1,20 @@
-# BICS-BOT
-This repo contains the source code of the **BICS bot**. It's main purpose is to automate the server and to give the users/students different ways
+# BICS-BOT 🤖
+This repo contains the source code of the **BICS bot**. It's main purpose is to automate the BICS server and to give the users/students different ways
 to interact with the server as well.
+
+Currently, the bot supports roles attribution, enrolment/unenrolment to courses text channels some general commands such as the `help` command.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
+    - [Initial Setup](#initial-setup)
+    - [Bot Deployment](#bot-deployment)
 - [Commands Available](#commands-available)
+    - [General Commands](#general-commands)
+    - [Role Commands](#role-commands)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
     - [Steps to Contribute](#steps-to-contribute)
+    - [Conventions to Follow](#conventions-to-follow)
 
 ## Getting Started
 > This repo contains a python package **bics_bot** which is where all the logic is implemented. For this reason, you will need to install the package locally.
@@ -22,24 +29,38 @@ For this reason I advice you to install it using a python virtual environment.
     - `python3 setup.py build`
 1. Install the package
     - `python3 setup.py install`
-1. Create a file .env in the root folder which contains the bot token as `BOT_TOKEN=token`. This token you can get from the bot you create.
-1. The `bics_bot/config/server_ids.py` file needs to be updated so that it contains the right codes of your developmet server.
+1. Create a file .env in the root folder which contains the bot token as `TOKEN_BOT_CLONE=token`. To get the token, reach out to @Pedro. 
+
+### Bot Deployment
+In case you want to test what you have coded, you will need to deploy a bot. To do so, run `python main.py -c` from within the root directory of this repo. The `-c` specifies the program to launch the clone instead of the real bot.
+Once the bot is running you should see a message `Bot is online`. 
+Then, if you want to test a command that you have added, go to `#bot-dev-discussion` text channel in the BICS discord server. *(Note that you need to have the role `BotDev` to see this channel)*
 
 
 ## Commands Available
 > All commands can be used in any channel as only the user that requests for one is able to see the bot messages.
 
-- `/help`: Displays the list of the available bot commands.
+### General Commands
+- `/help`: This command is used to view the list of the available bot commands.
   
-- `/intro` (Only for new members): Allows new member to set their roles and to introduce themselves. This command can only be used in the introduction channel.
+- `/useful_links`: This command is used to view a list of some links that might be useful for a BICS student, such as the BSP enrolment form.
 
-- `/gamer`: Gives the `Gamer` role, which also gives access to the gamer channel to communicate with other gamers in the server.
+- `/intro` (Only for new members): Allows a new member to get role and to introduce themselves. This command can only be used in the introduction channel (`#starting-up`).
 
-- `/harem`: Gives the `Harem` role, which also gives access to the harem channel to collect harem cards.
+- `enroll`: This command is used for students who wish to get viewing permissions to the text channels of their courses.
 
-- `/useful_links`: Shows some links that might be useful, such as the BSP enrolment form.
+- `unenroll`: This command is used for students who wish to remove their viewing permissions to the text channels of the courses they are no longer taking.
 
-- `/courses`: Allows the user to select the course channels they are currently taking.
+- `/update`: This command is used to update the students year. For example, if you are in year 1, then this command will update the year to 2
+
+### Role Commands
+
+- `/gamer`: Gives the **Gamer** role, which also gives access to the *#games* text channel to communicate with other gamers in the server.
+
+- `/harem`: Gives the **Harem** role, which also gives access to the *#harem* text channel to collect harem cards.
+
+- `/botdev`: Gives the **BotDev** role, which also gives access to the *#bot-dev-discussion* text channel.
+
 
 ## Dependencies
 - `nextcord`: python discord API
@@ -65,3 +86,13 @@ to fix a but then the branch would be of the form `fix/...`
 1. Once you have made your desired changes, you need to make sure that there are no bugs and everything works as expected. (Unless the changes do not affect the code itself, like documentation)
 
 1. Create a pull request from your branch to the main branch of repo.
+
+### Conventions to Follow
+- All the commands should be seen only by the user that has called the command. This can be achieved by using the `ephemeral=True` parameter when sending a message. 
+In case the command is supposed to be seen by everyone then the parameter needs to be set to false.
+
+- Class names should follow the CamelCase naming convention
+
+- Everything else than classes should follow the snacke_case naming convention
+
+- The use of docstrings is encouraged to give a brief description of the functions to others 
