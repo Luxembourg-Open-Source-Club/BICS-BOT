@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import argparse
 from dotenv import load_dotenv
 import nextcord
 from nextcord.ext import commands
@@ -28,15 +29,22 @@ def load_extensions(bot: commands.Bot):
             bot.load_extension(f"bics_bot.cogs.commands.{filename[:-3]}")
 
 
-def main():
+def main(args: vars):
     bot = commands.Bot(
         command_prefix="!", description=read_txt("./bics_bot/texts/bot_description.txt"), intents=get_intents()
     )
 
     load_extensions(bot)
 
-    bot.run(os.getenv("TOKEN_BOT"))
+    if args["clone"]:
+        bot.run(os.getenv("TOKEN_BOT_CLONE"))
+    else:
+        bot.run(os.getenv("TOKEN_BOT"))
 
 
 if __name__ == "__main__":
-    main()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-c", "--clone", default=False,
+                    help="When passed, the bot clone token will be used", action=argparse.BooleanOptionalAction)
+    args = vars(ap.parse_args())
+    main(args)
