@@ -1,63 +1,56 @@
 from nextcord.ext import commands
-from nextcord import application_command
-import nextcord
+from nextcord import application_command, Interaction, Guild
 
 from bics_bot.dropdowns.course_selection_dropdown import CoursesDropdownView
-from bics_bot.config.server_ids import (
-    GUILD_BICS_ID,
-    ROLE_ADMIN_ID,
-    ROLE_BOT_DEV_ID,
-    ROLE_YEAR3_ID,
-)
 from bics_bot.embeds.courses_embed import CoursesEmbed
 from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
 from bics_bot.utils.file_manipulation import read_txt
+from bics_bot.config.server_ids import GUILD_BICS_ID
 
 
 class CoursesCmd(commands.Cog):
     """
-    This class represents the commands `/enroll` and `/unenroll`.
-    
-    The `/enroll` command is used for students who wish to get viewing 
+    This class represents the commands </enroll> and </unenroll>.
+
+    The </enroll> command is used for students who wish to get viewing
     permissions to the text channels of their courses.
 
-    The `/unenroll` command is used for students who wish to remove their 
-    viewing permissions to the text channels of the courses they are no 
+    The </unenroll> command is used for students who wish to remove their
+    viewing permissions to the text channels of the courses they are no
     longer taking.
 
     Attributes:
         client: Required by the API, not directly utilized.
     """
+
     def __init__(self, client):
         self.client = client
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID],
-        description="Courses Selection.",
+        description="Enrollment to courses text channels",
     )
-    async def enroll(self, interaction: nextcord.Interaction) -> None:
+    async def enroll(self, interaction: Interaction) -> None:
         """
-        The `/enroll` command is used for students who wish to get viewing 
+        The </enroll> command is used for students who wish to get viewing
         permissions to the text channels of their courses.
 
         This method will:
-            
             1. Retrieve the courses the student is already enrolled to.
-            
             2. Display a dropdown menu where they can make choices.
-        
+
         Args:
-            interaction: Required by the API. Gives meta information about 
-              the interaction.
+            interaction: Required by the API. Gives meta information about
+            the interaction.
+
         Returns:
             None
         """
         user = interaction.user
         guild = interaction.guild
-        print(user.roles)
 
         if len(user.roles) == 1:
-            # Means the user only has the default @everyone role, and nothing else.
+            # The user has no roles. So he must first use the /intro command
             await interaction.response.send_message(
                 f"You haven't yet introduced yourself! Make sure you use the **/intro** command first",
                 ephemeral=True,
@@ -79,20 +72,20 @@ class CoursesCmd(commands.Cog):
         guild_ids=[GUILD_BICS_ID],
         description="Courses Selection.",
     )
-    async def unenroll(self, interaction: nextcord.Interaction) -> None:
+    async def unenroll(self, interaction: Interaction) -> None:
         """
-        The `/unenroll` command is used for students who wish to remove their 
-        viewing permissions to the text channels of the courses they are no 
+        The </unenroll> command is used for students who wish to remove their
+        viewing permissions to the text channels of the courses they are no
         longer taking.
 
         This method will:
-            
             1. Retrieve the courses the student is already enrolled to.
             2. Display a dropdown menu where they can make choices.
-        
+
         Args:
-            interaction: Required by the API. Gives meta information about 
-              the interaction.
+            interaction: Required by the API. Gives meta information about
+            the interaction.
+
         Returns:
             None
         """
@@ -100,7 +93,7 @@ class CoursesCmd(commands.Cog):
         guild = interaction.guild
 
         if len(user.roles) == 1:
-            # Means the user only has the default @everyone role, and nothing else.
+            # The user has no roles. So he must first use the /intro command
             await interaction.response.send_message(
                 f"You haven't yet introduced yourself! Make sure you use the **/intro** command first",
                 ephemeral=True,
@@ -118,31 +111,28 @@ class CoursesCmd(commands.Cog):
         )
 
     def get_courses_enrolled(
-        self, user: nextcord.Interaction.user, guild: nextcord.Guild
+        self, user: Interaction.user, guild: Guild
     ) -> dict[str, bool]:
-        """
-        Retrieves the courses a student is enrolled to.
-        
-        Technically; will return the courses that the student can view it by 
-        any means necessary (member level permission, role level permission, 
+        """Retrieves the courses a student is enrolled to.
+
+        Technically, it returns the courses that the student can view it by
+        any means necessary (member level permission, role level permission,
         admin rights).
 
         Args:
-            user: the user who is doing the `/enroll` or `unenroll` request.
-            guild: the server object, containing information on text channels 
+            user: the user who is doing the </enroll> or <unenroll> request.
+            guild: the server object, containing information on text channels
               necessary for this opeation
 
         Returns:
-            enrolled: a dictionary where the keys are the courses the 
-              student can see
+            dictionary where the keys are the courses the student can see
         """
-        enrolled:dict[str, bool] = {}
+        enrolled: dict[str, bool] = {}
         channels = guild.text_channels
+        courses_channels = retrieve_courses_text_channels_names(guild)
+
         for channel in channels:
-            if (
-                channel.name in retrieve_courses_text_channels_names(guild)
-                and user in channel.members
-            ):
+            if channel.name in courses_channels and user in channel.members:
                 enrolled[channel.name] = True
         return enrolled
 
