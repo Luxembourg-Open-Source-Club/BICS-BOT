@@ -59,7 +59,7 @@ class BotDevCmd(commands.Cog):
             )
         else:
             # The user wants to have the role Gamer
-            msg = "The role **BotDev** has been removed"
+            msg = "The role **BotDev** has been added"
             await user.add_roles(role)
             await interaction.response.send_message(
                 embed=LoggerEmbed("Role Status", msg),
