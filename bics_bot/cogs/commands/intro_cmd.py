@@ -35,12 +35,8 @@ class IntroCmd(commands.Cog):
     async def intro(
         self,
         interaction: Interaction,
-        name: str = nextcord.SlashOption(
-            description="First Name", required=True
-        ),
-        surname: str = nextcord.SlashOption(
-            description="Last Name", required=True
-        ),
+        name: str = nextcord.SlashOption(description="First Name", required=True),
+        surname: str = nextcord.SlashOption(description="Last Name", required=True),
         year: str = nextcord.SlashOption(
             description="The year you will be in. In case you plan on joining the University choose **incoming**",
             choices=ROLE_INTRO_LIST,
@@ -105,12 +101,12 @@ class IntroCmd(commands.Cog):
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
         msg = f"""Welcome on board **{name.capitalize()} {surname.capitalize()}**!
             Your role has been updated and you are all set 😉.
-            In case of any question, feel free to ping an <@&{ROLE_ADMIN_ID}>\n"""
+            In case of any question, feel free to ping an <@&{ROLE_ADMIN_ID}>\n\n"""
 
         if year == "incoming":
-            msg + read_txt("./bics_bot/texts/introduction_incoming.txt")
+            msg = msg + read_txt("./bics_bot/texts/introduction_incoming.txt")
         else:
-            msg + read_txt("./bics_bot/texts/introduction.txt")
+            msg = msg + read_txt("./bics_bot/texts/introduction.txt")
 
         await interaction.response.send_message(
             embed=LoggerEmbed("Introduction Status", msg),
