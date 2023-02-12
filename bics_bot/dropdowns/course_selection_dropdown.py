@@ -2,7 +2,7 @@ import nextcord
 import json
 
 from nextcord.interactions import Interaction
-from bics_bot.embeds.courses_embed import CoursesEmbed
+from bics_bot.embeds.logger_embed import LoggerEmbed
 
 PATH = "./bics_bot/data/discord_channels.json"
 
@@ -236,7 +236,7 @@ class CoursesDropdownView(nextcord.ui.View):
                 self.year3_dropdown.values, interaction
             )
 
-        embed = CoursesEmbed(
+        embed = LoggerEmbed(
             f"{'Enrollment' if self.operation else 'Unenrollment'} Status",
             f"You have been successfully {'**enrolled**' if self.operation else '**unenrolled**'} from the selected courses!",
         )

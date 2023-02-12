@@ -1,6 +1,8 @@
 from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
+from bics_bot.embeds.logger_embed import LoggerEmbed
+from bics_bot.embeds.logger_embed import WARNING_LEVEL
 from bics_bot.config.server_ids import (
     GUILD_BICS_ID,
     GUILD_BICS_CLONE_ID,
@@ -41,8 +43,9 @@ class UpdateYearCmd(commands.Cog):
         user = interaction.user
         for role in user.roles:
             if role.name == "Erasmus":
+                msg = "This command is only available for full **UniLu** students"
                 await interaction.response.send_message(
-                    "Sorry, this command is available for full UniLu students, not Erasmus :(",
+                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
                     ephemeral=True,
                 )
                 return
@@ -71,8 +74,9 @@ class UpdateYearCmd(commands.Cog):
                 await user.add_roles(
                     interaction.guild.get_role(ROLE_ALUMNI_ID)
                 )
+        msg = f"Your year role has been updated from {old_role.name} to {new_role.name}"
         await interaction.response.send_message(
-            f"Alright! Role updated from {old_role.name} to {new_role.name}.",
+            embed=LoggerEmbed("Role Status", msg),
             ephemeral=True,
         )
 

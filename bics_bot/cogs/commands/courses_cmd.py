@@ -2,7 +2,7 @@ from nextcord.ext import commands
 from nextcord import application_command, Interaction, Guild
 
 from bics_bot.dropdowns.course_selection_dropdown import CoursesDropdownView
-from bics_bot.embeds.courses_embed import CoursesEmbed
+from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.config.server_ids import GUILD_BICS_ID
@@ -60,8 +60,8 @@ class CoursesCmd(commands.Cog):
         enrolled_courses = self.get_courses_enrolled(user, guild)
         view = CoursesDropdownView(enrolled_courses, True)
         await interaction.response.send_message(
-            embed=CoursesEmbed(
-                "Enrollment Process",
+            embed=LoggerEmbed(
+                "Enrollment Status",
                 read_txt("./bics_bot/texts/enrollment.txt"),
             ),
             view=view,
@@ -102,8 +102,8 @@ class CoursesCmd(commands.Cog):
         enrolled_courses = self.get_courses_enrolled(user, guild)
         view = CoursesDropdownView(enrolled_courses, False)
         await interaction.response.send_message(
-            embed=CoursesEmbed(
-                "Unenrollment Process",
+            embed=LoggerEmbed(
+                "Unenrollment Status",
                 read_txt("./bics_bot/texts/unenrollment.txt"),
             ),
             view=view,

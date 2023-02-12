@@ -1,0 +1,12 @@
+In this server you will be able to find other BICS students, discuss course related material and much more!
+
+**Getting Started**
+**1.** In order to get granted the full server access, you will need to get a role which corresponds to your position in BICS. This can be the year you are in or for example if you are an erasmus/incoming student.
+To get the role head to the **#starting-up** text channel and type `/intro` which is a bot command. Then fill in your **first name**, **last name** and **year**. *(In case you are an erasmus/global exchange student choose **erasmus** as the year. In case you are planning on comming to the university choose **Incoming**)*
+
+**2.** Take a look at **#🧭nav-guide**. It contains some relevant descriptions of the currently available channels.
+
+**3.** Enjoy🙃
+
+**BICS Website**
+https://bicshub.uni.lu/
