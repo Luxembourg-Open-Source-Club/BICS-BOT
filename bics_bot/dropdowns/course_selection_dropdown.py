@@ -2,7 +2,7 @@ import nextcord
 import json
 
 from nextcord.interactions import Interaction
-from bics_bot.embeds.courses_embed import LoggerEmbed
+from bics_bot.embeds.logger_embed import LoggerEmbed
 
 PATH = "./bics_bot/data/discord_channels.json"
 
