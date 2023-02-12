@@ -1,19 +1,33 @@
-import nextcord
-from bics_bot.config.server_ids import *
+from nextcord import Interaction
+from bics_bot.config.server_ids import (
+    CATEGORY_SEMESTER_1_ID,
+    CATEGORY_SEMESTER_2_ID,
+    CATEGORY_SEMESTER_3_ID,
+    CATEGORY_SEMESTER_4_ID,
+    CATEGORY_SEMESTER_5_ID,
+    CATEGORY_SEMESTER_6_ID,
+)
 
 
-def retrieve_courses_text_channels_names(guild: nextcord.Interaction.guild) -> list[str]:
+def retrieve_courses_text_channels_names(
+    guild: Interaction.guild,
+) -> list[str]:
     """Retrieves all the text channels names for the different courses.
 
-        Args:
-            guild: The guild from where to retrieve the text channels
+    Args:
+        guild: The guild from where to retrieve the text channels
 
-        Rerturns:
-            List with all courses text channels names        
-
-"""
-    ids = [CATEGORY_SEMESTER_1_ID, CATEGORY_SEMESTER_2_ID, CATEGORY_SEMESTER_3_ID,
-           CATEGORY_SEMESTER_4_ID, CATEGORY_SEMESTER_5_ID, CATEGORY_SEMESTER_6_ID]
+    Rerturns:
+        List with all courses text channels names
+    """
+    ids = [
+        CATEGORY_SEMESTER_1_ID,
+        CATEGORY_SEMESTER_2_ID,
+        CATEGORY_SEMESTER_3_ID,
+        CATEGORY_SEMESTER_4_ID,
+        CATEGORY_SEMESTER_5_ID,
+        CATEGORY_SEMESTER_6_ID,
+    ]
     categories = guild.by_category()
     text_channels = []
     for category in categories:
@@ -24,30 +38,41 @@ def retrieve_courses_text_channels_names(guild: nextcord.Interaction.guild) -> l
     return text_channels
 
 
-def retrieve_courses_text_channels_by_year(guild: nextcord.Interaction.guild) -> dict:
+def retrieve_courses_text_channels_by_year(
+    guild: Interaction.guild,
+) -> dict:
     """Retrieves all the text channels for the different courses.
 
-        Args:
-            guild: The guild from where to retrieve the text channels
+    Args:
+        guild: The guild from where to retrieve the text channels
 
-        Rerturns:
-            dictionary where the key is the year, as yearn and the value is a 
-            list whith text channel names associated with the year.
+    Rerturns:
+        dictionary where the key is the year, as yearn and the value is a
+        list whith text channel names associated with the year.
     """
-    ids = [CATEGORY_SEMESTER_1_ID, CATEGORY_SEMESTER_2_ID, CATEGORY_SEMESTER_3_ID,
-           CATEGORY_SEMESTER_4_ID, CATEGORY_SEMESTER_5_ID, CATEGORY_SEMESTER_6_ID]
+    ids = [
+        CATEGORY_SEMESTER_1_ID,
+        CATEGORY_SEMESTER_2_ID,
+        CATEGORY_SEMESTER_3_ID,
+        CATEGORY_SEMESTER_4_ID,
+        CATEGORY_SEMESTER_5_ID,
+        CATEGORY_SEMESTER_6_ID,
+    ]
     categories = guild.by_category()
     text_channels = {"year1": [], "year2": [], "year3": []}
     for category in categories:
         if category[0].id in ids:
             if (category[0].name[-1]) == "1" or category[0].name[-1] == "2":
-                text_channels[f"year1"] += [
-                    text_channel.name for text_channel in category[1]]
+                text_channels["year1"] += [
+                    text_channel.name for text_channel in category[1]
+                ]
             if (category[0].name[-1]) == "3" or category[0].name[-1] == "4":
-                text_channels[f"year2"] += [
-                    text_channel.name for text_channel in category[1]]
+                text_channels["year2"] += [
+                    text_channel.name for text_channel in category[1]
+                ]
             if (category[0].name[-1]) == "5" or category[0].name[-1] == "6":
-                text_channels[f"year3"] += [
-                    text_channel.name for text_channel in category[1]]
+                text_channels["year3"] += [
+                    text_channel.name for text_channel in category[1]
+                ]
 
     return text_channels
