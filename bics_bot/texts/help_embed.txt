@@ -1,0 +1,26 @@
+**/help** 
+- This command is used to view the list of the available bot commands.
+
+**/intro** (Only for new members)
+- Allows a new member to get role and to introduce themselves. This command can only be used in the introduction channel (`#starting-up`).
+  
+**/useful_links**
+- This command is used to view a list of some links that might be useful for a BICS student, such as the BSP enrolment form.
+
+**/enroll**
+- This command is used for students who wish to get viewing permissions to the text channels of their courses.
+
+**/unenroll**
+- This command is used for students who wish to remove their viewing permissions to the text channels of the courses they are no longer taking.
+
+**/update**
+- This command is used to update the students year. For example, if you are in year 1, then this command will update the year to 2
+
+**/gamer**
+- Gives the **Gamer** role, which also gives access to the *#games* text channel to communicate with other gamers in the server.
+
+**/harem**
+- Gives the **Harem** role, which also gives access to the *#harem* text channel to collect harem cards.
+
+**/botdev**
+- Gives the **BotDev** role, which also gives access to the *#bot-dev-discussion* text channel.
