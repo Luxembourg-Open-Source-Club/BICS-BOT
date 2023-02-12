@@ -6,9 +6,9 @@ WARNING_LEVEL = "WARN"
 ERROR_LEVEL = "ERROR"
 
 level_colors = {
-    "INFO": Colour.blue,
-    "WARN": Colour.yellow,
-    "ERROR": Colour.red,
+    "INFO": Colour.green(),
+    "WARN": Colour.yellow(),
+    "ERROR": Colour.red(),
 }
 
 
