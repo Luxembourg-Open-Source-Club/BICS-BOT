@@ -11,6 +11,7 @@ from bics_bot.config.server_ids import (
     ROLE_ADMIN_ID,
     ROLE_INTRO_LIST,
 )
+from bics_bot.utils.file_manipulation import read_txt
 
 
 class IntroCmd(commands.Cog):
@@ -104,7 +105,12 @@ class IntroCmd(commands.Cog):
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
         msg = f"""Welcome on board **{name.capitalize()} {surname.capitalize()}**!
             Your role has been updated and you are all set 😉.
-            In case of any question, feel free to ping an <@&{ROLE_ADMIN_ID}>"""
+            In case of any question, feel free to ping an <@&{ROLE_ADMIN_ID}>\n"""
+
+        if year == "incoming":
+            msg + read_txt("./bics_bot/texts/introduction_incoming.txt")
+        else:
+            msg + read_txt("./bics_bot/texts/introduction.txt")
 
         await interaction.response.send_message(
             embed=LoggerEmbed("Introduction Status", msg),
