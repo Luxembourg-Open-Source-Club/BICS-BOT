@@ -47,9 +47,9 @@ Then, if you want to test a command that you have added, go to `#bot-dev-discuss
 
 - `/intro` (Only for new members): Allows a new member to get role and to introduce themselves. This command can only be used in the introduction channel (`#starting-up`).
 
-- `enroll`: This command is used for students who wish to get viewing permissions to the text channels of their courses.
+- `/enroll`: This command is used for students who wish to get viewing permissions to the text channels of their courses.
 
-- `unenroll`: This command is used for students who wish to remove their viewing permissions to the text channels of the courses they are no longer taking.
+- `/unenroll`: This command is used for students who wish to remove their viewing permissions to the text channels of the courses they are no longer taking.
 
 - `/update`: This command is used to update the students year. For example, if you are in year 1, then this command will update the year to 2
 
