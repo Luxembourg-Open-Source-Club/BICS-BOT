@@ -1,6 +1,6 @@
-Before you start using this server there is something you should know.
-This server is currently using a system where you need to **enroll** or **unenroll** to view the courses text channels.
-The idea is very simple. Once you know the courses you will take, or are currently taking, you can make use of the command `/enroll` to enroll to the desired courses text channels.
-In case you want to do the oposite, for instance because of a mistake, you can use the command `/unenroll`.
+There is something you should be aware of before utilizing this server.
+To view the course text channels on this server, you must either **enroll** in the course or **unenroll** from it.
+The concept is extremely basic. Once you are aware of the courses you will be taking or are already taking, you can use the command '/enroll' to join the text channels for those courses.
+You can use the command "/unenroll" if you want to do the opposite, say due to an error.
 
-**Note:** You can at any moment use both commands.
+Note that you are always free to use any command.
