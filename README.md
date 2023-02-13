@@ -1,8 +1,7 @@
 # BICS-BOT 🤖
-This repo contains the source code of the **BICS bot**. It's main purpose is to automate the BICS server and to give the users/students different ways
-to interact with the server as well.
+The **BICS bot's** source code may be found in this repository. Its primary goal is to automate the BICS server and provide users and students with a variety of ways to communicate with it.
 
-Currently, the bot supports roles attribution, enrolment/unenrolment to courses text channels some general commands such as the `help` command.
+The bot now supports text channel instructions including **help,** **role attribution**, and **enrolment/unenrolment** to courses.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
