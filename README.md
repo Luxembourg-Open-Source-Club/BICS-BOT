@@ -16,24 +16,20 @@ The bot now supports text channel instructions including **help,** **role attrib
     - [Conventions to Follow](#conventions-to-follow)
 
 ## Getting Started
-> This repo contains a python package **bics_bot** which is where all the logic is implemented. For this reason, you will need to install the package locally.
-For this reason I advice you to install it using a python virtual environment.
+> The logic is implemented in a python module called **bics_bot** that is part of this repository. You will have to install the software locally as a result.
+This is why I suggest installing it using a virtual Python environment.
 
 ### Initial Setup
 1. Set up a python virtual environment (*ignore this command if you don't want to*)
     - `python3 -m env env`
 1. Install the dependencies
     - `pip install -r requirements.txt`
-1. Build the package
-    - `python3 setup.py build`
-1. Install the package
-    - `python3 setup.py install`
 1. Create a file .env in the root folder which contains the bot token as `TOKEN_BOT_CLONE=token`. To get the token, reach out to @Pedro. 
 
 ### Bot Deployment
-In case you want to test what you have coded, you will need to deploy a bot. To do so, run `python main.py -c` from within the root directory of this repo. The `-c` specifies the program to launch the clone instead of the real bot.
-Once the bot is running you should see a message `Bot is online`. 
-Then, if you want to test a command that you have added, go to `#bot-dev-discussion` text channel in the BICS discord server. *(Note that you need to have the role `BotDev` to see this channel)*
+You must deploy a bot if you wish to test the code you have written. Run `python main.py -c` from this repository's root directory to accomplish this. The program to launch the clone rather than the actual bot is specified by the `-c` option.
+When the bot is operating, the message **Bot is online** should appear.
+Go to the **#bot-dev-discussion** text channel in the BICS discord server to test any commands you have added. *(Note: To view this channel, you must hold the role **BotDev**)*
 
 
 ## Commands Available
