@@ -1,8 +1,9 @@
+import nextcord
 from nextcord.ext import commands
 from nextcord import application_command, Interaction, Guild
 
 from bics_bot.dropdowns.course_selection_dropdown import CoursesDropdownView
-from bics_bot.embeds.logger_embed import LoggerEmbed
+from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.config.server_ids import GUILD_BICS_ID
@@ -51,8 +52,20 @@ class CoursesCmd(commands.Cog):
 
         if len(user.roles) == 1:
             # The user has no roles. So he must first use the /intro command
+            msg = (
+                "You haven't yet introduced yourself! Make sure you use the **/intro** command first",
+            )
             await interaction.response.send_message(
-                f"You haven't yet introduced yourself! Make sure you use the **/intro** command first",
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+
+        if nextcord.utils.get(user.roles, "Incoming"):
+            # The user has the incoming role and thus not allowed to enroll
+            msg = ("You are not allowed to enroll to courses yet!",)
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
                 ephemeral=True,
             )
             return
@@ -94,10 +107,23 @@ class CoursesCmd(commands.Cog):
 
         if len(user.roles) == 1:
             # The user has no roles. So he must first use the /intro command
+            msg = (
+                "You haven't yet introduced yourself! Make sure you use the **/intro** command first",
+            )
             await interaction.response.send_message(
-                f"You haven't yet introduced yourself! Make sure you use the **/intro** command first",
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
                 ephemeral=True,
             )
+            return
+
+        if nextcord.utils.get(user.roles, "Incoming"):
+            # The user has the incoming role and thus not allowed to enroll
+            msg = ("You are not allowed to enroll to courses yet!",)
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
 
         enrolled_courses = self.get_courses_enrolled(user, guild)
         view = CoursesDropdownView(enrolled_courses, False)
