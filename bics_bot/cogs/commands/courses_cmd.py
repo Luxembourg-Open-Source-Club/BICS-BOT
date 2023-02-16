@@ -61,9 +61,9 @@ class CoursesCmd(commands.Cog):
             )
             return
 
-        if nextcord.utils.get(user.roles, "Incoming"):
+        if nextcord.utils.get(user.roles, name="Incoming"):
             # The user has the incoming role and thus not allowed to enroll
-            msg = ("You are not allowed to enroll to courses yet!",)
+            msg = "You are not allowed to enroll to courses yet!"
             await interaction.response.send_message(
                 embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
                 ephemeral=True,
@@ -116,9 +116,9 @@ class CoursesCmd(commands.Cog):
             )
             return
 
-        if nextcord.utils.get(user.roles, "Incoming"):
+        if nextcord.utils.get(user.roles, name="Incoming"):
             # The user has the incoming role and thus not allowed to enroll
-            msg = ("You are not allowed to enroll to courses yet!",)
+            msg = "You are not allowed to enroll to courses yet!"
             await interaction.response.send_message(
                 embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
                 ephemeral=True,
