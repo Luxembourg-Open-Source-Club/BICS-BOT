@@ -1,11 +1,9 @@
 import nextcord
 from nextcord.ext import commands
-from nextcord import application_command, Interaction, Guild
+from nextcord import application_command, Interaction
 
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
-from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
-from bics_bot.utils.file_manipulation import read_txt
-from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, ROLE_INTRO_LIST, CHANNEL_INTRO_ID, ROLE_ADMIN_ID
+from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, CATEGORY_STUDY_GROUPS
 
 
 class CreateStudyGroupCmd(commands.Cog):
@@ -23,13 +21,13 @@ class CreateStudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Creating a study group",
+        description="Creating a study group. Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
     )
     async def create_study_group(
         self,
         interaction: Interaction,
         group_name: str = nextcord.SlashOption(description="Name of the group", required=True),
-        member_amount: str = nextcord.SlashOption(description="Amount of people in the group", required=True),
+        names: str = nextcord.SlashOption(description="The group members. Use server names, separate names with comma and a space after.", required=True),
     ) -> None:
         """
         The </create_study_group> command will let students manage private text and voice 
@@ -46,13 +44,43 @@ class CreateStudyGroupCmd(commands.Cog):
         """
 
         if len(interaction.user.roles) == 1:
-            # The user has no roles. So he must first use the /intro command
+            # The user has no roles. So he must first use this command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
             await interaction.response.send_message(
                 embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
                 ephemeral=True,
             )
+            return
+        elif nextcord.utils.get(interaction.user.roles, name="Incoming"):
+            # The user has the incoming role and thus not allowed to use this command
+            msg = "You are not allowed to create study groups, you aren't a student :)"
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
         
+        member_count = len(names.split(", "))
+        members = await self.get_members(interaction, names)
+        if len(members) != member_count:
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", "Check the names you entered, and the format in which you entered them.", WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+    
+    async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
+        members: list[Interaction.user] = []
+        for name in names.split(", "):
+            print("for " + name)
+            for member in interaction.guild.members:
+                print("looking at " + member.display_name)
+                if name == member.display_name:
+                    print("found")
+                    members.append(member)
+                    break
+            # f"The user {name} was not found on the server. Make sure you used the correct convention for inputting the names, and that you used the correct name."
+        return members
         
 
 def setup(client):
