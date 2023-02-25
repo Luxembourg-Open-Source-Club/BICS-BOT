@@ -24,3 +24,9 @@
 
 **/botdev**
 - Gives the **BotDev** role, which also gives access to the *#bot-dev-discussion* text channel.
+
+**/create_study_group**
+  - This command will let students create private text and voice channels for their study groups.
+    
+**/delete_study_group** 
+  - This command will let students remove their private text and voice.
