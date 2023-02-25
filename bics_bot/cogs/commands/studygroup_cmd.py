@@ -42,10 +42,6 @@ class StudyGroupCmd(commands.Cog):
         Returns:
             None
         """
-
-        print(names)
-        # return
-
         if len(interaction.user.roles) == 1:
             # The user has no roles. So he must first use this command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
@@ -62,6 +58,17 @@ class StudyGroupCmd(commands.Cog):
                 ephemeral=True,
             )
             return
+        
+        group_name = group_name.lower()
+        
+        # identical group name check
+        for channel in interaction.guild.get_channel(CATEGORY_STUDY_GROUPS).channels:
+            if channel.name == group_name:
+                await interaction.response.send_message(
+                    embed=LoggerEmbed("Warning", "Group name already in use. Enter a more unique group name.", WARNING_LEVEL),
+                    ephemeral=True,
+                )
+                return
         
         member_count = len(names.split(", "))
         members = await self.get_members(interaction, names)
@@ -106,10 +113,30 @@ class StudyGroupCmd(commands.Cog):
         Returns:
             None
         """
+
+        if len(interaction.user.roles) == 1:
+            # The user has no roles. So he must first use this command
+            msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+        elif nextcord.utils.get(interaction.user.roles, name="Incoming"):
+            # The user has the incoming role and thus not allowed to use this command
+            msg = "You are not allowed to create study groups, you aren't a student :)"
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+        
+        group_name = group_name.lower()
+
         studygroup_category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
         channels = []
         for channel in studygroup_category.channels:
-            if channel.name.lower() == group_name.lower():
+            if channel.name == group_name:
                 channels.append(channel)
 
         if interaction.user not in channels[0].overwrites.keys():
