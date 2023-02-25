@@ -6,7 +6,7 @@ from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, CATEGORY_STUDY_GROUPS
 
 
-class CreateStudyGroupCmd(commands.Cog):
+class StudyGroupCmd(commands.Cog):
     """This class represents the command </create_study_group>
 
     The </create_study_group> command will let students create private text and voice 
@@ -82,6 +82,25 @@ class CreateStudyGroupCmd(commands.Cog):
 
         return
     
+    async def delete_study_group(
+        self,
+        interaction: Interaction,
+        group_name: str = nextcord.SlashOption(description="Name of the group", required=True),
+    ) -> None:
+        """
+        The </delete_study_group> command will let students remove their private text and voice 
+        channels for their study groups. The user must be in the group to delete the group.
+
+        Args:
+            interaction: Required by the API. Gives meta information about
+                the interaction.
+            group_name: Name of the study group to be removed
+
+        Returns:
+            None
+        """
+        pass
+    
     async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
         members: list[Interaction.user] = []
         for name in names.split(", "):
@@ -114,4 +133,4 @@ class CreateStudyGroupCmd(commands.Cog):
 
 def setup(client):
     """Function used to setup nextcord cogs"""
-    client.add_cog(CreateStudyGroupCmd(client))
+    client.add_cog(StudyGroupCmd(client))
