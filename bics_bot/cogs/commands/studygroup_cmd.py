@@ -81,6 +81,7 @@ class CreateStudyGroupCmd(commands.Cog):
             )
 
         return
+    
     async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
         members: list[Interaction.user] = []
         for name in names.split(", "):
@@ -103,10 +104,10 @@ class CreateStudyGroupCmd(commands.Cog):
         print(text_overwrites)
         
         voice_overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(connect=False)
+            interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)
         }
         for member in members:
-            voice_overwrites[interaction.guild.get_member(member.id)] = nextcord.PermissionOverwrite(connect=True)
+            voice_overwrites[interaction.guild.get_member(member.id)] = nextcord.PermissionOverwrite(view_channel=True)
 
         return (text_overwrites, voice_overwrites)
         
