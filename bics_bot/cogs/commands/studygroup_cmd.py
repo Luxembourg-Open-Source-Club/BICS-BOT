@@ -78,7 +78,7 @@ class StudyGroupCmd(commands.Cog):
         await interaction.response.send_message(
                 embed=LoggerEmbed("Confirmation", f"Text channel <{text_channel.name}> and voice channel <{voice_channel.name}> have been created. Users {names} have been given access", WARNING_LEVEL),
                 ephemeral=True,
-            )
+        )
 
         return
     
@@ -104,10 +104,28 @@ class StudyGroupCmd(commands.Cog):
             None
         """
         studygroup_category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
-
+        channels = []
         for channel in studygroup_category.channels:
             if channel.name == group_name or channel.name.capitalize == group_name:
-                await channel.delete()
+                channels.append(channel)
+                # channel
+
+        if interaction.user not in channels[0].members:
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", f"You are not a part of this study group. You cannot delete it.", WARNING_LEVEL),
+                ephemeral=True,
+            )
+            # report_incident()
+            return
+        
+        for channel in channels:
+            await channel.delete()
+
+        await interaction.response.send_message(
+                embed=LoggerEmbed("Confirmation", f"Study group {group_name} has been deleted. Farewell.", WARNING_LEVEL),
+                ephemeral=True,
+        )
+
     
     async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
         members: list[Interaction.user] = []
