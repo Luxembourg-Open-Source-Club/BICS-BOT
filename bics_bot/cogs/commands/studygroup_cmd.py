@@ -82,6 +82,10 @@ class StudyGroupCmd(commands.Cog):
 
         return
     
+    @application_command.slash_command(
+        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
+        description="Deletes a study group. Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
+    )
     async def delete_study_group(
         self,
         interaction: Interaction,
@@ -99,7 +103,11 @@ class StudyGroupCmd(commands.Cog):
         Returns:
             None
         """
-        pass
+        studygroup_category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
+
+        for channel in studygroup_category.channels:
+            if channel.name == group_name or channel.name.capitalize == group_name:
+                await channel.delete()
     
     async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
         members: list[Interaction.user] = []
