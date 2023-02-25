@@ -21,7 +21,7 @@ class CreateStudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Creating a study group. Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
+        description="INCLUDE YOUR OWN NAME. Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
     )
     async def create_study_group(
         self,
@@ -71,16 +71,16 @@ class CreateStudyGroupCmd(commands.Cog):
 
         topic = f"Study group {group_name} for {names}."
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
-        overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(read_messages=False)
-        }
-        text_channel = await interaction.guild.create_text_channel(group_name, topic=topic, category=category, overwrites=overwrites)
-        voice_channel = await interaction.guild.create_voice_channel(group_name, topic=topic, category=category, overwrites=overwrites)
+        text_overwrites, voice_overwrites = self.get_overwrites(interaction, members)
+        text_channel: nextcord.TextChannel = await interaction.guild.create_text_channel(group_name, topic=topic, category=category, overwrites=text_overwrites)
+        voice_channel: nextcord.VoiceChannel = await interaction.guild.create_voice_channel(group_name, category=category, overwrites=voice_overwrites)
         
-        # for member in members:
-        #     await text_channel.set_permissions(target=member, read_messages=True)
-        #     await voice_channel.set_permissions(target=member, read_messages=True)
-    
+        await interaction.response.send_message(
+                embed=LoggerEmbed("Confirmation", f"Text channel <{text_channel.name}> and voice channel <{voice_channel.name}> have been created. Users {names} have been given access", WARNING_LEVEL),
+                ephemeral=True,
+            )
+
+        return
     async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
         members: list[Interaction.user] = []
         for name in names.split(", "):
@@ -91,8 +91,24 @@ class CreateStudyGroupCmd(commands.Cog):
                     print("found")
                     members.append(member)
                     break
-            # f"The user {name} was not found on the server. Make sure you used the correct convention for inputting the names, and that you used the correct name."
         return members
+    
+    def get_overwrites(self, interaction: Interaction, members: list[Interaction.user]):
+        text_overwrites = {
+            interaction.guild.default_role: nextcord.PermissionOverwrite(read_messages=False)
+        }
+        for member in members:
+            text_overwrites[interaction.guild.get_member(member.id)] = nextcord.PermissionOverwrite(read_messages=True)
+        
+        print(text_overwrites)
+        
+        voice_overwrites = {
+            interaction.guild.default_role: nextcord.PermissionOverwrite(connect=False)
+        }
+        for member in members:
+            voice_overwrites[interaction.guild.get_member(member.id)] = nextcord.PermissionOverwrite(connect=True)
+
+        return (text_overwrites, voice_overwrites)
         
 
 def setup(client):
