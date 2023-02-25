@@ -68,6 +68,18 @@ class CreateStudyGroupCmd(commands.Cog):
                 ephemeral=True,
             )
             return
+
+        topic = f"Study group {group_name} for {names}."
+        category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
+        overwrites = {
+            interaction.guild.default_role: nextcord.PermissionOverwrite(read_messages=False)
+        }
+        text_channel = await interaction.guild.create_text_channel(group_name, topic=topic, category=category, overwrites=overwrites)
+        voice_channel = await interaction.guild.create_voice_channel(group_name, topic=topic, category=category, overwrites=overwrites)
+        
+        # for member in members:
+        #     await text_channel.set_permissions(target=member, read_messages=True)
+        #     await voice_channel.set_permissions(target=member, read_messages=True)
     
     async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
         members: list[Interaction.user] = []
