@@ -27,10 +27,10 @@ class StudyGroupCmd(commands.Cog):
         self,
         interaction: Interaction,
         group_name: str = nextcord.SlashOption(description="Try to make it unique to avoid overlapping. Example: use member names in the group name.", required=True),
-        names: str = nextcord.SlashOption(description="Include your own name. Use server names. Separate names with a comma and a space. (', ')", required=True),
+        names: str = nextcord.SlashOption(description="Use server names. Separate names with a comma and a space. (', ')", required=True),
     ) -> None:
         """
-        The </create_study_group> command will let students manage private text and voice 
+        The </create_study_group> command will let students create private text and voice 
         channels for their study groups.
 
         Args:
@@ -167,13 +167,15 @@ class StudyGroupCmd(commands.Cog):
     
     def get_overwrites(self, interaction: Interaction, members: list[Interaction.user]):
         text_overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(read_messages=False)
+            interaction.guild.default_role: nextcord.PermissionOverwrite(read_messages=False),
+            interaction.guild.me: nextcord.PermissionOverwrite(read_messages=True)
         }
         for member in members:
             text_overwrites[interaction.guild.get_member(member.id)] = nextcord.PermissionOverwrite(read_messages=True)
         
         voice_overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)
+            interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False),
+            interaction.guild.me: nextcord.PermissionOverwrite(view_channel=True)
         }
         for member in members:
             voice_overwrites[interaction.guild.get_member(member.id)] = nextcord.PermissionOverwrite(view_channel=True)
