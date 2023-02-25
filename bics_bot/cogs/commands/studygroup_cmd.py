@@ -21,13 +21,13 @@ class StudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="INCLUDE YOUR OWN NAME. Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
+        description="Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
     )
     async def create_study_group(
         self,
         interaction: Interaction,
-        group_name: str = nextcord.SlashOption(description="Name of the group", required=True),
-        names: str = nextcord.SlashOption(description="The group members. Use server names, separate names with comma and a space after.", required=True),
+        group_name: str = nextcord.SlashOption(description="Try to make it unique to avoid overlapping. Example: use member names in the group name.", required=True),
+        names: str = nextcord.SlashOption(description="Include your own name. Use server names. Separate names with a comma and a space. (', ')", required=True),
     ) -> None:
         """
         The </create_study_group> command will let students manage private text and voice 
@@ -42,6 +42,9 @@ class StudyGroupCmd(commands.Cog):
         Returns:
             None
         """
+
+        print(names)
+        # return
 
         if len(interaction.user.roles) == 1:
             # The user has no roles. So he must first use this command
@@ -84,12 +87,12 @@ class StudyGroupCmd(commands.Cog):
     
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Deletes a study group. Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
+        description="Example: /delete_study_group Awesome-LA1-Study-Group",
     )
     async def delete_study_group(
         self,
         interaction: Interaction,
-        group_name: str = nextcord.SlashOption(description="Name of the group", required=True),
+        group_name: str = nextcord.SlashOption(description="Enter the name of the text channel or the voice channel", required=True),
     ) -> None:
         """
         The </delete_study_group> command will let students remove their private text and voice 
@@ -106,11 +109,10 @@ class StudyGroupCmd(commands.Cog):
         studygroup_category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
         channels = []
         for channel in studygroup_category.channels:
-            if channel.name == group_name or channel.name.capitalize == group_name:
+            if channel.name.lower() == group_name.lower():
                 channels.append(channel)
-                # channel
 
-        if interaction.user not in channels[0].members:
+        if interaction.user not in channels[0].overwrites.keys():
             await interaction.response.send_message(
                 embed=LoggerEmbed("Warning", f"You are not a part of this study group. You cannot delete it.", WARNING_LEVEL),
                 ephemeral=True,
@@ -130,11 +132,8 @@ class StudyGroupCmd(commands.Cog):
     async def get_members(self, interaction: Interaction, names: str) -> list[Interaction.user]:
         members: list[Interaction.user] = []
         for name in names.split(", "):
-            print("for " + name)
             for member in interaction.guild.members:
-                print("looking at " + member.display_name)
                 if name == member.display_name:
-                    print("found")
                     members.append(member)
                     break
         return members
@@ -145,8 +144,6 @@ class StudyGroupCmd(commands.Cog):
         }
         for member in members:
             text_overwrites[interaction.guild.get_member(member.id)] = nextcord.PermissionOverwrite(read_messages=True)
-        
-        print(text_overwrites)
         
         voice_overwrites = {
             interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)
