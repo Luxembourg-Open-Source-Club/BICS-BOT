@@ -41,15 +41,15 @@ class CalendarCmd(commands.Cog):
         location: str = nextcord.SlashOption(description="Room of the event. For example: MSA 3.050", required=False)
     ) -> None:
         fields, rows = self.read_csv()
-        rows.append([type, course, graded, deadline_date, deadline_time, location])
+        year = self.get_user_year(interaction)
+        rows.append([type, course, graded, deadline_date, deadline_time, location, year])
         self.write_csv(fields, rows)
         
         await interaction.response.send_message(
             embed=LoggerEmbed("Confirmation", f"Data added to calendar.\n\nType: {type}\nCourse: {course}\nGraded: {graded}\nDeadline Date: {deadline_date}\nDeadline Time: {deadline_time}\nLocation: {location}", WARNING_LEVEL),
             ephemeral=True,
         )
-
-        return    
+        return
 
     def read_csv(self):
         fields = []
@@ -73,6 +73,11 @@ class CalendarCmd(commands.Cog):
         d = datetime.datetime(int(deadline_date[2]), int(deadline_date[1]), int(deadline_date[0]), int(deadline_time[0]), int(deadline_time[1]))
         unixtime = int(time.mktime(d.timetuple()))
         return unixtime
+    
+    def get_user_year(self, interaction:Interaction) -> str:
+        for role in interaction.user.roles:
+            if role.name.startswith("Year"):
+                return role.name
 
 def setup(client):
     """Function used to setup nextcord cogs"""

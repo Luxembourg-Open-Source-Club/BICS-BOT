@@ -1,1 +1,1 @@
-type, course, graded, deadline_date, deadline_time, location
+type, course, graded, deadline_date, deadline_time, location, year
