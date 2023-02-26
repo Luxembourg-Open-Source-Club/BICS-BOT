@@ -3,15 +3,20 @@ import json
 
 from nextcord.interactions import Interaction
 from bics_bot.embeds.logger_embed import LoggerEmbed
-
-PATH = "./bics_bot/data/discord_channels.json"
-
-with open(PATH) as f:
-    text_channels = json.load(f)
+from bics_bot.utils.channels_utils import (
+    retrieve_courses_text_channels,
+    unfilter_course_name,
+)
 
 
 class Year1CoursesDropdown(nextcord.ui.Select):
-    def __init__(self, enrolled_courses: dict[str, bool], enroll: bool):
+    def __init__(
+        self,
+        enrolled_courses: dict[str, bool],
+        enroll: bool,
+        text_channels,
+    ):
+        self.text_channels = text_channels
         self._options = self._get_options(enrolled_courses, enroll)
 
     def build(self):
@@ -30,20 +35,20 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
         options = []
-        for value in text_channels["courses"]["year1"]["winter"]:
-            if value["name"] not in enrolled_courses:
+        for value in self.text_channels["year1"]["winter"]:
+            if unfilter_course_name(value) not in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 1 course",
                         emoji="⛄",
                     )
                 )
-        for value in text_channels["courses"]["year1"]["summer"]:
-            if value["name"] not in enrolled_courses:
+        for value in self.text_channels["year1"]["summer"]:
+            if unfilter_course_name(value) not in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 2 course",
                         emoji="☀️",
                     )
@@ -52,20 +57,20 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
         options = []
-        for value in text_channels["courses"]["year1"]["winter"]:
-            if value["name"] in enrolled_courses:
+        for value in self.text_channels["year1"]["winter"]:
+            if unfilter_course_name(value) in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 1 course",
                         emoji="⛄",
                     )
                 )
-        for value in text_channels["courses"]["year1"]["summer"]:
-            if value["name"] in enrolled_courses:
+        for value in self.text_channels["year1"]["summer"]:
+            if unfilter_course_name(value) in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 2 course",
                         emoji="☀️",
                     )
@@ -74,7 +79,13 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
 
 class Year2CoursesDropdown(nextcord.ui.Select):
-    def __init__(self, enrolled_courses: dict[str, bool], enroll: bool):
+    def __init__(
+        self,
+        enrolled_courses: dict[str, bool],
+        enroll: bool,
+        text_channels,
+    ):
+        self.text_channels = text_channels
         self._options = self._get_options(enrolled_courses, enroll)
 
     def build(self):
@@ -93,20 +104,20 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
         options = []
-        for value in text_channels["courses"]["year2"]["winter"]:
-            if value["name"] not in enrolled_courses:
+        for value in self.text_channels["year2"]["winter"]:
+            if unfilter_course_name(value) not in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 3 course",
                         emoji="⛄",
                     )
                 )
-        for value in text_channels["courses"]["year2"]["summer"]:
-            if value["name"] not in enrolled_courses:
+        for value in self.text_channels["year2"]["summer"]:
+            if unfilter_course_name(value) not in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 4 course",
                         emoji="☀️",
                     )
@@ -115,20 +126,20 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
         options = []
-        for value in text_channels["courses"]["year2"]["winter"]:
-            if value["name"] in enrolled_courses:
+        for value in self.text_channels["year2"]["winter"]:
+            if unfilter_course_name(value) in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 3 course",
                         emoji="⛄",
                     )
                 )
-        for value in text_channels["courses"]["year2"]["summer"]:
-            if value["name"] in enrolled_courses:
+        for value in self.text_channels["year2"]["summer"]:
+            if unfilter_course_name(value) in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 4 course",
                         emoji="☀️",
                     )
@@ -137,7 +148,13 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 
 
 class Year3CoursesDropdown(nextcord.ui.Select):
-    def __init__(self, enrolled_courses: dict[str, bool], enroll: bool):
+    def __init__(
+        self,
+        enrolled_courses: dict[str, bool],
+        enroll: bool,
+        text_channels: Interaction.guild,
+    ):
+        self.text_channels = text_channels
         self._options = self._get_options(enrolled_courses, enroll)
 
     def build(self):
@@ -156,20 +173,20 @@ class Year3CoursesDropdown(nextcord.ui.Select):
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
         options = []
-        for value in text_channels["courses"]["year3"]["winter"]:
-            if value["name"] not in enrolled_courses:
+        for value in self.text_channels["year3"]["winter"]:
+            if unfilter_course_name(value) not in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 5 course",
                         emoji="⛄",
                     )
                 )
-        for value in text_channels["courses"]["year3"]["summer"]:
-            if value["name"] not in enrolled_courses:
+        for value in self.text_channels["year3"]["summer"]:
+            if unfilter_course_name(value) not in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 6 course",
                         emoji="☀️",
                     )
@@ -178,20 +195,20 @@ class Year3CoursesDropdown(nextcord.ui.Select):
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
         options = []
-        for value in text_channels["courses"]["year3"]["winter"]:
-            if value["name"] in enrolled_courses:
+        for value in self.text_channels["year3"]["winter"]:
+            if unfilter_course_name(value) in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 5 course",
                         emoji="⛄",
                     )
                 )
-        for value in text_channels["courses"]["year3"]["summer"]:
-            if value["name"] in enrolled_courses:
+        for value in self.text_channels["year3"]["summer"]:
+            if unfilter_course_name(value) in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=value["name"],
+                        label=value,
                         description="Semester 6 course",
                         emoji="☀️",
                     )
@@ -200,11 +217,23 @@ class Year3CoursesDropdown(nextcord.ui.Select):
 
 
 class CoursesDropdownView(nextcord.ui.View):
-    def __init__(self, enrolled_courses: dict[str, bool], enroll):
+    def __init__(
+        self,
+        enrolled_courses: dict[str, bool],
+        enroll,
+        guild: Interaction.guild,
+    ):
         super().__init__(timeout=5000)
-        self.year1_dropdown = Year1CoursesDropdown(enrolled_courses, enroll)
-        self.year2_dropdown = Year2CoursesDropdown(enrolled_courses, enroll)
-        self.year3_dropdown = Year3CoursesDropdown(enrolled_courses, enroll)
+        self.text_channels = retrieve_courses_text_channels(guild)
+        self.year1_dropdown = Year1CoursesDropdown(
+            enrolled_courses, enroll, self.text_channels
+        )
+        self.year2_dropdown = Year2CoursesDropdown(
+            enrolled_courses, enroll, self.text_channels
+        )
+        self.year3_dropdown = Year3CoursesDropdown(
+            enrolled_courses, enroll, self.text_channels
+        )
         if len(self.year1_dropdown._options) > 0:
             self.year1_dropdown.build()
             self.add_item(self.year1_dropdown)

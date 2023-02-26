@@ -133,3 +133,72 @@ def retrieve_courses_text_channels_by_year(
                 ]
 
     return text_channels
+
+
+def retrieve_courses_text_channels(
+    guild: Interaction.guild,
+) -> dict:
+    """Retrieves all the text channels for the different courses.
+
+    Args:
+        guild: The guild from where to retrieve the text channels
+
+    Rerturns:
+        dictionary where the key is the year, as yearn and the value is a
+        list whith text channel names associated with the year.
+    """
+    ids = [
+        CATEGORY_SEMESTER_1_ID,
+        CATEGORY_SEMESTER_2_ID,
+        CATEGORY_SEMESTER_3_ID,
+        CATEGORY_SEMESTER_4_ID,
+        CATEGORY_SEMESTER_5_ID,
+        CATEGORY_SEMESTER_6_ID,
+    ]
+    categories = guild.by_category()
+    text_channels = {"year1": {}, "year2": {}, "year3": {}}
+    for category in categories:
+        if category[0].id in ids:
+            if (category[0].name[-1]) == "1" or category[0].name[-1] == "2":
+                if int(category[0].name[-1]) % 2 == 0:
+                    text_channels["year1"]["summer"] = [
+                        filter_course_name(text_channel.name)
+                        for text_channel in category[1]
+                    ]
+                else:
+                    text_channels["year1"]["winter"] = [
+                        filter_course_name(text_channel.name)
+                        for text_channel in category[1]
+                    ]
+            elif (category[0].name[-1]) == "3" or category[0].name[-1] == "4":
+                if int(category[0].name[-1]) % 2 == 0:
+                    text_channels["year2"]["summer"] = [
+                        filter_course_name(text_channel.name)
+                        for text_channel in category[1]
+                    ]
+                else:
+                    text_channels["year2"]["winter"] = [
+                        filter_course_name(text_channel.name)
+                        for text_channel in category[1]
+                    ]
+            else:
+                if int(category[0].name[-1]) % 2 == 0:
+                    text_channels["year3"]["summer"] = [
+                        filter_course_name(text_channel.name)
+                        for text_channel in category[1]
+                    ]
+                else:
+                    text_channels["year3"]["winter"] = [
+                        filter_course_name(text_channel.name)
+                        for text_channel in category[1]
+                    ]
+
+    return text_channels
+
+
+def filter_course_name(text):
+    return " ".join([t.capitalize() for t in text.split("-")])
+
+
+def unfilter_course_name(text):
+    return "-".join(text.lower().split(" "))
