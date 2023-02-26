@@ -5,7 +5,7 @@ from nextcord import application_command, Interaction
 import csv
 import time, datetime
 
-from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
+from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names, calendar_auto_update
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, CHANNEL_CALENDAR_YEAR_1_ID, CHANNEL_CALENDAR_YEAR_2_ID, CHANNEL_CALENDAR_YEAR_3_ID, MESSAGE_CALENDAR_YEAR_3_ID
 from bics_bot.dropdowns.calendar_dropdown import CalendarView
@@ -45,12 +45,12 @@ class CalendarCmd(commands.Cog):
         year = self.get_user_year(interaction.user)
         rows.append([type, course, graded, deadline_date, deadline_time, location, year])
         self.write_csv(fields, rows)
+        await calendar_auto_update(interaction)
         
         await interaction.response.send_message(
             embed=LoggerEmbed("Confirmation", f"Data added to calendar.\n\nType: {type}\nCourse: {course}\nGraded: {graded}\nDeadline Date: {deadline_date}\nDeadline Time: {deadline_time}\nLocation: {location}", WARNING_LEVEL),
             ephemeral=True,
         )
-        await self.calendar_auto_update(interaction)
     
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
@@ -59,13 +59,16 @@ class CalendarCmd(commands.Cog):
     async def calendar_delete(self, interaction:Interaction) -> None:
         fields, rows = self.read_csv()
 
-        view = CalendarView(interaction.user, fields, rows)
+        print("before constructing")
+        view = CalendarView(interaction.user, rows)
+        print("after constructing")
         await interaction.response.send_message(
             view=view,
             ephemeral=True,
         )
+        print("after displaying")
 
-        await self.calendar_auto_update(interaction)
+        # await self.calendar_auto_update(interaction)
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
@@ -84,32 +87,6 @@ class CalendarCmd(commands.Cog):
             return
         await interaction.response.send_message(content=msg, ephemeral=True)
         
-    async def calendar_auto_update(self, interaction:Interaction):
-        channel = None
-        if self.get_user_year(interaction.user) == "Year 1":
-            channel = interaction.guild.get_channel(CHANNEL_CALENDAR_YEAR_1_ID)
-        elif self.get_user_year(interaction.user) == "Year 2":
-            channel = interaction.guild.get_channel(CHANNEL_CALENDAR_YEAR_2_ID)
-        elif self.get_user_year(interaction.user) == "Year 3":
-            channel = interaction.guild.get_channel(CHANNEL_CALENDAR_YEAR_3_ID)
-        else:
-            await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", "You can't do that.", WARNING_LEVEL),
-                ephemeral=True,
-            )
-            return
-        
-        fields, rows = self.read_csv()
-        msg = ""
-        for row in rows:
-            if self.get_user_year(interaction.user) == row[-1]:
-                unixtime = self.get_unixtime(row[3], row[4])
-                msg += f" > **{row[0]}** for *{row[1]}* on <t:{unixtime}:F>\n\n"
-
-        # await channel.purge(limit=100)
-        message = await channel.fetch_message(MESSAGE_CALENDAR_YEAR_3_ID)
-        await message.edit(content=msg)
-
     def get_courses_enrolled(
         self, user: Interaction.user, guild: Interaction.guild
     ) -> dict[str, bool]:

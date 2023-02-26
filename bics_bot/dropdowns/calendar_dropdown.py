@@ -3,6 +3,7 @@ import csv
 
 from nextcord.interactions import Interaction
 from bics_bot.embeds.logger_embed import LoggerEmbed, WARNING_LEVEL
+from bics_bot.utils.channels_utils import calendar_auto_update
 
 CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
 
@@ -38,11 +39,9 @@ class EventsDropdown(nextcord.ui.Select):
     
 
 class CalendarView(nextcord.ui.View):
-    def __init__(self, user, fields, rows):
+    def __init__(self, user, rows):
         super().__init__(timeout=5000)
         self.events = EventsDropdown(user, rows)
-        self.fields = fields,
-        self.rows: list = rows
         if len(self.events._options) > 0:
             self.events.build()
             self.add_item(self.events)
@@ -54,12 +53,14 @@ class CalendarView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        fields, rows = self.read_csv()
         for row in self.events.values:
-            if self.events.option_to_row[row] in self.rows:
-                self.rows.remove(self.events.option_to_row[row])
+            if self.events.option_to_row[row] in rows:
+                rows.remove(self.events.option_to_row[row])
 
-        fields, _ = self.read_csv()
-        self.write_csv(fields, self.rows)
+        print("before writing")
+        self.write_csv(fields, rows)
+        await calendar_auto_update(interaction)
 
         msg = ""
         for row in self.events.values:
@@ -71,6 +72,9 @@ class CalendarView(nextcord.ui.View):
             embed=LoggerEmbed("Confirmation", msg, WARNING_LEVEL),
             ephemeral=True,
         )
+
+
+        
         
     @nextcord.ui.button(
         label="Cancel",
