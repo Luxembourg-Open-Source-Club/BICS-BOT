@@ -3,7 +3,7 @@ from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
-from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, CATEGORY_STUDY_GROUPS
+from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
 
 
 class CalendarCmd(commands.Cog):
@@ -26,7 +26,16 @@ class CalendarCmd(commands.Cog):
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Allow students to enter a HW/exam into the calendar with info such as deadline.",
     )
-    async def calendar_add():
+    async def calendar_add(
+        self,
+        interaction: Interaction,
+        type: str = nextcord.SlashOption(description="The type of event.", required=True, choices={"homework": "hw", "midterm": "midterm", "quiz": "quiz", "final": "final"}),
+        course: str = nextcord.SlashOption(description="Use the name of the text-channel of the course. For example; linear-algebra-2", required=True),
+        graded: str = nextcord.SlashOption(description="Is this event graded?", required=True, choices={"True": True, "False": False}),
+        deadline_date: str = nextcord.SlashOption(description="Date format: <DAY.MONTH.YEAR>. Example (June 5th, 2023): 05.06.2023", required=True),
+        deadline_time: str = nextcord.SlashOption(description="Time format: <HOUR:MINUTE>. Use 24-hour clock. Examples: 09:30, 15:45, 00:00, 23:59", required=True),
+        location: str = nextcord.SlashOption(description="Room of the event. For example: MSA 3.050", required=False)
+    ) -> None:
         pass
 
     @application_command.slash_command(
