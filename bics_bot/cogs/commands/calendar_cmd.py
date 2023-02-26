@@ -3,7 +3,8 @@ from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
 import csv
-import time, datetime
+import time
+from datetime import datetime
 
 from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names, calendar_auto_update
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
@@ -40,7 +41,7 @@ class CalendarCmd(commands.Cog):
         deadline_date: str = nextcord.SlashOption(description="Date format: <DAY.MONTH.YEAR>. Example (June 5th, 2023): 05.06.2023", required=True),
         deadline_time: str = nextcord.SlashOption(description="Time format: <HOUR:MINUTE>. Use 24-hour clock. Examples: 09:30, 15:45, 00:00, 23:59", required=True),
         location: str = nextcord.SlashOption(description="Room of the event. For example: MSA 3.050", required=False)
-    ) -> None:
+    ) -> None:                
         fields, rows = self.read_csv()
         year = self.get_user_year(interaction.user)
         rows.append([type, course, graded, deadline_date, deadline_time, location, year])
@@ -60,15 +61,13 @@ class CalendarCmd(commands.Cog):
         fields, rows = self.read_csv()
 
         print("before constructing")
-        view = CalendarView(interaction.user, rows)
+        view = CalendarView(interaction.user, interaction.guild, rows)
         print("after constructing")
         await interaction.response.send_message(
             view=view,
             ephemeral=True,
         )
         print("after displaying")
-
-        # await self.calendar_auto_update(interaction)
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
