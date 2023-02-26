@@ -2,9 +2,13 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
+import csv
+import time, datetime
+
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
 
+CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
 
 class CalendarCmd(commands.Cog):
     """This class represents the commands to interact with the calendar system.
@@ -29,21 +33,46 @@ class CalendarCmd(commands.Cog):
     async def calendar_add(
         self,
         interaction: Interaction,
-        type: str = nextcord.SlashOption(description="The type of event.", required=True, choices={"homework": "hw", "midterm": "midterm", "quiz": "quiz", "final": "final"}),
-        course: str = nextcord.SlashOption(description="Use the name of the text-channel of the course. For example; linear-algebra-2", required=True),
-        graded: str = nextcord.SlashOption(description="Is this event graded?", required=True, choices={"True": True, "False": False}),
+        type: str = nextcord.SlashOption(description="The type of event.", required=True, choices={"Homework": "Homework", "Midterm": "Midterm", "Quiz": "Quiz", "Final": "Final"}),
+        course: str = nextcord.SlashOption(description="For example; Linear Algebra 1", required=True),
+        graded: bool = nextcord.SlashOption(description="Is this event graded?", required=True, choices={"True": True, "False": False}),
         deadline_date: str = nextcord.SlashOption(description="Date format: <DAY.MONTH.YEAR>. Example (June 5th, 2023): 05.06.2023", required=True),
         deadline_time: str = nextcord.SlashOption(description="Time format: <HOUR:MINUTE>. Use 24-hour clock. Examples: 09:30, 15:45, 00:00, 23:59", required=True),
         location: str = nextcord.SlashOption(description="Room of the event. For example: MSA 3.050", required=False)
     ) -> None:
-        pass
+        fields, rows = self.read_csv()
+        rows.append([type, course, graded, deadline_date, deadline_time, location])
+        self.write_csv(fields, rows)
+        
+        await interaction.response.send_message(
+            embed=LoggerEmbed("Confirmation", f"Data added to calendar.\n\nType: {type}\nCourse: {course}\nGraded: {graded}\nDeadline Date: {deadline_date}\nDeadline Time: {deadline_time}\nLocation: {location}", WARNING_LEVEL),
+            ephemeral=True,
+        )
 
-    @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Allow students to remove a HW/exam from the calendar.",
-    )
-    async def calendar_delete():
-        pass        
+        return    
+
+    def read_csv(self):
+        fields = []
+        rows = []
+        with open(CALENDAR_FILE_PATH, 'r') as csvfile:
+            csvreader = csv.reader(csvfile)
+            fields = next(csvreader)        
+            for row in csvreader:
+                rows.append(row)
+        return (fields, rows)
+    
+    def write_csv(self, fields, rows) -> None:
+        with open(CALENDAR_FILE_PATH, 'w') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow(fields)
+            csvwriter.writerows(rows)
+    
+    def get_unixtime(self, deadline_date:str, deadline_time:str) -> int:
+        deadline_date = deadline_date.split(".")
+        deadline_time = deadline_time.split(":")
+        d = datetime.datetime(int(deadline_date[2]), int(deadline_date[1]), int(deadline_date[0]), int(deadline_time[0]), int(deadline_time[1]))
+        unixtime = int(time.mktime(d.timetuple()))
+        return unixtime
 
 def setup(client):
     """Function used to setup nextcord cogs"""
