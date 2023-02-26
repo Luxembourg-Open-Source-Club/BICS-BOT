@@ -7,6 +7,7 @@ from bics_bot.utils.channels_utils import calendar_auto_update, retrieve_courses
 
 CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
 
+
 class EventsDropdown(nextcord.ui.Select):
     def __init__(self, user, guild, rows):
         self.option_to_row = {}
@@ -30,7 +31,13 @@ class EventsDropdown(nextcord.ui.Select):
                         label=f"{row[1]} {row[0]} on {row[3]} at {row[4]}"
                     )
                 )
-                self.option_to_row[str(nextcord.SelectOption(label=f"{row[1]} {row[0]} on {row[3]} at {row[4]}"))] = row
+                self.option_to_row[
+                    str(
+                        nextcord.SelectOption(
+                            label=f"{row[1]} {row[0]} on {row[3]} at {row[4]}"
+                        )
+                    )
+                ] = row
         return options
     
     def get_courses_enrolled(
@@ -63,7 +70,6 @@ class EventsDropdown(nextcord.ui.Select):
         for role in user.roles:
             if role.name.startswith("Year"):
                 return role.name
-    
 
 class CalendarView(nextcord.ui.View):
     def __init__(self, user, guild, rows):
@@ -72,7 +78,6 @@ class CalendarView(nextcord.ui.View):
         if len(self.events._options) > 0:
             self.events.build()
             self.add_item(self.events)
-        
 
     @nextcord.ui.button(
         label="Confirm", style=nextcord.ButtonStyle.green, row=3
@@ -99,6 +104,8 @@ class CalendarView(nextcord.ui.View):
             embed=LoggerEmbed("Confirmation", msg, WARNING_LEVEL),
             ephemeral=True,
         )
+
+    @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.red, row=3)
         
     @nextcord.ui.button(
         label="Cancel",
@@ -116,18 +123,19 @@ class CalendarView(nextcord.ui.View):
     def read_csv(self):
         fields = []
         rows = []
-        with open(CALENDAR_FILE_PATH, 'r') as csvfile:
+        with open(CALENDAR_FILE_PATH, "r") as csvfile:
             csvreader = csv.reader(csvfile)
-            fields = next(csvreader)        
+            fields = next(csvreader)
             for row in csvreader:
                 rows.append(row)
         return (fields, rows)
-    
+
     def write_csv(self, fields, rows) -> None:
-        with open(CALENDAR_FILE_PATH, 'w') as csvfile:
+        with open(CALENDAR_FILE_PATH, "w") as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(fields)
             csvwriter.writerows(rows)
+
 
     def get_user_year(self, user) -> str:
         for role in user.roles:
