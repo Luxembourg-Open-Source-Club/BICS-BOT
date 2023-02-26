@@ -9,7 +9,7 @@ from bics_bot.config.server_ids import (
     CHANNEL_CALENDAR_YEAR_1_ID,
     CHANNEL_CALENDAR_YEAR_2_ID,
     CHANNEL_CALENDAR_YEAR_3_ID,
-    MESSAGE_CALENDAR_YEAR_3_ID
+    MESSAGE_CALENDAR_YEAR_3_ID,
 )
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 import csv, datetime, time
@@ -45,29 +45,39 @@ def retrieve_courses_text_channels_names(
 
     return text_channels
 
+
 def read_csv():
     fields = []
     rows = []
-    with open(CALENDAR_FILE_PATH, 'r') as csvfile:
+    with open(CALENDAR_FILE_PATH, "r") as csvfile:
         csvreader = csv.reader(csvfile)
-        fields = next(csvreader)        
+        fields = next(csvreader)
         for row in csvreader:
             rows.append(row)
     return (fields, rows)
+
 
 def get_user_year(user) -> str:
     for role in user.roles:
         if role.name.startswith("Year"):
             return role.name
-        
-def get_unixtime(deadline_date:str, deadline_time:str) -> int:
+
+
+def get_unixtime(deadline_date: str, deadline_time: str) -> int:
     deadline_date = deadline_date.split(".")
     deadline_time = deadline_time.split(":")
-    d = datetime.datetime(int(deadline_date[2]), int(deadline_date[1]), int(deadline_date[0]), int(deadline_time[0]), int(deadline_time[1]))
+    d = datetime.datetime(
+        int(deadline_date[2]),
+        int(deadline_date[1]),
+        int(deadline_date[0]),
+        int(deadline_time[0]),
+        int(deadline_time[1]),
+    )
     unixtime = int(time.mktime(d.timetuple()))
     return unixtime
 
-async def calendar_auto_update(interaction:Interaction):
+
+async def calendar_auto_update(interaction: Interaction):
     print("we are deleting")
     channel = None
     if get_user_year(interaction.user) == "Year 1":
@@ -82,7 +92,7 @@ async def calendar_auto_update(interaction:Interaction):
             ephemeral=True,
         )
         return
-    
+
     fields, rows = read_csv()
     print(rows)
     msg = "=========\n"
@@ -94,6 +104,7 @@ async def calendar_auto_update(interaction:Interaction):
     # await channel.purge(limit=100)
     message = await channel.fetch_message(MESSAGE_CALENDAR_YEAR_3_ID)
     await message.edit(content=msg)
+
 
 def retrieve_courses_text_channels_by_year(
     guild: Interaction.guild,
