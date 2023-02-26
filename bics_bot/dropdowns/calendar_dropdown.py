@@ -58,10 +58,12 @@ class CalendarView(nextcord.ui.View):
             if self.events.option_to_row[row] in self.rows:
                 self.rows.remove(self.events.option_to_row[row])
 
-        self.write_csv(self.fields, self.rows)
+        fields, _ = self.read_csv()
+        self.write_csv(fields, self.rows)
 
         msg = ""
         for row in self.events.values:
+            row = self.events.option_to_row[row]
             msg += "The following events are deleted:\n\n"
             msg += f" > {row[1]} {row[0]} on {row[3]} at {row[4]}\n"
 
@@ -82,6 +84,16 @@ class CalendarView(nextcord.ui.View):
             "Canceled operation. No changes made.", ephemeral=True
         )
         self.stop()
+
+    def read_csv(self):
+        fields = []
+        rows = []
+        with open(CALENDAR_FILE_PATH, 'r') as csvfile:
+            csvreader = csv.reader(csvfile)
+            fields = next(csvreader)        
+            for row in csvreader:
+                rows.append(row)
+        return (fields, rows)
     
     def write_csv(self, fields, rows) -> None:
         with open(CALENDAR_FILE_PATH, 'w') as csvfile:
