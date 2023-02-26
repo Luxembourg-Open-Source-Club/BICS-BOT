@@ -7,7 +7,7 @@ import time, datetime
 
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
-
+from bics_bot.dropdowns.calendar_dropdown import CalendarView
 CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
 
 class CalendarCmd(commands.Cog):
@@ -41,7 +41,7 @@ class CalendarCmd(commands.Cog):
         location: str = nextcord.SlashOption(description="Room of the event. For example: MSA 3.050", required=False)
     ) -> None:
         fields, rows = self.read_csv()
-        year = self.get_user_year(interaction)
+        year = self.get_user_year(interaction.user)
         rows.append([type, course, graded, deadline_date, deadline_time, location, year])
         self.write_csv(fields, rows)
         
@@ -50,6 +50,23 @@ class CalendarCmd(commands.Cog):
             ephemeral=True,
         )
         return
+    
+    @application_command.slash_command(
+        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
+        description="Allow students to remove a HW/exam from the calendar.",
+    )
+    async def calendar_delete(self, interaction:Interaction) -> None:
+        fields, rows = self.read_csv()
+
+        view = CalendarView(interaction.user, fields, rows)
+        await interaction.response.send_message(
+            view=view,
+            ephemeral=True,
+        )
+        
+    # async def calendar_update(self):
+    #     unixtime = self.get_unixtime(deadline_date, deadline_time)
+    #     await interaction.response.send_message(content=f"<t:{unixtime}:F>")
 
     def read_csv(self):
         fields = []
@@ -74,8 +91,8 @@ class CalendarCmd(commands.Cog):
         unixtime = int(time.mktime(d.timetuple()))
         return unixtime
     
-    def get_user_year(self, interaction:Interaction) -> str:
-        for role in interaction.user.roles:
+    def get_user_year(self, user) -> str:
+        for role in user.roles:
             if role.name.startswith("Year"):
                 return role.name
 
