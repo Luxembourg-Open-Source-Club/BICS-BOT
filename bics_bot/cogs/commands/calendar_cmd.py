@@ -47,15 +47,6 @@ class CalendarCmd(commands.Cog):
     async def calendar_add(
         self,
         interaction: Interaction,
-<<<<<<< HEAD
-        type: str = nextcord.SlashOption(description="The type of event.", required=True, choices={"Homework": "Homework", "Midterm": "Midterm", "Quiz": "Quiz", "Final": "Final"}),
-        course: str = nextcord.SlashOption(description="For example; Linear Algebra 1", required=True),
-        graded: bool = nextcord.SlashOption(description="Is this event graded?", required=True, choices={"True": True, "False": False}),
-        deadline_date: str = nextcord.SlashOption(description="Date format: <DAY.MONTH.YEAR>. Example (June 5th, 2023): 05.06.2023", required=True),
-        deadline_time: str = nextcord.SlashOption(description="Time format: <HOUR:MINUTE>. Use 24-hour clock. Examples: 09:30, 15:45, 00:00, 23:59", required=True),
-        location: str = nextcord.SlashOption(description="Room of the event. For example: MSA 3.050", required=False)
-    ) -> None:                
-=======
         type: str = nextcord.SlashOption(
             description="The type of event.",
             required=True,
@@ -87,7 +78,6 @@ class CalendarCmd(commands.Cog):
             required=False,
         ),
     ) -> None:
->>>>>>> 4c833767cebc8ad41fbdbc78a7a0d289ba961932
         fields, rows = self.read_csv()
         year = self.get_user_year(interaction.user)
         rows.append(
