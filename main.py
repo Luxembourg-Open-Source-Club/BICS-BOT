@@ -45,7 +45,7 @@ def load_extensions(bot: commands.Bot):
 
     for filename in os.listdir("./bics_bot/cogs/commands"):
         if filename.endswith(".py") and filename != "__init__.py":
-            bot.load_extension(f"becs_bot.cogs.commands.{filename[:-3]}")
+            bot.load_extension(f"bics_bot.cogs.commands.{filename[:-3]}")
 
 
 def main(args: vars):
