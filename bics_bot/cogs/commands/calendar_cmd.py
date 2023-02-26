@@ -4,7 +4,7 @@ from nextcord import application_command, Interaction
 
 import csv
 import time
-from datetime import datetime
+import datetime
 
 from bics_bot.utils.channels_utils import (
     retrieve_courses_text_channels_names,
@@ -171,6 +171,8 @@ class CalendarCmd(commands.Cog):
                 and user in channel.members
             ):
                 enrolled[channel.topic] = True
+
+        # print(enrolled)
         return enrolled
 
     def read_csv(self):
