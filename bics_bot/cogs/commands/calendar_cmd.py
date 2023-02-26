@@ -5,8 +5,9 @@ from nextcord import application_command, Interaction
 import csv
 import time, datetime
 
+from bics_bot.utils.channels_utils import retrieve_courses_text_channels_names
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
-from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
+from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID, CHANNEL_CALENDAR_YEAR_1_ID, CHANNEL_CALENDAR_YEAR_2_ID, CHANNEL_CALENDAR_YEAR_3_ID, MESSAGE_CALENDAR_YEAR_3_ID
 from bics_bot.dropdowns.calendar_dropdown import CalendarView
 CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
 
@@ -49,7 +50,7 @@ class CalendarCmd(commands.Cog):
             embed=LoggerEmbed("Confirmation", f"Data added to calendar.\n\nType: {type}\nCourse: {course}\nGraded: {graded}\nDeadline Date: {deadline_date}\nDeadline Time: {deadline_time}\nLocation: {location}", WARNING_LEVEL),
             ephemeral=True,
         )
-        return
+        await self.calendar_auto_update(interaction)
     
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
@@ -63,11 +64,78 @@ class CalendarCmd(commands.Cog):
             view=view,
             ephemeral=True,
         )
-        
-    # async def calendar_update(self):
-    #     unixtime = self.get_unixtime(deadline_date, deadline_time)
-    #     await interaction.response.send_message(content=f"<t:{unixtime}:F>")
 
+        await self.calendar_auto_update(interaction)
+
+    @application_command.slash_command(
+        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
+        description="Allow students to view their own calendar.",
+    )
+    async def calendar_view(self, interaction:Interaction) -> None:
+        enrolled_courses = self.get_courses_enrolled(interaction.user, interaction.guild)
+        fields, rows = self.read_csv()
+        msg = ""
+        for row in rows:
+            if row[1] in enrolled_courses:
+                unixtime = self.get_unixtime(row[3], row[4])
+                msg += f" > **{row[0]}** for *{row[1]}* on <t:{unixtime}:F>\n\n"
+        if msg == "":
+            await interaction.response.send_message(content="No deadlines for you. Enjoy your free time :)")
+            return
+        await interaction.response.send_message(content=msg, ephemeral=True)
+        
+    async def calendar_auto_update(self, interaction:Interaction):
+        channel = None
+        if self.get_user_year(interaction.user) == "Year 1":
+            channel = interaction.guild.get_channel(CHANNEL_CALENDAR_YEAR_1_ID)
+        elif self.get_user_year(interaction.user) == "Year 2":
+            channel = interaction.guild.get_channel(CHANNEL_CALENDAR_YEAR_2_ID)
+        elif self.get_user_year(interaction.user) == "Year 3":
+            channel = interaction.guild.get_channel(CHANNEL_CALENDAR_YEAR_3_ID)
+        else:
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", "You can't do that.", WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+        
+        fields, rows = self.read_csv()
+        msg = ""
+        for row in rows:
+            if self.get_user_year(interaction.user) == row[-1]:
+                unixtime = self.get_unixtime(row[3], row[4])
+                msg += f" > **{row[0]}** for *{row[1]}* on <t:{unixtime}:F>\n\n"
+
+        # await channel.purge(limit=100)
+        message = await channel.fetch_message(MESSAGE_CALENDAR_YEAR_3_ID)
+        await message.edit(content=msg)
+
+    def get_courses_enrolled(
+        self, user: Interaction.user, guild: Interaction.guild
+    ) -> dict[str, bool]:
+        """Retrieves the courses a student is enrolled to.
+
+        Technically, it returns the courses that the student can view it by
+        any means necessary (member level permission, role level permission,
+        admin rights).
+
+        Args:
+            user: the user who is doing the </enroll> or <unenroll> request.
+            guild: the server object, containing information on text channels
+              necessary for this opeation
+
+        Returns:
+            dictionary where the keys are the courses the student can see
+        """
+        enrolled: dict[str, bool] = {}
+        channels = guild.text_channels
+        courses_channels_names = retrieve_courses_text_channels_names(guild)
+
+        for channel in channels:
+            if channel.name in courses_channels_names and user in channel.members:
+                enrolled[channel.topic] = True
+        return enrolled
+    
     def read_csv(self):
         fields = []
         rows = []
