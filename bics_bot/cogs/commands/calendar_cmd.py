@@ -3,7 +3,8 @@ from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
 import csv
-import time, datetime
+import time
+import datetime
 
 from bics_bot.utils.channels_utils import (
     retrieve_courses_text_channels_names,
@@ -110,15 +111,13 @@ class CalendarCmd(commands.Cog):
         fields, rows = self.read_csv()
 
         print("before constructing")
-        view = CalendarView(interaction.user, rows)
+        view = CalendarView(interaction.user, interaction.guild, rows)
         print("after constructing")
         await interaction.response.send_message(
             view=view,
             ephemeral=True,
         )
         print("after displaying")
-
-        # await self.calendar_auto_update(interaction)
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
@@ -172,6 +171,8 @@ class CalendarCmd(commands.Cog):
                 and user in channel.members
             ):
                 enrolled[channel.topic] = True
+
+        # print(enrolled)
         return enrolled
 
     def read_csv(self):
