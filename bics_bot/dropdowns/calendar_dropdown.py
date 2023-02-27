@@ -1,17 +1,17 @@
 import nextcord
-import csv
 
 from nextcord.interactions import Interaction
-from bics_bot.embeds.logger_embed import LoggerEmbed, WARNING_LEVEL
-from bics_bot.utils.channels_utils import calendar_auto_update, retrieve_courses_text_channels_names
-
-CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
+from bics_bot.embeds.logger_embed import LoggerEmbed
+from bics_bot.utils.calendar import Calendar
+from bics_bot.utils.channels_utils import (
+    retrieve_courses_text_channels_names,
+)
 
 
 class EventsDropdown(nextcord.ui.Select):
-    def __init__(self, user, guild, rows):
+    def __init__(self, user, guild, calendar: Calendar):
         self.option_to_row = {}
-        self._options = self._get_options(user, guild, rows)
+        self._options = self._get_options(user, guild, calendar)
 
     def build(self):
         super().__init__(
@@ -21,25 +21,25 @@ class EventsDropdown(nextcord.ui.Select):
             options=self._options,
         )
 
-    def _get_options(self, user, guild, rows):
+    def _get_options(self, user, guild, calendar):
         options = []
         enrolled_courses = self.get_courses_enrolled(user, guild)
-        for row in rows:
-            if row[1] in enrolled_courses:
+        for entry in calendar.retrieve_entries():
+            if entry.course in enrolled_courses:
                 options.append(
                     nextcord.SelectOption(
-                        label=f"{row[1]} {row[0]} on {row[3]} at {row[4]}"
+                        label=f"{entry.course} {entry.type} on {entry.deadline_date} at {entry.deadline_time}"
                     )
                 )
                 self.option_to_row[
                     str(
                         nextcord.SelectOption(
-                            label=f"{row[1]} {row[0]} on {row[3]} at {row[4]}"
+                            label=f"{entry.course} {entry.type} on {entry.deadline_date} at {entry.deadline_time}"
                         )
                     )
-                ] = row
+                ] = entry
         return options
-    
+
     def get_courses_enrolled(
         self, user: Interaction.user, guild: Interaction.guild
     ) -> dict[str, bool]:
@@ -62,19 +62,19 @@ class EventsDropdown(nextcord.ui.Select):
         courses_channels_names = retrieve_courses_text_channels_names(guild)
 
         for channel in channels:
-            if channel.name in courses_channels_names and user in channel.members:
+            if (
+                channel.name in courses_channels_names
+                and user in channel.members
+            ):
                 enrolled[channel.topic] = True
         return enrolled
 
-    def get_user_year(self, user) -> str:
-        for role in user.roles:
-            if role.name.startswith("Year"):
-                return role.name
 
 class CalendarView(nextcord.ui.View):
-    def __init__(self, user, guild, rows):
+    def __init__(self, user, guild, calendar: Calendar):
         super().__init__(timeout=5000)
-        self.events = EventsDropdown(user, guild, rows)
+        self.events = EventsDropdown(user, guild, calendar)
+        self.calendar = calendar
         if len(self.events._options) > 0:
             self.events.build()
             self.add_item(self.events)
@@ -85,33 +85,29 @@ class CalendarView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        fields, rows = self.read_csv()
-        for row in self.events.values:
-            if self.events.option_to_row[row] in rows:
-                rows.remove(self.events.option_to_row[row])
+        for entry in self.events.values:
+            if (
+                self.events.option_to_row[entry]
+                in self.calendar.retrieve_entries()
+            ):
+                self.calendar.remove_entry(self.events.option_to_row[entry])
 
-        print("before writing")
-        self.write_csv(fields, rows)
-        await calendar_auto_update(interaction)
+        self.calendar.export_calendar()
+        await self.calendar.update_caledar_text_channel(interaction)
 
         msg = ""
-        for row in self.events.values:
-            row = self.events.option_to_row[row]
+        for entry in self.events.values:
+            entry = self.events.option_to_row[entry]
             msg += "The following events are deleted:\n\n"
-            msg += f" > {row[1]} {row[0]} on {row[3]} at {row[4]}\n"
+            msg += f"{entry}\n"
 
         await interaction.response.send_message(
-            embed=LoggerEmbed("Confirmation", msg, WARNING_LEVEL),
+            embed=LoggerEmbed("Confirmation", msg),
             ephemeral=True,
         )
 
     @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.red, row=3)
-        
-    @nextcord.ui.button(
-        label="Cancel",
-        style=nextcord.ButtonStyle.red,
-        row=3
-    )
+    @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.red, row=3)
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
@@ -119,25 +115,3 @@ class CalendarView(nextcord.ui.View):
             "Canceled operation. No changes made.", ephemeral=True
         )
         self.stop()
-
-    def read_csv(self):
-        fields = []
-        rows = []
-        with open(CALENDAR_FILE_PATH, "r") as csvfile:
-            csvreader = csv.reader(csvfile)
-            fields = next(csvreader)
-            for row in csvreader:
-                rows.append(row)
-        return (fields, rows)
-
-    def write_csv(self, fields, rows) -> None:
-        with open(CALENDAR_FILE_PATH, "w") as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(fields)
-            csvwriter.writerows(rows)
-
-
-    def get_user_year(self, user) -> str:
-        for role in user.roles:
-            if role.name.startswith("Year"):
-                return role.name

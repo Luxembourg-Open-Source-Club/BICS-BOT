@@ -79,31 +79,6 @@ def get_unixtime(deadline_date: str, deadline_time: str) -> int:
     return unixtime
 
 
-async def calendar_auto_update(interaction: Interaction):
-    print("we are deleting")
-    channel = None
-    if get_user_year(interaction.user) == "Year 1" or get_user_year(interaction.user) == "Year 2" or get_user_year(interaction.user) == "Year 3":
-        channel = interaction.guild.get_channel(CHANNEL_CALENDAR_ID)
-    else:
-        await interaction.response.send_message(
-            embed=LoggerEmbed("Warning", "You can't do that.", WARNING_LEVEL),
-            ephemeral=True,
-        )
-        return
-
-    fields, rows = read_csv()
-    print(rows)
-    msg = "***__THE BICS CALENDAR__***\n"
-    for row in rows:
-        unixtime = get_unixtime(row[3], row[4])
-        msg += f" > **{row[0]}** for *{row[1]}* on <t:{unixtime}:F>\n"
-
-    # await channel.purge(limit=100)
-    message = await channel.fetch_message(MESSAGE_CALENDAR_ID)
-    # await channel.send(content=msg)
-    await message.edit(content=msg)
-
-
 def retrieve_courses_text_channels_by_year(
     guild: Interaction.guild,
 ) -> dict:

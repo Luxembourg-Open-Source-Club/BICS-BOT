@@ -2,26 +2,17 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
-import csv
-import time
-import datetime
-
 from bics_bot.utils.channels_utils import (
     retrieve_courses_text_channels_names,
-    calendar_auto_update,
+    get_user_year,
 )
-from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
+from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.config.server_ids import (
     GUILD_BICS_ID,
     GUILD_BICS_CLONE_ID,
-    CHANNEL_CALENDAR_YEAR_1_ID,
-    CHANNEL_CALENDAR_YEAR_2_ID,
-    CHANNEL_CALENDAR_YEAR_3_ID,
-    MESSAGE_CALENDAR_YEAR_3_ID,
 )
 from bics_bot.dropdowns.calendar_dropdown import CalendarView
-
-CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
+from bics_bot.utils.calendar import Calendar
 
 
 class CalendarCmd(commands.Cog):
@@ -50,12 +41,12 @@ class CalendarCmd(commands.Cog):
         type: str = nextcord.SlashOption(
             description="The type of event.",
             required=True,
-            choices={
-                "Homework": "Homework",
-                "Midterm": "Midterm",
-                "Quiz": "Quiz",
-                "Final": "Final",
-            },
+            choices=[
+                "Homework",
+                "Midterm",
+                "Quiz",
+                "Final",
+            ],
         ),
         course: str = nextcord.SlashOption(
             description="For example; Linear Algebra 1", required=True
@@ -63,7 +54,7 @@ class CalendarCmd(commands.Cog):
         graded: bool = nextcord.SlashOption(
             description="Is this event graded?",
             required=True,
-            choices={"True": True, "False": False},
+            choices={True, False},
         ),
         deadline_date: str = nextcord.SlashOption(
             description="Date format: <DAY.MONTH.YEAR>. Example (June 5th, 2023): 05.06.2023",
@@ -76,29 +67,21 @@ class CalendarCmd(commands.Cog):
         location: str = nextcord.SlashOption(
             description="Room of the event. For example: MSA 3.050",
             required=False,
+            default="",
         ),
     ) -> None:
-        fields, rows = self.read_csv()
-        year = self.get_user_year(interaction.user)
-        rows.append(
-            [
-                type,
-                course,
-                graded,
-                deadline_date,
-                deadline_time,
-                location,
-                year,
-            ]
+        year = get_user_year(interaction.user)
+        calendar = Calendar()
+        calendar.add_entry(
+            type, course, graded, deadline_date, deadline_time, location, year
         )
-        self.write_csv(fields, rows)
-        await calendar_auto_update(interaction)
+        calendar.export_calendar()
+        await calendar.update_caledar_text_channel(interaction)
 
         await interaction.response.send_message(
             embed=LoggerEmbed(
                 "Confirmation",
                 f"Data added to calendar.\n\nType: {type}\nCourse: {course}\nGraded: {graded}\nDeadline Date: {deadline_date}\nDeadline Time: {deadline_time}\nLocation: {location}",
-                WARNING_LEVEL,
             ),
             ephemeral=True,
         )
@@ -108,16 +91,13 @@ class CalendarCmd(commands.Cog):
         description="Allow students to remove a HW/exam from the calendar.",
     )
     async def calendar_delete(self, interaction: Interaction) -> None:
-        fields, rows = self.read_csv()
+        calendar = Calendar()
 
-        print("before constructing")
-        view = CalendarView(interaction.user, interaction.guild, rows)
-        print("after constructing")
+        view = CalendarView(interaction.user, interaction.guild, calendar)
         await interaction.response.send_message(
             view=view,
             ephemeral=True,
         )
-        print("after displaying")
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
@@ -128,14 +108,11 @@ class CalendarCmd(commands.Cog):
             interaction.user,
             interaction.guild,
         )
-        fields, rows = self.read_csv()
+        calendar = Calendar()
         msg = ""
-        for row in rows:
-            if row[1] in enrolled_courses:
-                unixtime = self.get_unixtime(row[3], row[4])
-                msg += (
-                    f" > **{row[0]}** for *{row[1]}* on <t:{unixtime}:F>\n\n"
-                )
+        for entry in calendar.retrieve_entries():
+            if entry.course in enrolled_courses:
+                msg += f"{entry}\n"
         if msg == "":
             await interaction.response.send_message(
                 content="No deadlines for you. Enjoy your free time :)",
@@ -174,40 +151,6 @@ class CalendarCmd(commands.Cog):
 
         # print(enrolled)
         return enrolled
-
-    def read_csv(self):
-        fields = []
-        rows = []
-        with open(CALENDAR_FILE_PATH, "r") as csvfile:
-            csvreader = csv.reader(csvfile)
-            fields = next(csvreader)
-            for row in csvreader:
-                rows.append(row)
-        return (fields, rows)
-
-    def write_csv(self, fields, rows) -> None:
-        with open(CALENDAR_FILE_PATH, "w") as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(fields)
-            csvwriter.writerows(rows)
-
-    def get_unixtime(self, deadline_date: str, deadline_time: str) -> int:
-        deadline_date = deadline_date.split(".")
-        deadline_time = deadline_time.split(":")
-        d = datetime.datetime(
-            int(deadline_date[2]),
-            int(deadline_date[1]),
-            int(deadline_date[0]),
-            int(deadline_time[0]),
-            int(deadline_time[1]),
-        )
-        unixtime = int(time.mktime(d.timetuple()))
-        return unixtime
-
-    def get_user_year(self, user) -> str:
-        for role in user.roles:
-            if role.name.startswith("Year"):
-                return role.name
 
 
 def setup(client):
