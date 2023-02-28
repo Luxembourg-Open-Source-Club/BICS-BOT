@@ -9,6 +9,7 @@ from bics_bot.config.server_ids import (
     CATEGORY_STUDY_GROUPS,
 )
 
+import regex
 
 class StudyGroupCmd(commands.Cog):
     """This class represents the command </create_study_group>
@@ -25,17 +26,17 @@ class StudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
+        description="Example: /create_study_group Awesome LA1 Study Group @John D @Jane D @Adam S",
     )
-    async def create_study_group(
+    async def studygroup_add(
         self,
         interaction: Interaction,
         group_name: str = nextcord.SlashOption(
-            description="Try to make it unique to avoid overlapping. Example: use member names in the group name.",
+            description="Do not enter special characters.",
             required=True,
         ),
         names: str = nextcord.SlashOption(
-            description="Use server names. Separate names with a comma and a space. (', ')",
+            description="Mention `@` the study group members. Example: @John D @Jane D",
             required=True,
         ),
     ) -> None:
@@ -46,8 +47,9 @@ class StudyGroupCmd(commands.Cog):
         Args:
             interaction: Required by the API. Gives meta information about
                 the interaction.
-            create: Bool value indicating if the student wants to create a
-                group or delete a group.
+            group_name: `String` value representing the study group's name.
+            names: The names of the study group members, retrieved in a Discord ID format.
+                Example: '<@622007259424377748> <@224606608425044993> <@208934975432933696>'
 
         Returns:
             None
@@ -70,6 +72,20 @@ class StudyGroupCmd(commands.Cog):
             return
 
         group_name = group_name.lower()
+        group_name = group_name.replace(" ", "-")
+        group_name = group_name.replace("_", "-")
+
+        for char in group_name:
+            if not char.isalnum() and not char == '-':
+                await interaction.response.send_message(
+                    embed=LoggerEmbed(
+                        "Warning",
+                        f"Do not use {char} in group name.",
+                        WARNING_LEVEL,
+                    ),
+                    ephemeral=True,
+                )
+                return
 
         # identical group name check
         for channel in interaction.guild.get_channel(
@@ -86,20 +102,21 @@ class StudyGroupCmd(commands.Cog):
                 )
                 return
 
-        member_count = len(names.split(", "))
         members = await self.get_members(interaction, names)
-        if len(members) != member_count:
+        if not members:
             await interaction.response.send_message(
                 embed=LoggerEmbed(
                     "Warning",
-                    "Check the names you entered, and the format in which you entered them.",
+                    f"You need to enter users by mentioning them (use `@`).",
                     WARNING_LEVEL,
                 ),
                 ephemeral=True,
             )
-            return
+        members.append(interaction.user)
 
-        topic = f"Study group {group_name} for {names}."
+        member_names = ", ".join([member.display_name for member in members])
+
+        topic = f"Study group {group_name} for {member_names}."
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
         text_overwrites, voice_overwrites = self.get_overwrites(
             interaction, members
@@ -121,7 +138,7 @@ class StudyGroupCmd(commands.Cog):
         await interaction.response.send_message(
             embed=LoggerEmbed(
                 "Confirmation",
-                f"Text channel <{text_channel.name}> and voice channel <{voice_channel.name}> have been created. Users {names} have been given access",
+                f"Text channel <{text_channel.name}> and voice channel <{voice_channel.name}> have been created. Users {member_names} have been given access",
                 WARNING_LEVEL,
             ),
             ephemeral=True,
@@ -209,11 +226,14 @@ class StudyGroupCmd(commands.Cog):
         self, interaction: Interaction, names: str
     ) -> list[Interaction.user]:
         members: list[Interaction.user] = []
-        for name in names.split(", "):
-            for member in interaction.guild.members:
-                if name == member.display_name:
-                    members.append(member)
-                    break
+        ids = [int(name.strip("<@>")) for name in names.replace("><", "> <").split(" ")]
+        for id in ids:
+            member = None
+            try:
+                member = interaction.guild.get_member(id)
+            except:
+                return
+            members.append(member)
         return members
 
     def get_overwrites(
