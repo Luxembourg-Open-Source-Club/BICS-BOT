@@ -8,8 +8,7 @@ from bics_bot.config.server_ids import (
     GUILD_BICS_CLONE_ID,
     CATEGORY_STUDY_GROUPS,
 )
-
-import regex
+from bics_bot.dropdowns.studygroup_dropdown import StudyGroupView
 
 class StudyGroupCmd(commands.Cog):
     """This class represents the command </create_study_group>
@@ -138,8 +137,7 @@ class StudyGroupCmd(commands.Cog):
         await interaction.response.send_message(
             embed=LoggerEmbed(
                 "Confirmation",
-                f"Text channel <{text_channel.name}> and voice channel <{voice_channel.name}> have been created. Users {member_names} have been given access",
-                WARNING_LEVEL,
+                f"Text channel **{text_channel.name}** and voice channel **{voice_channel.name}** have been created.\n\nUsers *{member_names}* have been given access.",
             ),
             ephemeral=True,
         )
@@ -148,16 +146,9 @@ class StudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Example: /delete_study_group Awesome-LA1-Study-Group",
+        description="Example: /studygroup_leave",
     )
-    async def delete_study_group(
-        self,
-        interaction: Interaction,
-        group_name: str = nextcord.SlashOption(
-            description="Enter the name of the text channel or the voice channel",
-            required=True,
-        ),
-    ) -> None:
+    async def studygroup_leave(self, interaction: Interaction) -> None:
         """
         The </delete_study_group> command will let students remove their private text and voice
         channels for their study groups. The user must be in the group to delete the group.
@@ -165,7 +156,6 @@ class StudyGroupCmd(commands.Cog):
         Args:
             interaction: Required by the API. Gives meta information about
                 the interaction.
-            group_name: Name of the study group to be removed
 
         Returns:
             None
@@ -187,38 +177,10 @@ class StudyGroupCmd(commands.Cog):
                 ephemeral=True,
             )
             return
-
-        group_name = group_name.lower()
-
-        studygroup_category = interaction.guild.get_channel(
-            CATEGORY_STUDY_GROUPS
-        )
-        channels = []
-        for channel in studygroup_category.channels:
-            if channel.name == group_name:
-                channels.append(channel)
-
-        if interaction.user not in channels[0].overwrites.keys():
-            await interaction.response.send_message(
-                embed=LoggerEmbed(
-                    "Warning",
-                    f"You are not a part of this study group. You cannot delete it.",
-                    WARNING_LEVEL,
-                ),
-                ephemeral=True,
-            )
-            # report_incident()
-            return
-
-        for channel in channels:
-            await channel.delete()
-
+        
+        view = StudyGroupView(interaction)
         await interaction.response.send_message(
-            embed=LoggerEmbed(
-                "Confirmation",
-                f"Study group {group_name} has been deleted. Farewell.",
-                WARNING_LEVEL,
-            ),
+            view=view,
             ephemeral=True,
         )
 
@@ -266,7 +228,6 @@ class StudyGroupCmd(commands.Cog):
             ] = nextcord.PermissionOverwrite(view_channel=True)
 
         return (text_overwrites, voice_overwrites)
-
 
 def setup(client):
     """Function used to setup nextcord cogs"""
