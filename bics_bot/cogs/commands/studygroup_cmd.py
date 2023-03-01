@@ -25,9 +25,9 @@ class StudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Example: /create_study_group Awesome LA1 Study Group @John D @Jane D @Adam S",
+        description="Example: /studygroup_create Awesome LA1 Study Group @John D @Jane D @Adam S",
     )
-    async def studygroup_add(
+    async def studygroup_create(
         self,
         interaction: Interaction,
         group_name: str = nextcord.SlashOption(
