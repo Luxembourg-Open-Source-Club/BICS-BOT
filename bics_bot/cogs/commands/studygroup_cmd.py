@@ -117,20 +117,22 @@ class StudyGroupCmd(commands.Cog):
 
         topic = f"Study group {group_name} for {member_names}."
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
-        text_overwrites, voice_overwrites = self.get_overwrites(
-            interaction, members
+        overwrites = self.get_overwrites(
+            members
         )
+        overwrites[interaction.guild.default_role] = nextcord.PermissionOverwrite(read_messages=False)
+
         text_channel: nextcord.TextChannel = (
             await interaction.guild.create_text_channel(
                 group_name,
                 topic=topic,
                 category=category,
-                overwrites=text_overwrites,
+                overwrites=overwrites,
             )
         )
         voice_channel: nextcord.VoiceChannel = (
             await interaction.guild.create_voice_channel(
-                group_name, category=category, overwrites=voice_overwrites
+                group_name, category=category, overwrites=overwrites
             )
         )
 
@@ -231,18 +233,15 @@ class StudyGroupCmd(commands.Cog):
         member_names = ", ".join([member.display_name for member in members])
 
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
-        text_overwrites, voice_overwrites = self.get_overwrites_invitation(
-            interaction,
-            members
-        )
+        overwrites = self.get_overwrites(members)
 
         for channel in category.channels:
             if channel.name == group_name and isinstance(channel, nextcord.TextChannel):
                 for member in members:
-                    await channel.set_permissions(target=member, overwrite=text_overwrites[member])
+                    await channel.set_permissions(target=member, overwrite=overwrites[member])
             if channel.name == group_name and isinstance(channel, nextcord.VoiceChannel):
                 for member in members:
-                    await channel.set_permissions(target=member, overwrite=voice_overwrites[member])
+                    await channel.set_permissions(target=member, overwrite=overwrites[member])
 
         await interaction.response.send_message(
             embed=LoggerEmbed(
@@ -267,45 +266,17 @@ class StudyGroupCmd(commands.Cog):
                 return
             members.append(member)
         return members
-
-    def get_overwrites_invitation(self, interaction: Interaction, members):
-        for member in members:
-            text_overwrites = {
-                member: nextcord.PermissionOverwrite(
-                    read_messages=True
-                )
-            }
-            voice_overwrites = {
-                member: nextcord.PermissionOverwrite(
-                    view_channel=True
-                )
-            }
-        return (text_overwrites, voice_overwrites)
     
     def get_overwrites(
-        self, interaction: Interaction, members: list[Interaction.user]
+        self, members: list[Interaction.user]
     ):
-        text_overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(
-                read_messages=False
-            )
-        }
+        overwrites = {}
         for member in members:
-            text_overwrites[
-                member
-            ] = nextcord.PermissionOverwrite(read_messages=True)
-
-        voice_overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(
-                view_channel=False
-            )
-        }
-        for member in members:
-            voice_overwrites[
+            overwrites[
                 member
             ] = nextcord.PermissionOverwrite(view_channel=True)
 
-        return (text_overwrites, voice_overwrites)
+        return overwrites
 
 def setup(client):
     """Function used to setup nextcord cogs"""
