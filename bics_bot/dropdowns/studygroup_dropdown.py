@@ -28,8 +28,49 @@ class StudyGroupDropdown(nextcord.ui.Select):
                     )
                 )
         return options
+    
+class StudyGroupInviteView(nextcord.ui.View):
+    def __init__(self, interaction: Interaction, members, overwrites):
+        super().__init__(timeout=5000)
+        self.groups = StudyGroupDropdown(interaction)
+        self.members=members
+        self.overwrites = overwrites
+        if len(self.groups._options) > 0:
+            self.groups.build()
+            self.add_item(self.groups)
 
-class StudyGroupView(nextcord.ui.View):
+    @nextcord.ui.button(
+        label="Confirm", style=nextcord.ButtonStyle.green, row=3
+    )
+    async def confirm_callback(
+        self, button: nextcord.Button, interaction: nextcord.Interaction
+    ):
+        for value in self.groups.values:
+            for channel in interaction.guild.get_channel(CATEGORY_STUDY_GROUPS).channels:
+                if channel.name == value:
+                    for member in self.members:
+                        await channel.set_permissions(target=member, overwrite=self.overwrites[member])
+
+        member_names = ", ".join([member.display_name for member in self.members])
+        await interaction.response.send_message(
+            embed=LoggerEmbed(
+                "Confirmation",
+                f"User(s) *{member_names}* have been given access.",
+            ),
+            ephemeral=True,
+        )
+        return
+        
+    @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.red, row=3)
+    async def cancel_callback(
+        self, button: nextcord.Button, interaction: nextcord.Interaction
+    ):
+        await interaction.response.send_message(
+            "Canceled operation. No changes made.", ephemeral=True
+        )
+        self.stop()
+
+class StudyGroupLeaveView(nextcord.ui.View):
     def __init__(self, interaction: Interaction):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)

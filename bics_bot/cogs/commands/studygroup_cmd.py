@@ -8,7 +8,7 @@ from bics_bot.config.server_ids import (
     GUILD_BICS_CLONE_ID,
     CATEGORY_STUDY_GROUPS,
 )
-from bics_bot.dropdowns.studygroup_dropdown import StudyGroupView
+from bics_bot.dropdowns.studygroup_dropdown import StudyGroupLeaveView, StudyGroupInviteView
 
 class StudyGroupCmd(commands.Cog):
     """This class represents the command </create_study_group>
@@ -180,7 +180,7 @@ class StudyGroupCmd(commands.Cog):
             )
             return
         
-        view = StudyGroupView(interaction)
+        view = StudyGroupLeaveView(interaction)
         await interaction.response.send_message(
             view=view,
             ephemeral=True,
@@ -193,10 +193,6 @@ class StudyGroupCmd(commands.Cog):
     async def studygroup_invite(
         self,
         interaction: Interaction,
-        group_name: str = nextcord.SlashOption(
-            description="Enter the exam name you see in your text channel",
-            required=True,
-        ),
         names: str = nextcord.SlashOption(
             description="Mention `@` the study group members. Example: @John D @Jane D",
             required=True,
@@ -235,23 +231,11 @@ class StudyGroupCmd(commands.Cog):
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
         overwrites = self.get_overwrites(members)
 
-        for channel in category.channels:
-            if channel.name == group_name and isinstance(channel, nextcord.TextChannel):
-                for member in members:
-                    await channel.set_permissions(target=member, overwrite=overwrites[member])
-            if channel.name == group_name and isinstance(channel, nextcord.VoiceChannel):
-                for member in members:
-                    await channel.set_permissions(target=member, overwrite=overwrites[member])
-
+        view = StudyGroupInviteView(interaction, members, overwrites)
         await interaction.response.send_message(
-            embed=LoggerEmbed(
-                "Confirmation",
-                f"User(s) *{member_names}* have been given access.",
-            ),
+            view=view,
             ephemeral=True,
         )
-
-        return
 
     async def get_members(
         self, interaction: Interaction, names: str
