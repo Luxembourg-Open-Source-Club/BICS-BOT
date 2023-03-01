@@ -8,7 +8,7 @@ from bics_bot.config.server_ids import (
     GUILD_BICS_CLONE_ID,
     CATEGORY_STUDY_GROUPS,
 )
-
+from bics_bot.dropdowns.studygroup_dropdown import StudyGroupLeaveView, StudyGroupInviteView
 
 class StudyGroupCmd(commands.Cog):
     """This class represents the command </create_study_group>
@@ -25,17 +25,17 @@ class StudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Example: /create_study_group Awesome-LA1-Study-Group John D, Jane D, Adam S",
+        description="Example: /studygroup_create Awesome LA1 Study Group @John D @Jane D @Adam S",
     )
-    async def create_study_group(
+    async def studygroup_create(
         self,
         interaction: Interaction,
         group_name: str = nextcord.SlashOption(
-            description="Try to make it unique to avoid overlapping. Example: use member names in the group name.",
+            description="Do not enter special characters.",
             required=True,
         ),
         names: str = nextcord.SlashOption(
-            description="Use server names. Separate names with a comma and a space. (', ')",
+            description="Mention `@` the study group members. Example: @John D @Jane D",
             required=True,
         ),
     ) -> None:
@@ -46,8 +46,9 @@ class StudyGroupCmd(commands.Cog):
         Args:
             interaction: Required by the API. Gives meta information about
                 the interaction.
-            create: Bool value indicating if the student wants to create a
-                group or delete a group.
+            group_name: `String` value representing the study group's name.
+            names: The names of the study group members, retrieved in a Discord ID format.
+                Example: '<@622007259424377748> <@224606608425044993> <@208934975432933696>'
 
         Returns:
             None
@@ -70,6 +71,20 @@ class StudyGroupCmd(commands.Cog):
             return
 
         group_name = group_name.lower()
+        group_name = group_name.replace(" ", "-")
+        group_name = group_name.replace("_", "-")
+
+        for char in group_name:
+            if not char.isalnum() and not char == '-':
+                await interaction.response.send_message(
+                    embed=LoggerEmbed(
+                        "Warning",
+                        f"Do not use {char} in group name.",
+                        WARNING_LEVEL,
+                    ),
+                    ephemeral=True,
+                )
+                return
 
         # identical group name check
         for channel in interaction.guild.get_channel(
@@ -86,43 +101,45 @@ class StudyGroupCmd(commands.Cog):
                 )
                 return
 
-        member_count = len(names.split(", "))
         members = await self.get_members(interaction, names)
-        if len(members) != member_count:
+        if not members:
             await interaction.response.send_message(
                 embed=LoggerEmbed(
                     "Warning",
-                    "Check the names you entered, and the format in which you entered them.",
+                    f"You need to enter users by mentioning them (use `@`).",
                     WARNING_LEVEL,
                 ),
                 ephemeral=True,
             )
-            return
+        members.append(interaction.user)
 
-        topic = f"Study group {group_name} for {names}."
+        member_names = ", ".join([member.display_name for member in members])
+
+        topic = f"Study group {group_name} for {member_names}."
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
-        text_overwrites, voice_overwrites = self.get_overwrites(
-            interaction, members
+        overwrites = self.get_overwrites(
+            members
         )
+        overwrites[interaction.guild.default_role] = nextcord.PermissionOverwrite(read_messages=False)
+
         text_channel: nextcord.TextChannel = (
             await interaction.guild.create_text_channel(
                 group_name,
                 topic=topic,
                 category=category,
-                overwrites=text_overwrites,
+                overwrites=overwrites,
             )
         )
         voice_channel: nextcord.VoiceChannel = (
             await interaction.guild.create_voice_channel(
-                group_name, category=category, overwrites=voice_overwrites
+                group_name, category=category, overwrites=overwrites
             )
         )
 
         await interaction.response.send_message(
             embed=LoggerEmbed(
                 "Confirmation",
-                f"Text channel <{text_channel.name}> and voice channel <{voice_channel.name}> have been created. Users {names} have been given access",
-                WARNING_LEVEL,
+                f"Text channel **{text_channel.name}** and voice channel **{voice_channel.name}** have been created.\n\nUsers *{member_names}* have been given access.",
             ),
             ephemeral=True,
         )
@@ -131,16 +148,9 @@ class StudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Example: /delete_study_group Awesome-LA1-Study-Group",
+        description="Example: /studygroup_leave. Just press ENTER, nothing more needed :)",
     )
-    async def delete_study_group(
-        self,
-        interaction: Interaction,
-        group_name: str = nextcord.SlashOption(
-            description="Enter the name of the text channel or the voice channel",
-            required=True,
-        ),
-    ) -> None:
+    async def studygroup_leave(self, interaction: Interaction) -> None:
         """
         The </delete_study_group> command will let students remove their private text and voice
         channels for their study groups. The user must be in the group to delete the group.
@@ -148,7 +158,6 @@ class StudyGroupCmd(commands.Cog):
         Args:
             interaction: Required by the API. Gives meta information about
                 the interaction.
-            group_name: Name of the study group to be removed
 
         Returns:
             None
@@ -170,38 +179,61 @@ class StudyGroupCmd(commands.Cog):
                 ephemeral=True,
             )
             return
-
-        group_name = group_name.lower()
-
-        studygroup_category = interaction.guild.get_channel(
-            CATEGORY_STUDY_GROUPS
+        
+        view = StudyGroupLeaveView(interaction)
+        await interaction.response.send_message(
+            view=view,
+            ephemeral=True,
         )
-        channels = []
-        for channel in studygroup_category.channels:
-            if channel.name == group_name:
-                channels.append(channel)
 
-        if interaction.user not in channels[0].overwrites.keys():
+    @application_command.slash_command(
+        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
+        description="Example: /studygroup_invite awesome-la2-group @John D @Jane D",
+    )
+    async def studygroup_invite(
+        self,
+        interaction: Interaction,
+        names: str = nextcord.SlashOption(
+            description="Mention `@` the study group members. Example: @John D @Jane D",
+            required=True,
+        ),
+    ) -> None:
+        if len(interaction.user.roles) == 1:
+            # The user has no roles. So he must first use this command
+            msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+        elif nextcord.utils.get(interaction.user.roles, name="Incoming"):
+            # The user has the incoming role and thus not allowed to use this command
+            msg = "You are not allowed to invite user to study groups, you aren't a student :)"
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+        
+        members = await self.get_members(interaction, names)
+        if not members:
             await interaction.response.send_message(
                 embed=LoggerEmbed(
                     "Warning",
-                    f"You are not a part of this study group. You cannot delete it.",
+                    f"You need to enter users by mentioning them (use `@`).",
                     WARNING_LEVEL,
                 ),
                 ephemeral=True,
             )
-            # report_incident()
-            return
 
-        for channel in channels:
-            await channel.delete()
+        member_names = ", ".join([member.display_name for member in members])
 
+        category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
+        overwrites = self.get_overwrites(members)
+
+        view = StudyGroupInviteView(interaction, members, overwrites)
         await interaction.response.send_message(
-            embed=LoggerEmbed(
-                "Confirmation",
-                f"Study group {group_name} has been deleted. Farewell.",
-                WARNING_LEVEL,
-            ),
+            view=view,
             ephemeral=True,
         )
 
@@ -209,44 +241,26 @@ class StudyGroupCmd(commands.Cog):
         self, interaction: Interaction, names: str
     ) -> list[Interaction.user]:
         members: list[Interaction.user] = []
-        for name in names.split(", "):
-            for member in interaction.guild.members:
-                if name == member.display_name:
-                    members.append(member)
-                    break
+        ids = [int(name.strip("<@>")) for name in names.replace("><", "> <").split(" ")]
+        for id in ids:
+            member = None
+            try:
+                member = interaction.guild.get_member(id)
+            except:
+                return
+            members.append(member)
         return members
-
+    
     def get_overwrites(
-        self, interaction: Interaction, members: list[Interaction.user]
+        self, members: list[Interaction.user]
     ):
-        text_overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(
-                read_messages=False
-            ),
-            interaction.guild.me: nextcord.PermissionOverwrite(
-                read_messages=True
-            ),
-        }
+        overwrites = {}
         for member in members:
-            text_overwrites[
-                interaction.guild.get_member(member.id)
-            ] = nextcord.PermissionOverwrite(read_messages=True)
-
-        voice_overwrites = {
-            interaction.guild.default_role: nextcord.PermissionOverwrite(
-                view_channel=False
-            ),
-            interaction.guild.me: nextcord.PermissionOverwrite(
-                view_channel=True
-            ),
-        }
-        for member in members:
-            voice_overwrites[
-                interaction.guild.get_member(member.id)
+            overwrites[
+                member
             ] = nextcord.PermissionOverwrite(view_channel=True)
 
-        return (text_overwrites, voice_overwrites)
-
+        return overwrites
 
 def setup(client):
     """Function used to setup nextcord cogs"""
