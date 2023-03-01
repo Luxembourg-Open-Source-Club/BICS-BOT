@@ -148,7 +148,7 @@ class StudyGroupCmd(commands.Cog):
 
     @application_command.slash_command(
         guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
-        description="Example: /studygroup_leave",
+        description="Example: /studygroup_leave. Just press ENTER, nothing more needed :)",
     )
     async def studygroup_leave(self, interaction: Interaction) -> None:
         """
