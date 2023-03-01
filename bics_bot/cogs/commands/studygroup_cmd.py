@@ -184,6 +184,76 @@ class StudyGroupCmd(commands.Cog):
             ephemeral=True,
         )
 
+    @application_command.slash_command(
+        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
+        description="Example: /studygroup_invite awesome-la2-group @John D @Jane D",
+    )
+    async def studygroup_invite(
+        self,
+        interaction: Interaction,
+        group_name: str = nextcord.SlashOption(
+            description="Enter the exam name you see in your text channel",
+            required=True,
+        ),
+        names: str = nextcord.SlashOption(
+            description="Mention `@` the study group members. Example: @John D @Jane D",
+            required=True,
+        ),
+    ) -> None:
+        if len(interaction.user.roles) == 1:
+            # The user has no roles. So he must first use this command
+            msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+        elif nextcord.utils.get(interaction.user.roles, name="Incoming"):
+            # The user has the incoming role and thus not allowed to use this command
+            msg = "You are not allowed to invite user to study groups, you aren't a student :)"
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+        
+        members = await self.get_members(interaction, names)
+        if not members:
+            await interaction.response.send_message(
+                embed=LoggerEmbed(
+                    "Warning",
+                    f"You need to enter users by mentioning them (use `@`).",
+                    WARNING_LEVEL,
+                ),
+                ephemeral=True,
+            )
+
+        member_names = ", ".join([member.display_name for member in members])
+
+        category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
+        text_overwrites, voice_overwrites = self.get_overwrites_invitation(
+            interaction,
+            members
+        )
+
+        for channel in category.channels:
+            if channel.name == group_name and isinstance(channel, nextcord.TextChannel):
+                for member in members:
+                    await channel.set_permissions(target=member, overwrite=text_overwrites[member])
+            if channel.name == group_name and isinstance(channel, nextcord.VoiceChannel):
+                for member in members:
+                    await channel.set_permissions(target=member, overwrite=voice_overwrites[member])
+
+        await interaction.response.send_message(
+            embed=LoggerEmbed(
+                "Confirmation",
+                f"User(s) *{member_names}* have been given access.",
+            ),
+            ephemeral=True,
+        )
+
+        return
+
     async def get_members(
         self, interaction: Interaction, names: str
     ) -> list[Interaction.user]:
@@ -198,33 +268,41 @@ class StudyGroupCmd(commands.Cog):
             members.append(member)
         return members
 
+    def get_overwrites_invitation(self, interaction: Interaction, members):
+        for member in members:
+            text_overwrites = {
+                member: nextcord.PermissionOverwrite(
+                    read_messages=True
+                )
+            }
+            voice_overwrites = {
+                member: nextcord.PermissionOverwrite(
+                    view_channel=True
+                )
+            }
+        return (text_overwrites, voice_overwrites)
+    
     def get_overwrites(
         self, interaction: Interaction, members: list[Interaction.user]
     ):
         text_overwrites = {
             interaction.guild.default_role: nextcord.PermissionOverwrite(
                 read_messages=False
-            ),
-            interaction.guild.me: nextcord.PermissionOverwrite(
-                read_messages=True
-            ),
+            )
         }
         for member in members:
             text_overwrites[
-                interaction.guild.get_member(member.id)
+                member
             ] = nextcord.PermissionOverwrite(read_messages=True)
 
         voice_overwrites = {
             interaction.guild.default_role: nextcord.PermissionOverwrite(
                 view_channel=False
-            ),
-            interaction.guild.me: nextcord.PermissionOverwrite(
-                view_channel=True
-            ),
+            )
         }
         for member in members:
             voice_overwrites[
-                interaction.guild.get_member(member.id)
+                member
             ] = nextcord.PermissionOverwrite(view_channel=True)
 
         return (text_overwrites, voice_overwrites)
