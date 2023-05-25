@@ -4,21 +4,16 @@ The **BICS bot's** source code may be found in this repository. Its primary goal
 The bot now supports text channel instructions including **help,** **role attribution**, and **enrolment/unenrolment** to courses.
 
 ## Table of Contents
-- [Getting Started](#getting-started)
-    - [Initial Setup](#initial-setup)
-    - [Bot Deployment](#bot-deployment)
+- [Bot Deployment](#bot-deployment)
 - [Commands Available](#commands-available)
     - [General Commands](#general-commands)
     - [Role Commands](#role-commands)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
-    - [Steps to Contribute](#steps-to-contribute)
     - [Conventions to Follow](#conventions-to-follow)
 
-### Bot Deployment
-You must deploy a bot if you wish to test the code you have written. Run `python main.py -c` from this repository's root directory to accomplish this. The program to launch the clone rather than the actual bot is specified by the `-c` option.
-When the bot is operating, the message **Bot is online** should appear.
-Go to the **#bot-dev-discussion** text channel in the BICS discord server to test any commands you have added. *(Note: To view this channel, you must hold the role **BotDev**)*
+## Bot Deployment
+Please refer to the **Testing Environment Setup** and **Development Environment Setup** sections in the [contribution documentation](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/blob/main/.github/CONTRIBUTING.md).
 
 
 ## Commands Available
@@ -48,27 +43,11 @@ Go to the **#bot-dev-discussion** text channel in the BICS discord server to tes
 
 ## Dependencies
 - `nextcord`: python discord API
-
 - `python-dotenv`: used to retrieve environment variables
 
 ## Contributing
-For guidelines on how to contribute, refer to the [contribution documentation](./.github/CONTRIBUTING.md).
 
-### Steps to Contribute
-1. Create your own bot. You can follow this (tutorial)[https://discord.com/developers/docs/getting-started] where you should go until *Adding scopres and permissions* section. When choosing the bot permissions, choose administrator.
-
-1. Create the clone of the BICS discord server. The link for the template can be found in the **#bot-discussion** text channel in the pin messages.
-
-1. Fork this repo.
-
-1. If you are contributing to an issue make sure to notify that you will be working on that issue, to let others now that someone took that issue.
-
-1. Create a branch where you will work on. The branch name should start with the type of change you want to do followed by a `/` and the description of the change. For example, say you want to add a new feature which adds a new command to the bot. Then the branch would look like `feature/new_command`. Another example would be if you want
-to fix a but then the branch would be of the form `fix/...`
-
-1. Once you have made your desired changes, you need to make sure that there are no bugs and everything works as expected. (Unless the changes do not affect the code itself, like documentation)
-
-1. Create a pull request from your branch to the main branch of repo.
+Please refer to the [contribution documentation](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/blob/main/.github/CONTRIBUTING.md).
 
 ### Conventions to Follow
 - All the commands should be seen only by the user that has called the command. This can be achieved by using the `ephemeral=True` parameter when sending a message. 
