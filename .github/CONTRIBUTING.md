@@ -6,8 +6,9 @@ Read our [Code of Conduct](./CODE_OF_CONDUCT.md) to keep our community approacha
 
 In this guide you will get an overview of the contribution workflow from opening an issue, creating a PR, reviewing, and merging the PR.
 
-## Getting started
-We expect you to develop on a UNIX-based operating system. If you are on Windows, follow [this tutorial](https://learn.microsoft.com/en-us/windows/wsl/install) on installing WSL.
+## Technical Requirements Before Starting
+- We expect you to develop on a UNIX-based operating system. If you are on Windows, follow [this tutorial](https://learn.microsoft.com/en-us/windows/wsl/install) on installing WSL.
+- Use Python3.8 and above.
 
 ## New contributor guide
 
@@ -33,7 +34,7 @@ Scan through our [existing issues](https://github.com/Luxembourg-Open-Source-Clu
 
 1. [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
 
-2. [Create a virtual environment](https://docs.python.org/3/library/venv.html#creating-virtual-environments) for Python, and [activate it](https://docs.python.org/3/library/venv.html#how-venvs-work).
+2. [Create a virtual environment](https://docs.python.org/3/library/venv.html#creating-virtual-environments) for Python, and [activate it](https://docs.python.org/3/library/venv.html#how-venvs-work). _**If you are on Linux**_, you must first install the package `python3-venv` using your distro's package manager.
 
 3. Install requirements via `$ pip install -r requirements.txt`
 
