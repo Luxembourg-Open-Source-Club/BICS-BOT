@@ -1,5 +1,5 @@
 # BICS-BOT 🤖
-The **BICS bot's** source code may be found in this repository. Its primary goal is to automate the BICS server and provide users and students with a variety of ways to communicate with it.
+The **BICS bot's** source code may be found in this repository. Its primary goal is to automate the BICS Discord server and provide users and students with a variety of ways to interact with it.
 
 The bot now supports text channel instructions including **help,** **role attribution**, and **enrolment/unenrolment** to courses.
 
@@ -53,8 +53,8 @@ Please refer to the [contribution documentation](https://github.com/Luxembourg-O
 - All the commands should be seen only by the user that has called the command. This can be achieved by using the `ephemeral=True` parameter when sending a message. 
 In case the command is supposed to be seen by everyone then the parameter needs to be set to false.
 
-- Class names should follow the CamelCase naming convention
+- Class names should follow the PascalCase naming convention
 
-- Everything else than classes should follow the snacke_case naming convention
+- Everything else should follow the snake_case naming convention
 
 - The use of docstrings is encouraged to give a brief description of the functions to others 
