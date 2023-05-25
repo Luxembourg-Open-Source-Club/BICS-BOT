@@ -15,17 +15,6 @@ The bot now supports text channel instructions including **help,** **role attrib
     - [Steps to Contribute](#steps-to-contribute)
     - [Conventions to Follow](#conventions-to-follow)
 
-## Getting Started
-> The logic is implemented in a python module called **bics_bot** that is part of this repository. You will have to install the software locally as a result.
-This is why I suggest installing it using a virtual Python environment.
-
-### Initial Setup
-1. Set up a python virtual environment (*ignore this command if you don't want to*)
-    - `python3 -m env env`
-1. Install the dependencies
-    - `pip install -r requirements.txt`
-1. Create a file .env in the root folder which contains the bot token as `TOKEN_BOT_CLONE=token`. To get the token, reach out to @Pedro. 
-
 ### Bot Deployment
 You must deploy a bot if you wish to test the code you have written. Run `python main.py -c` from this repository's root directory to accomplish this. The program to launch the clone rather than the actual bot is specified by the `-c` option.
 When the bot is operating, the message **Bot is online** should appear.
