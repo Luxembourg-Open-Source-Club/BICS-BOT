@@ -63,8 +63,7 @@ Go to the **#bot-dev-discussion** text channel in the BICS discord server to tes
 - `python-dotenv`: used to retrieve environment variables
 
 ## Contributing
-**Any contributions are welcome!** 😉 If you desired to contribute, you can head to the issues tab and check if there are issues you want to 
-address. In addition, you can also just leave issues as features requests, or bugs that you might have found.
+For guidelines on how to contribute, refer to the [contribution documentation](./.github/CONTRIBUTING.md).
 
 ### Steps to Contribute
 1. Create your own bot. You can follow this (tutorial)[https://discord.com/developers/docs/getting-started] where you should go until *Adding scopres and permissions* section. When choosing the bot permissions, choose administrator.
