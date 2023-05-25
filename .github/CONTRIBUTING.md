@@ -18,6 +18,27 @@ To get an overview of the project, read the [README](README.md). Here are some r
 - [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow)
 - [Collaborating with pull requests](https://docs.github.com/en/github/collaborating-with-pull-requests)
 
+## Setting Up Development Environment
+1. Create your own bot. You can follow [this tutorial](https://discord.com/developers/docs/getting-started), where you should do everything in step 1, and stop before step 2. Below are some answers to questions you might have about the setup process.
+
+### Setup FAQ
+
+#### What should the name of my testing bot be?
+The name of your bot does not matter. The bot you are creating in this guide is your own, personal, testing bot. Completely disconnected from the production bot (the bot that students are using on the Discord server).
+
+#### What priviliges should I give to my testing bot in the **Bot** section?
+In the section **Priviliged Gateway Intents**, toggle all three options. When you scroll down, you will find a section called **Bot Permissions**. Check the **Administrator** box.
+
+#### Where do I get the token for my testing bot?
+Sometimes, Discord doesn't give the token at first. All you have to do is;
+1. Navigate to the **Bot** page from the left sidebar.
+2. Click **Reset Token**.
+3. Write it down and do not lose it. DO NOT SHARE IT WITH ANYONE.
+4. In case you lose it, repeat the steps above, and update your used token in the codebase.
+
+#### What **Bot Permissions** should I choose in the **URL Generator** section?
+After you choose `applications.command` and `bot` as your scopes, a new **Bot Permissions** section will be available below. Just as before, toggle the **Administrator** checkbox.
+
 ### Issues
 
 #### Create a new issue
@@ -26,13 +47,13 @@ If you spot a problem with BICS-BOT, [search if an issue already exists](https:/
 
 #### Solve an issue
 
-Scan through our [existing issues](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/issues) to find one that interests you. You can narrow down the search using `labels` as filters. Once you spot a issue you are interested in solving, feel free to self-assign it and create a branch for it to start working.
+Scan through our [existing issues](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/issues) to find one that interests you. You can narrow down the search using `labels` as filters. Once you spot an issue you are interested in solving, feel free to self-assign it and create a branch for it to start working. Pay attention to issues labeled **good first issue**
 
 ### Make Changes
 
 #### Make changes locally
 
-1. [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
+1. Clone the repo so that you can make your changes without affecting the original project until you're ready to merge them.
 
 2. [Create a virtual environment](https://docs.python.org/3/library/venv.html#creating-virtual-environments) for Python, and [activate it](https://docs.python.org/3/library/venv.html#how-venvs-work). _**If you are on Linux**_, you must first install the package `python3-venv` using your distro's package manager.
 
