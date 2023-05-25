@@ -16,6 +16,7 @@ In this guide you will get an overview of the contribution workflow from opening
         - [Where do I get the token for my testing bot?](#where-do-i-get-the-token-for-my-testing-bot)
         - [What Bot Permissions should I choose in the URL Generator section?](#what-bot-permissions-should-i-choose-in-the-url-generator-section)
 - [Setting Up Development Environment](#setting-up-development-environment)
+- [Running the Bot](#running-the-bot)
 - [Issues](#issues)
     - [Create a New Issue](#create-a-new-issue)
     - [Solve an Issue](#solve-an-issue)
@@ -64,11 +65,9 @@ After you choose `applications.command` and `bot` as your scopes, a new **Bot Pe
 
 3. Install requirements via `$ pip install -r requirements.txt`
 
-4. Create a file `.env` in the root directory, and add your test bot's token by entering this in the file: `TOKEN_BOT_CLONE=<insert your token>`
+4. Create a file `.env` in the root directory, and add your test bot's token by entering this in the file: `TOKEN_BOT=<insert your token>`
 
-5. Create a working branch and start with your changes!
-
-### Running the Bot
+## Running the Bot
 
 Now that your testing environment is fully set and you have a local copy of the codebase, you can run your own test bot.
 
