@@ -81,7 +81,7 @@ If you spot a problem with BICS-BOT, [search if an issue already exists](https:/
 
 ### Solve an issue
 
-Scan through our [existing issues](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/issues) to find one that interests you. You can narrow down the search using `labels` as filters. Once you spot an issue you are interested in solving, feel free to self-assign it and create a branch for it to start working. Pay attention to issues labeled **good first issue**
+Scan through our [existing issues](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/issues) to find one that interests you. You can narrow down the search using `labels` as filters. Once you spot an issue you are interested in solving, ask if you can be assigned this issue. Pay attention to issues labeled **good first issue**
 
 ### Pull Requests
 
