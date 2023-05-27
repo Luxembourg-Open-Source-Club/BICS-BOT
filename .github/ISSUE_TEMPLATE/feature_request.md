@@ -1,6 +1,6 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: 💡 Feature request
+about: Create a new ticket for a new feature request
 title: ''
 labels: 'enhancement'
 assignees: ''
