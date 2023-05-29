@@ -48,7 +48,7 @@ def load_extensions(bot: commands.Bot):
             bot.load_extension(f"bics_bot.cogs.commands.{filename[:-3]}")
 
 
-def main(args: vars):
+def main():
     bot = commands.Bot(
         command_prefix="!",
         description=read_txt("./bics_bot/texts/bot_description.txt"),
@@ -56,21 +56,8 @@ def main(args: vars):
     )
 
     load_extensions(bot)
-
-    if args["clone"]:
-        bot.run(os.getenv("TOKEN_BOT_CLONE"))
-    else:
-        bot.run(os.getenv("TOKEN_BOT"))
+    bot.run(os.getenv("TOKEN_BOT"))
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        "-c",
-        "--clone",
-        default=False,
-        help="When passed, the bot clone token will be used",
-        action=argparse.BooleanOptionalAction,
-    )
-    args = vars(ap.parse_args())
-    main(args)
+    main()
