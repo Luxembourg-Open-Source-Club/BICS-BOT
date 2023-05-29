@@ -49,6 +49,19 @@ def load_extensions(bot: commands.Bot):
 
 
 def main():
+    """
+    The main method taking care of the bot initialization and running of bot.
+
+    This function initializes the bot by setting its command prefix, description,
+    and intents. It also loads necessary extensions and runs the bot using the
+    provided bot token.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     bot = commands.Bot(
         command_prefix="!",
         description=read_txt("./bics_bot/texts/bot_description.txt"),
