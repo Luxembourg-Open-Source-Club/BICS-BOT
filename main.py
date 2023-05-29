@@ -56,17 +56,12 @@ def main(args: vars):
     )
 
     load_extensions(bot)
-
-    if args["clone"]:
-        bot.run(os.getenv("TOKEN_BOT_CLONE"))
-    else:
-        bot.run(os.getenv("TOKEN_BOT"))
+    bot.run(os.getenv("TOKEN_BOT"))
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument(
-        "-c",
         "--clone",
         default=False,
         help="When passed, the bot clone token will be used",
