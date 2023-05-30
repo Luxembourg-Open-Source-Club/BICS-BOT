@@ -24,7 +24,7 @@ In this guide you will get an overview of the contribution workflow from opening
 
 ## Technical Requirements Before Starting
 - We expect you to develop on a UNIX-based operating system. If you are on Windows, follow [this tutorial](https://learn.microsoft.com/en-us/windows/wsl/install) on installing WSL.
-- Use Python3.8 and above.
+- Use Python3.9 and above.
 
 ## New Contributor Guide
 
