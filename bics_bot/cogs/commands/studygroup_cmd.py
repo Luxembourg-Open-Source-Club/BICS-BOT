@@ -4,8 +4,6 @@ from nextcord import application_command, Interaction
 
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 from bics_bot.config.server_ids import (
-    GUILD_BICS_ID,
-    GUILD_BICS_CLONE_ID,
     CATEGORY_STUDY_GROUPS,
 )
 from bics_bot.dropdowns.studygroup_dropdown import StudyGroupLeaveView, StudyGroupInviteView
@@ -24,7 +22,6 @@ class StudyGroupCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Example: /studygroup_create Awesome LA1 Study Group @John D @Jane D @Adam S",
     )
     async def studygroup_create(
@@ -147,7 +144,6 @@ class StudyGroupCmd(commands.Cog):
         return
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Example: /studygroup_leave. Just press ENTER, nothing more needed :)",
     )
     async def studygroup_leave(self, interaction: Interaction) -> None:
@@ -187,7 +183,6 @@ class StudyGroupCmd(commands.Cog):
         )
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Example: /studygroup_invite awesome-la2-group @John D @Jane D",
     )
     async def studygroup_invite(

@@ -5,8 +5,6 @@ from nextcord import application_command, Interaction
 from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.embeds.logger_embed import WARNING_LEVEL
 from bics_bot.config.server_ids import (
-    GUILD_BICS_ID,
-    GUILD_BICS_CLONE_ID,
     CHANNEL_INTRO_ID,
     ROLE_ADMIN_ID,
     ROLE_INTRO_LIST,
@@ -29,7 +27,6 @@ class IntroCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Introduction",
     )
     async def intro(

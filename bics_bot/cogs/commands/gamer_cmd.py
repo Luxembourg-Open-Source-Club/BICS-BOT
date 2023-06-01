@@ -3,7 +3,6 @@ from nextcord import application_command, Interaction
 from nextcord.ext import commands
 from nextcord.types import embed
 
-from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
 from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.embeds.logger_embed import WARNING_LEVEL
 
@@ -22,7 +21,6 @@ class GamerCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Get the role of Gamer",
     )
     async def gamer(self, interaction: Interaction):
