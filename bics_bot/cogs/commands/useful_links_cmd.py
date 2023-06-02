@@ -2,7 +2,6 @@ from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
 from bics_bot.embeds.useful_links_embed import UsefulLinksEmbed
-from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
 
 
 class UsefulLinksCmd(commands.Cog):
@@ -19,7 +18,6 @@ class UsefulLinksCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Links that might be useful",
     )
     async def useful_links(self, interaction: Interaction):

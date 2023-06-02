@@ -2,7 +2,6 @@ from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
 from bics_bot.embeds.help_embed import HelpEmbed
-from bics_bot.config.server_ids import GUILD_BICS_ID, GUILD_BICS_CLONE_ID
 
 
 class HelpCmd(commands.Cog):
@@ -19,7 +18,6 @@ class HelpCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="List of available commands for the bics bot",
     )
     async def help(self, interaction: Interaction):

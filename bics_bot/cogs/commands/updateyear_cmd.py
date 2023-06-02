@@ -4,8 +4,6 @@ from nextcord.ext import commands
 from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.embeds.logger_embed import WARNING_LEVEL
 from bics_bot.config.server_ids import (
-    GUILD_BICS_ID,
-    GUILD_BICS_CLONE_ID,
     ROLE_YEAR1_ID,
     ROLE_YEAR2_ID,
     ROLE_YEAR3_ID,
@@ -27,7 +25,6 @@ class UpdateYearCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Update your bachelor year to the next year",
     )
     async def update(self, interaction: Interaction):
