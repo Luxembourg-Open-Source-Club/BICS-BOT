@@ -7,10 +7,6 @@ from bics_bot.utils.channels_utils import (
     get_user_year,
 )
 from bics_bot.embeds.logger_embed import LoggerEmbed
-from bics_bot.config.server_ids import (
-    GUILD_BICS_ID,
-    GUILD_BICS_CLONE_ID,
-)
 from bics_bot.dropdowns.calendar_dropdown import CalendarView
 from bics_bot.utils.calendar import Calendar
 
@@ -32,7 +28,6 @@ class CalendarCmd(commands.Cog):
         self.client = client
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Allow students to enter a HW/exam into the calendar with info such as deadline.",
     )
     async def calendar_add(
@@ -87,7 +82,6 @@ class CalendarCmd(commands.Cog):
         )
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Allow students to remove a HW/exam from the calendar.",
     )
     async def calendar_delete(self, interaction: Interaction) -> None:
@@ -100,7 +94,6 @@ class CalendarCmd(commands.Cog):
         )
 
     @application_command.slash_command(
-        guild_ids=[GUILD_BICS_ID, GUILD_BICS_CLONE_ID],
         description="Allow students to view their own calendar.",
     )
     async def calendar_view(self, interaction: Interaction) -> None:
