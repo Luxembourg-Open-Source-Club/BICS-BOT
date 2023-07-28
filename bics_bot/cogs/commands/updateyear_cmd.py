@@ -17,6 +17,8 @@ class UpdateYearCmd(commands.Cog):
     The </update> command will allow students to update their current bachelor
     year to the next year. So if they are in `year1`, they will be in `year2`.
 
+    PS This command will face heavy rework during the "AUTHENTICATION update", thus is not properly maintained.
+
     Attributes:
         client: Required by the API, not directly utilized.
     """
@@ -37,6 +39,19 @@ class UpdateYearCmd(commands.Cog):
             interaction: Required by the API. Gives meta information about
               the interaction.
         """
+        isAdmin = False
+        user = interaction.user
+        for role in user.roles:
+            if role.name == "Admin":
+                isAdmin = True
+        if not isAdmin:
+            msg = "Sorry, this command is under development and reserved for admins only."
+            await interaction.response.send_message(
+                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                    ephemeral=True,
+                )
+            return
+        
         user = interaction.user
         for role in user.roles:
             if role.name == "Erasmus":
@@ -48,34 +63,36 @@ class UpdateYearCmd(commands.Cog):
                 return
         old_role = ""
         new_role = ""
-        for role in user.roles:
-            if role.name == "Incoming":
-                old_role = role
-                new_role = interaction.guild.get_role(ROLE_YEAR1_ID)
-                await user.remove_roles(role)
-                await user.add_roles(new_role)
-            elif role.name == "Year 1":
-                old_role = role
-                new_role = interaction.guild.get_role(ROLE_YEAR2_ID)
-                await user.remove_roles(role)
-                await user.add_roles(interaction.guild.get_role(ROLE_YEAR2_ID))
-            elif role.name == "Year 2":
-                old_role = role
-                new_role = interaction.guild.get_role(ROLE_YEAR3_ID)
-                await user.remove_roles(role)
-                await user.add_roles(interaction.guild.get_role(ROLE_YEAR3_ID))
-            elif role.name == "Year 3":
-                old_role = role
-                new_role = interaction.guild.get_role(ROLE_ALUMNI_ID)
-                await user.remove_roles(role)
-                await user.add_roles(
-                    interaction.guild.get_role(ROLE_ALUMNI_ID)
-                )
-        msg = f"Your year role has been updated from {old_role.name} to {new_role.name}"
-        await interaction.response.send_message(
-            embed=LoggerEmbed("Role Status", msg),
-            ephemeral=True,
-        )
+        members = user.guild.members
+        for member in members:
+            for role in member.roles:
+                # if role.name == "Incoming":
+                #     old_role = role
+                #     new_role = interaction.guild.get_role(ROLE_YEAR1_ID)
+                #     await member.remove_roles(role)
+                #     await member.add_roles(new_role)
+                if role.name == "Year 1":
+                    old_role = role
+                    new_role = interaction.guild.get_role(ROLE_YEAR2_ID)
+                    await member.remove_roles(role)
+                    await member.add_roles(interaction.guild.get_role(ROLE_YEAR2_ID))
+                elif role.name == "Year 2":
+                    old_role = role
+                    new_role = interaction.guild.get_role(ROLE_YEAR3_ID)
+                    await member.remove_roles(role)
+                    await member.add_roles(interaction.guild.get_role(ROLE_YEAR3_ID))
+                elif role.name == "Year 3":
+                    old_role = role
+                    new_role = interaction.guild.get_role(ROLE_ALUMNI_ID)
+                    await member.remove_roles(role)
+                    await member.add_roles(
+                        interaction.guild.get_role(ROLE_ALUMNI_ID)
+                    )
+            # msg = f"Your year role has been updated from {old_role.name} to {new_role.name}"
+            # await interaction.response.send_message(
+            #     embed=LoggerEmbed("Role Status", msg),
+            #     ephemeral=True,
+            # )
 
 
 def setup(client):
