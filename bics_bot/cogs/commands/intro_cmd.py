@@ -32,8 +32,12 @@ class IntroCmd(commands.Cog):
     async def intro(
         self,
         interaction: Interaction,
-        name: str = nextcord.SlashOption(description="First Name", required=True),
-        surname: str = nextcord.SlashOption(description="Last Name", required=True),
+        name: str = nextcord.SlashOption(
+            description="First Name", required=True
+        ),
+        surname: str = nextcord.SlashOption(
+            description="Last Name", required=True
+        ),
         year: str = nextcord.SlashOption(
             description="The year you will be in. In case you plan on joining the University choose **incoming**",
             choices=ROLE_INTRO_LIST,

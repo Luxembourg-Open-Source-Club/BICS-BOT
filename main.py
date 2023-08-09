@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-import argparse
 from dotenv import load_dotenv
 import nextcord
 from nextcord.ext import commands
@@ -28,7 +27,7 @@ def get_intents() -> nextcord.Intents:
     return intents
 
 
-def load_extensions(bot: commands.Bot):
+def load_extensions(bot: commands.Bot) -> None:
     """
     Loading up the cogs from cogs/commands and cogs/events. Read about cogs
     from the Nextcord docs to understand what they are and how they work.
@@ -48,7 +47,7 @@ def load_extensions(bot: commands.Bot):
             bot.load_extension(f"bics_bot.cogs.commands.{filename[:-3]}")
 
 
-def main():
+def main() -> None:
     """
     The main method taking care of the bot initialization and running of bot.
 

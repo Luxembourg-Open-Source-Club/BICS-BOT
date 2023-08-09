@@ -6,7 +6,11 @@ from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 from bics_bot.config.server_ids import (
     CATEGORY_STUDY_GROUPS,
 )
-from bics_bot.dropdowns.studygroup_dropdown import StudyGroupLeaveView, StudyGroupInviteView
+from bics_bot.dropdowns.studygroup_dropdown import (
+    StudyGroupLeaveView,
+    StudyGroupInviteView,
+)
+
 
 class StudyGroupCmd(commands.Cog):
     """This class represents the command </create_study_group>
@@ -72,7 +76,7 @@ class StudyGroupCmd(commands.Cog):
         group_name = group_name.replace("_", "-")
 
         for char in group_name:
-            if not char.isalnum() and not char == '-':
+            if not char.isalnum() and not char == "-":
                 await interaction.response.send_message(
                     embed=LoggerEmbed(
                         "Warning",
@@ -114,10 +118,10 @@ class StudyGroupCmd(commands.Cog):
 
         topic = f"Study group {group_name} for {member_names}."
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
-        overwrites = self.get_overwrites(
-            members
-        )
-        overwrites[interaction.guild.default_role] = nextcord.PermissionOverwrite(read_messages=False)
+        overwrites = self.get_overwrites(members)
+        overwrites[
+            interaction.guild.default_role
+        ] = nextcord.PermissionOverwrite(read_messages=False)
 
         text_channel: nextcord.TextChannel = (
             await interaction.guild.create_text_channel(
@@ -175,7 +179,7 @@ class StudyGroupCmd(commands.Cog):
                 ephemeral=True,
             )
             return
-        
+
         view = StudyGroupLeaveView(interaction)
         await interaction.response.send_message(
             view=view,
@@ -209,7 +213,7 @@ class StudyGroupCmd(commands.Cog):
                 ephemeral=True,
             )
             return
-        
+
         members = await self.get_members(interaction, names)
         if not members:
             await interaction.response.send_message(
@@ -236,7 +240,10 @@ class StudyGroupCmd(commands.Cog):
         self, interaction: Interaction, names: str
     ) -> list[Interaction.user]:
         members: list[Interaction.user] = []
-        ids = [int(name.strip("<@>")) for name in names.replace("><", "> <").split(" ")]
+        ids = [
+            int(name.strip("<@>"))
+            for name in names.replace("><", "> <").split(" ")
+        ]
         for id in ids:
             member = None
             try:
@@ -245,17 +252,16 @@ class StudyGroupCmd(commands.Cog):
                 return
             members.append(member)
         return members
-    
-    def get_overwrites(
-        self, members: list[Interaction.user]
-    ):
+
+    def get_overwrites(self, members: list[Interaction.user]):
         overwrites = {}
         for member in members:
-            overwrites[
-                member
-            ] = nextcord.PermissionOverwrite(view_channel=True)
+            overwrites[member] = nextcord.PermissionOverwrite(
+                view_channel=True
+            )
 
         return overwrites
+
 
 def setup(client):
     """Function used to setup nextcord cogs"""
