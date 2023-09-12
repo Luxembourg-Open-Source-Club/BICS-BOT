@@ -9,7 +9,5 @@ setup(
     author_email="pmbs.123@gmail.com",
     packages=[package_name],
     description="Code source of the discord BICS bot",
-    install_requires=[
-        "nextcord",
-    ],
+    install_requires=["nextcord", "python-dotenv"],
 )

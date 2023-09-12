@@ -4,7 +4,6 @@ from nextcord.ext import commands
 from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.embeds.logger_embed import WARNING_LEVEL
 from bics_bot.config.server_ids import (
-    ROLE_YEAR1_ID,
     ROLE_YEAR2_ID,
     ROLE_YEAR3_ID,
     ROLE_ALUMNI_ID,
@@ -17,7 +16,8 @@ class UpdateYearCmd(commands.Cog):
     The </update> command will allow students to update their current bachelor
     year to the next year. So if they are in `year1`, they will be in `year2`.
 
-    PS This command will face heavy rework during the "AUTHENTICATION update", thus is not properly maintained.
+    PS This command will face heavy rework during the "AUTHENTICATION update",
+    thus is not properly maintained.
 
     Attributes:
         client: Required by the API, not directly utilized.
@@ -47,11 +47,11 @@ class UpdateYearCmd(commands.Cog):
         if not isAdmin:
             msg = "Sorry, this command is under development and reserved for admins only."
             await interaction.response.send_message(
-                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
-                    ephemeral=True,
-                )
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
             return
-        
+
         user = interaction.user
         for role in user.roles:
             if role.name == "Erasmus":
@@ -75,12 +75,16 @@ class UpdateYearCmd(commands.Cog):
                     old_role = role
                     new_role = interaction.guild.get_role(ROLE_YEAR2_ID)
                     await member.remove_roles(role)
-                    await member.add_roles(interaction.guild.get_role(ROLE_YEAR2_ID))
+                    await member.add_roles(
+                        interaction.guild.get_role(ROLE_YEAR2_ID)
+                    )
                 elif role.name == "Year 2":
                     old_role = role
                     new_role = interaction.guild.get_role(ROLE_YEAR3_ID)
                     await member.remove_roles(role)
-                    await member.add_roles(interaction.guild.get_role(ROLE_YEAR3_ID))
+                    await member.add_roles(
+                        interaction.guild.get_role(ROLE_YEAR3_ID)
+                    )
                 elif role.name == "Year 3":
                     old_role = role
                     new_role = interaction.guild.get_role(ROLE_ALUMNI_ID)

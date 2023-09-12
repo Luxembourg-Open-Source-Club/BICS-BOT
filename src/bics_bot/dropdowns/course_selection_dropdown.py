@@ -1,5 +1,4 @@
 import nextcord
-import json
 
 from nextcord.interactions import Interaction
 from bics_bot.embeds.logger_embed import LoggerEmbed
@@ -254,15 +253,18 @@ class CoursesDropdownView(nextcord.ui.View):
     ):
         if len(self.year1_dropdown._options) > 0:
             await self.give_course_permissions(
-                [unfilter_course_name(v) for v in self.year1_dropdown.values], interaction
+                [unfilter_course_name(v) for v in self.year1_dropdown.values],
+                interaction,
             )
         if len(self.year2_dropdown._options) > 0:
             await self.give_course_permissions(
-                [unfilter_course_name(v) for v in self.year2_dropdown.values], interaction
+                [unfilter_course_name(v) for v in self.year2_dropdown.values],
+                interaction,
             )
         if len(self.year3_dropdown._options) > 0:
             await self.give_course_permissions(
-                [unfilter_course_name(v) for v in self.year3_dropdown.values], interaction
+                [unfilter_course_name(v) for v in self.year3_dropdown.values],
+                interaction,
             )
 
         embed = LoggerEmbed(

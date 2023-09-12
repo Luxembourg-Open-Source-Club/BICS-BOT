@@ -22,18 +22,15 @@ class StudyGroupDropdown(nextcord.ui.Select):
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
         for channel in category.text_channels:
             if interaction.user in channel.members:
-                options.append(
-                    nextcord.SelectOption(
-                        label=channel.name
-                    )
-                )
+                options.append(nextcord.SelectOption(label=channel.name))
         return options
-    
+
+
 class StudyGroupInviteView(nextcord.ui.View):
     def __init__(self, interaction: Interaction, members, overwrites):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)
-        self.members=members
+        self.members = members
         self.overwrites = overwrites
         if len(self.groups._options) > 0:
             self.groups.build()
@@ -46,12 +43,18 @@ class StudyGroupInviteView(nextcord.ui.View):
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
         for value in self.groups.values:
-            for channel in interaction.guild.get_channel(CATEGORY_STUDY_GROUPS).channels:
+            for channel in interaction.guild.get_channel(
+                CATEGORY_STUDY_GROUPS
+            ).channels:
                 if channel.name == value:
                     for member in self.members:
-                        await channel.set_permissions(target=member, overwrite=self.overwrites[member])
+                        await channel.set_permissions(
+                            target=member, overwrite=self.overwrites[member]
+                        )
 
-        member_names = ", ".join([member.display_name for member in self.members])
+        member_names = ", ".join(
+            [member.display_name for member in self.members]
+        )
         await interaction.response.send_message(
             embed=LoggerEmbed(
                 "Confirmation",
@@ -60,7 +63,7 @@ class StudyGroupInviteView(nextcord.ui.View):
             ephemeral=True,
         )
         return
-        
+
     @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.red, row=3)
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
@@ -69,6 +72,7 @@ class StudyGroupInviteView(nextcord.ui.View):
             "Canceled operation. No changes made.", ephemeral=True
         )
         self.stop()
+
 
 class StudyGroupLeaveView(nextcord.ui.View):
     def __init__(self, interaction: Interaction):
@@ -85,18 +89,22 @@ class StudyGroupLeaveView(nextcord.ui.View):
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
         for value in self.groups.values:
-            for channel in interaction.guild.get_channel(CATEGORY_STUDY_GROUPS).channels:
+            for channel in interaction.guild.get_channel(
+                CATEGORY_STUDY_GROUPS
+            ).channels:
                 if channel.name == value:
-                    await channel.set_permissions(interaction.user, overwrite=None)
+                    await channel.set_permissions(
+                        interaction.user, overwrite=None
+                    )
         await interaction.response.send_message(
             embed=LoggerEmbed(
                 "Confirmation",
-                f"You have left the study group. They will miss you :("
+                f"You have left the study group. They will miss you :(",
             ),
             ephemeral=True,
         )
         return
-        
+
     @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.red, row=3)
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction

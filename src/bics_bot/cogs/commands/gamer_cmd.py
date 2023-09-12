@@ -1,7 +1,6 @@
 import nextcord
 from nextcord import application_command, Interaction
 from nextcord.ext import commands
-from nextcord.types import embed
 
 from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.embeds.logger_embed import WARNING_LEVEL

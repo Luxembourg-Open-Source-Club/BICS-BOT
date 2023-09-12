@@ -6,15 +6,10 @@ from bics_bot.config.server_ids import (
     CATEGORY_SEMESTER_4_ID,
     CATEGORY_SEMESTER_5_ID,
     CATEGORY_SEMESTER_6_ID,
-    CHANNEL_CALENDAR_ID,
-    MESSAGE_CALENDAR_ID,
-    CHANNEL_CALENDAR_YEAR_1_ID,
-    CHANNEL_CALENDAR_YEAR_2_ID,
-    CHANNEL_CALENDAR_YEAR_3_ID,
-    MESSAGE_CALENDAR_YEAR_3_ID,
 )
-from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
-import csv, datetime, time
+import csv
+import datetime
+import time
 
 CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
 
