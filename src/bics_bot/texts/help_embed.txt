@@ -30,3 +30,5 @@
     
 **/delete_study_group** 
   - This command will let students remove their private text and voice.
+
+new implementation
