@@ -1,15 +1,8 @@
 from nextcord import Interaction
-from bics_bot.config.server_ids import (
-    CATEGORY_SEMESTER_1_ID,
-    CATEGORY_SEMESTER_2_ID,
-    CATEGORY_SEMESTER_3_ID,
-    CATEGORY_SEMESTER_4_ID,
-    CATEGORY_SEMESTER_5_ID,
-    CATEGORY_SEMESTER_6_ID,
-)
 import csv
 import datetime
 import time
+from bics_bot.utils.server_utilities import retrieve_server_ids
 
 CALENDAR_FILE_PATH = "./bics_bot/data/calendar.csv"
 
@@ -25,13 +18,14 @@ def retrieve_courses_text_channels_names(
     Rerturns:
         List with all courses text channels names
     """
+    server_config = retrieve_server_ids(guild)
     ids = [
-        CATEGORY_SEMESTER_1_ID,
-        CATEGORY_SEMESTER_2_ID,
-        CATEGORY_SEMESTER_3_ID,
-        CATEGORY_SEMESTER_4_ID,
-        CATEGORY_SEMESTER_5_ID,
-        CATEGORY_SEMESTER_6_ID,
+        server_config["categories"]["semester-1"],
+        server_config["categories"]["semester-2"],
+        server_config["categories"]["semester-3"],
+        server_config["categories"]["semester-4"],
+        server_config["categories"]["semester-5"],
+        server_config["categories"]["semester-6"],
     ]
     categories = guild.by_category()
     text_channels = []
@@ -86,13 +80,14 @@ def retrieve_courses_text_channels_by_year(
         dictionary where the key is the year, as yearn and the value is a
         list whith text channel names associated with the year.
     """
+    server_config = retrieve_server_ids(guild)
     ids = [
-        CATEGORY_SEMESTER_1_ID,
-        CATEGORY_SEMESTER_2_ID,
-        CATEGORY_SEMESTER_3_ID,
-        CATEGORY_SEMESTER_4_ID,
-        CATEGORY_SEMESTER_5_ID,
-        CATEGORY_SEMESTER_6_ID,
+        server_config["categories"]["semester-1"],
+        server_config["categories"]["semester-2"],
+        server_config["categories"]["semester-3"],
+        server_config["categories"]["semester-4"],
+        server_config["categories"]["semester-5"],
+        server_config["categories"]["semester-6"],
     ]
     categories = guild.by_category()
     text_channels = {"year1": [], "year2": [], "year3": []}
@@ -126,13 +121,14 @@ def retrieve_courses_text_channels(
         dictionary where the key is the year, as yearn and the value is a
         list whith text channel names associated with the year.
     """
+    server_config = retrieve_server_ids(guild)
     ids = [
-        CATEGORY_SEMESTER_1_ID,
-        CATEGORY_SEMESTER_2_ID,
-        CATEGORY_SEMESTER_3_ID,
-        CATEGORY_SEMESTER_4_ID,
-        CATEGORY_SEMESTER_5_ID,
-        CATEGORY_SEMESTER_6_ID,
+        server_config["categories"]["semester-1"],
+        server_config["categories"]["semester-2"],
+        server_config["categories"]["semester-3"],
+        server_config["categories"]["semester-4"],
+        server_config["categories"]["semester-5"],
+        server_config["categories"]["semester-6"],
     ]
     categories = guild.by_category()
     text_channels = {"year1": {}, "year2": {}, "year3": {}}
