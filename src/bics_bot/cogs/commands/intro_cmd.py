@@ -5,11 +5,10 @@ from nextcord import application_command, Interaction
 from bics_bot.embeds.logger_embed import LoggerEmbed
 from bics_bot.embeds.logger_embed import WARNING_LEVEL
 from bics_bot.config.server_ids import (
-    CHANNEL_INTRO_ID,
-    ROLE_ADMIN_ID,
     ROLE_INTRO_LIST,
 )
 from bics_bot.utils.file_manipulation import read_txt
+from bics_bot.utils.server_utilities import retrieve_server_ids
 
 
 class IntroCmd(commands.Cog):
@@ -59,11 +58,14 @@ class IntroCmd(commands.Cog):
             None
         """
 
-        if interaction.channel_id != CHANNEL_INTRO_ID:
+        server_ids = retrieve_server_ids(interaction.guild)
+        intro_channel_id = server_ids["channels"]["💡starting-up"]
+
+        if interaction.channel_id != intro_channel_id:
             # Only allow the /intro command to be used inside the
             # starting-up text channel
             msg = (
-                f"Oops something went wrong! Make sure you are on <#{CHANNEL_INTRO_ID}> to send the **/intro** command",
+                f"Oops something went wrong! Make sure you are on <#{intro_channel_id}> to send the **/intro** command",
             )
             await interaction.response.send_message(
                 embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
@@ -77,7 +79,7 @@ class IntroCmd(commands.Cog):
         if len(user.roles) > 1:
             # User already used /intro once
             msg = (
-                f"You have already introduced yourself! In case you have a role that you think should be changed feel free to ping an <@&{ROLE_ADMIN_ID}>",
+                f"You have already introduced yourself! In case you have a role that you think should be changed feel free to ping an <@&{server_ids['roles']['admin']}>",
             )
             await interaction.response.send_message(
                 embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
@@ -102,7 +104,7 @@ class IntroCmd(commands.Cog):
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
         msg = f"""Welcome on board **{name.capitalize()} {surname.capitalize()}**!
             Your role has been updated and you are all set 😉.
-            In case of any question, feel free to ping an <@&{ROLE_ADMIN_ID}>\n\n"""
+            In case of any question, feel free to ping an <@&{server_ids['roles']['admin']}>\n\n"""
 
         if year == "incoming":
             msg = msg + read_txt("./bics_bot/texts/introduction_incoming.txt")
