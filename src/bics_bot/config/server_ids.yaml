@@ -1,0 +1,15 @@
+roles: ['Admin', 'Year 1', 'Year 2', 'Year 3', 'Alumni', 'Erasmus', 'Gamer']
+
+categories:
+  [
+    'Semester 1',
+    'Semester 2',
+    'Semester 3',
+    'Semester 4',
+    'Semester 5',
+    'Semester 6',
+    '🏖 Chilling',
+    'Study Groups',
+  ]
+
+channels: ['💡starting-up']
