@@ -41,6 +41,11 @@ class IntroCmd(commands.Cog):
             description="The year you will be in. In case you plan on joining the University choose **incoming**",
             choices=ROLE_INTRO_LIST,
         ),
+        birthday: str = nextcord.SlashOption(
+            description="(OPTIONAL) Your birthday in the format DD/MM/YYYY",
+            required=False,
+            default=""
+        ),
     ) -> None:
         """
         The `/intro` command is used for newcomers to get a student role,
