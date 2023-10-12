@@ -24,6 +24,8 @@ In this guide you will get an overview of how to set up your development environ
 - Linux (recommended) or macOS are fine. Use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) if on Windows. 
 - Python3.9>=
 
+Check out our [technical guide](https://github.com/Luxembourg-Open-Source-Club/guides/tree/main) for help with setting up your OS, and learning about `git` and `bash` (Linux terminal) if you are unfamiliar with these software.
+
 ## Setting up Development Environment
 This process should take roughly 15 minutes. Steps 12-17 are directed at absolute beginners; if you are experienced with development, feel free to skip. Steps 18 and 19 are still very necessary. However, everything in this section is still recommended.
 
