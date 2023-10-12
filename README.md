@@ -1,7 +1,7 @@
 # BICS-BOT 🤖
-The **BICS bot's** source code may be found in this repository. Its primary goal is to automate the BICS Discord server and provide users and students with a variety of ways to interact with it.
+The **BICS-BOT**'s source code can be found in this repository. Its primary goal is to automate the BICS Discord server tasks, and provide students with simple ways to interact with the server.
 
-The bot now supports text channel instructions including **help**, **role attribution**, and **enrolment/unenrolment** to courses.
+You can run `/help` on the server the bot is present, and see the capabilities of it.
 
 ## Table of Contents
 - [Bot Deployment](#bot-deployment)
@@ -12,9 +12,8 @@ The bot now supports text channel instructions including **help**, **role attrib
 - [Contributing](#contributing)
     - [Conventions to Follow](#conventions-to-follow)
 
-## Bot Deployment
-Please refer to the **Testing Environment Setup** and **Development Environment Setup** sections in the [contribution documentation](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/blob/main/.github/CONTRIBUTING.md).
-
+## Contribution
+Please refer to the [contribution documentation](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/blob/main/.github/CONTRIBUTING.md) for a complete guide on getting everything set up on your local machine.
 
 ## Commands Available
 > All commands can be used in any channel as only the user that requests for one is able to see the bot messages.
@@ -46,21 +45,12 @@ Please refer to the **Testing Environment Setup** and **Development Environment 
 
 - `/botdev`: Gives or removes the **BotDev** role, which also gives access to the *#bot-dev-discussion* text channel.
 
-
-## Dependencies
-- `nextcord`: python discord API
-- `python-dotenv`: used to retrieve environment variables
-
-## Contributing
-
-Please refer to the [contribution documentation](https://github.com/Luxembourg-Open-Source-Club/BICS-BOT/blob/main/.github/CONTRIBUTING.md).
-
 ### Conventions to Follow
 - All the commands should be seen only by the user that has called the command. This can be achieved by using the `ephemeral=True` parameter when sending a message. 
 In case the command is supposed to be seen by everyone then the parameter needs to be set to false.
 
-- Class names should follow the PascalCase naming convention
+- Class names should follow the `PascalCase` naming convention
 
-- Everything else should follow the snake_case naming convention
+- Everything else should follow the `snake_case`` naming convention
 
-- The use of docstrings is encouraged to give a brief description of the functions to others 
+- Use docstrings for your functions.
