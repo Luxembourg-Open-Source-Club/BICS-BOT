@@ -47,6 +47,7 @@ If you see text like `$ sudo apt update`, that means this is a *Bash command*. Y
 15. Install the `python3-venv` package *if you are on Linux*. For example; `$ sudo apt install python3-venv` for Ubuntu/Debian users.
 16. Create a **Python Virtual Environment**. `$ python3 -m venv .venv`. This command will create a sandbox Python installation just for this project in a folder named `.venv` at the root of the prepository.
 17. Activate the virtual environment. `$ source .venv/bin/activate`.
+- To deactive your virtual environment, run `$ deactivate`
 18. Install requirement. `$ pip install -r requirements.txt`
 19. Install your bot's token which you saved before using the command below. Replace the placeholder with your own token. Do not put it in any brackets, quotes, etc.
 - `$ touch .env && echo TOKEN_BOT=<PLACE YOUR TOKEN HERE> >> .env`

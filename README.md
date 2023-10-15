@@ -51,6 +51,6 @@ In case the command is supposed to be seen by everyone then the parameter needs 
 
 - Class names should follow the `PascalCase` naming convention
 
-- Everything else should follow the `snake_case`` naming convention
+- Everything else should follow the `snake_case` naming convention
 
 - Use docstrings for your functions.
