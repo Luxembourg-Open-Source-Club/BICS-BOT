@@ -4,7 +4,7 @@ package_name = "bics_bot"
 
 setup(
     name=package_name,
-    version="1.0.0",
+    version="1.1.0",
     author="Bics Admins",
     author_email="pmbs.123@gmail.com",
     packages=[package_name],
