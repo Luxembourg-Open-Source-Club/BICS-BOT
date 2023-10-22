@@ -10,6 +10,9 @@ from bics_bot.config.server_ids import (
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
+import re
+import json
+
 
 class IntroCmd(commands.Cog):
     """This class represents the command </intro>
@@ -42,7 +45,7 @@ class IntroCmd(commands.Cog):
             choices=ROLE_INTRO_LIST,
         ),
         birthday: str = nextcord.SlashOption(
-            description="(OPTIONAL) Your birthday in the format DD/MM/YYYY",
+            description="(OPTIONAL) Your birthday in the format DD.MM.YYYY",
             required=False,
             default=""
         ),
@@ -92,6 +95,18 @@ class IntroCmd(commands.Cog):
             )
             return
 
+        valid_pattern = r"^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.\d{4}$"
+        # Check if entered birthday format is valid
+        if re.match(valid_pattern, birthday) == None and len(birthday) > 0:
+            msg = (
+                "You entered an invalid birthday. Please follow the format DD.MM.YYYY"
+            )
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+
         # Retrieving the roles
         roles = {
             "year-1": nextcord.utils.get(server_roles, name="Year 1"),
@@ -105,6 +120,12 @@ class IntroCmd(commands.Cog):
         # Add role to the user
         await user.add_roles(roles[year])
 
+        # Store user's birthday in json file
+        if len(birthday) > 0:
+            pair = {"member": user.id, "birthday": birthday}
+            with open("./bics_bot/config/birthdays.json", "w") as file:
+                json.dump(pair, file, indent=4)
+        
         # Changing the nickname to Name + Surname initial
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
         msg = f"""Welcome on board **{name.capitalize()} {surname.capitalize()}**!
