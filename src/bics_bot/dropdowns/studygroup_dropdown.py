@@ -57,7 +57,6 @@ class StudyGroupInviteView(nextcord.ui.View):
         )
         await interaction.response.send_message(
             embed=LoggerEmbed(
-                "Confirmation",
                 f"User(s) *{member_names}* have been given access.",
             ),
             ephemeral=True,
@@ -98,7 +97,6 @@ class StudyGroupLeaveView(nextcord.ui.View):
                     )
         await interaction.response.send_message(
             embed=LoggerEmbed(
-                "Confirmation",
                 f"You have left the study group. They will miss you :(",
             ),
             ephemeral=True,

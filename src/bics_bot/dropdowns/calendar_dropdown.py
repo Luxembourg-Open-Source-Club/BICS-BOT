@@ -102,7 +102,7 @@ class CalendarView(nextcord.ui.View):
             msg += f"{entry}\n"
 
         await interaction.response.send_message(
-            embed=LoggerEmbed("Confirmation", msg),
+            embed=LoggerEmbed(msg),
             ephemeral=True,
         )
 
