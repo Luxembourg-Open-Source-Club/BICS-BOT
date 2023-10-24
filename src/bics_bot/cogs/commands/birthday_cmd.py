@@ -57,12 +57,6 @@ class BirthdayCmd(commands.Cog):
             )
             return
 
-        
-        """
-        Mr Ivo Big cock 23 we will need to do the add_birthday_to_profile function
-        """
-        #add_birthday_to_profile(user, birthdate)
-
         # Storing the user's birthday in JSON file
         if len(birthday) > 0:
             filename = "./bics_bot/config/birthdays.json"
