@@ -99,7 +99,7 @@ class IntroCmd(commands.Cog):
         # Check if entered birthday format is valid
         if re.match(valid_pattern, birthday) == None and len(birthday) > 0:
             msg = (
-                "You entered an invalid birthday. Please follow the format DD.MM.YYYY"
+                "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
             )
             await interaction.response.send_message(
                 embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
@@ -120,11 +120,29 @@ class IntroCmd(commands.Cog):
         # Add role to the user
         await user.add_roles(roles[year])
 
-        # Store user's birthday in json file
+        # Storing the user's birthday in JSON file
         if len(birthday) > 0:
-            pair = {"member": user.id, "birthday": birthday}
-            with open("./bics_bot/config/birthdays.json", "w") as file:
-                json.dump(pair, file, indent=4)
+            filename = "./bics_bot/config/birthdays.json"
+            with open(filename, "r") as file:
+                data = json.load(file)
+
+            # Check if the user has already added their birthday before
+            for _, ids in data.items():
+                if user.id in ids:
+                    # If the user ID is found for another existing birthday, remove it
+                    ids.remove(user.id)
+                    break
+
+            if birthday in data:
+                # If the new birthday already exists but the user ID doesn't, append the new user ID
+                data[birthday].append(user.id)
+            else:
+                # If the new birthday is not in the data, create a new array with the user ID
+                data[birthday] = [user.id]
+
+            # Write the updated data back to the JSON file
+            with open(filename, "w") as file:
+                json.dump(data, file, indent=4)
         
         # Changing the nickname to Name + Surname initial
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
