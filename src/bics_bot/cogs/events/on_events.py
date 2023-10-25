@@ -18,7 +18,6 @@ class OnEvents(commands.Cog):
         is fully active.
         """
         print("Bot is fully deployed and is now online!")
-        self.check_birthday.start()
 
     @commands.Cog.listener()
     async def on_member_join(self, member: Member):
@@ -28,18 +27,6 @@ class OnEvents(commands.Cog):
         server = await self.client.fetch_guild(member.guild.id)
 
         await member.send(embed=WelcomeEmbed(member.display_name, server.name))
-
-    @tasks.loop(time=datetime.time(15, 3, tzinfo=datetime.timezone.utc))
-    async def check_birthday(self):
-        """This method represents the event which gets triggered once a new
-        user joins the server.
-        """
-        channel = self.client.get_channel(1162419330277986354)
-        date = datetime.datetime.now()
-        print("Sending message")
-        print(date)
-
-        await channel.send("Hello World!")
 
 
 def setup(client):
