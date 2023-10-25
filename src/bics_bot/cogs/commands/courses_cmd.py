@@ -3,7 +3,7 @@ from nextcord.ext import commands
 from nextcord import application_command, Interaction, Guild
 
 from bics_bot.dropdowns.course_selection_dropdown import CoursesDropdownView
-from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
+from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
 from bics_bot.utils.channels_utils import (
     retrieve_courses_text_channels_names,
 )
@@ -56,7 +56,7 @@ class CoursesCmd(commands.Cog):
                 "You haven't yet introduced yourself! Make sure you use the **/intro** command first",
             )
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -65,7 +65,7 @@ class CoursesCmd(commands.Cog):
             # The user has the incoming role and thus not allowed to enroll
             msg = "You are not allowed to enroll to courses yet!"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -75,7 +75,6 @@ class CoursesCmd(commands.Cog):
         view = CoursesDropdownView(enrolled_courses, True, guild)
         await interaction.response.send_message(
             embed=LoggerEmbed(
-                "Enrollment Status",
                 read_txt("./bics_bot/texts/enrollment.txt"),
             ),
             view=view,
@@ -111,7 +110,7 @@ class CoursesCmd(commands.Cog):
                 "You haven't yet introduced yourself! Make sure you use the **/intro** command first",
             )
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -120,7 +119,7 @@ class CoursesCmd(commands.Cog):
             # The user has the incoming role and thus not allowed to enroll
             msg = "You are not allowed to enroll to courses yet!"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -129,7 +128,6 @@ class CoursesCmd(commands.Cog):
         view = CoursesDropdownView(enrolled_courses, False, guild)
         await interaction.response.send_message(
             embed=LoggerEmbed(
-                "Unenrollment Status",
                 read_txt("./bics_bot/texts/unenrollment.txt"),
             ),
             view=view,
