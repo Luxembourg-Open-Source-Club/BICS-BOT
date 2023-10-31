@@ -13,7 +13,6 @@ class OnEvents(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self.birthday_check.start()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -21,6 +20,7 @@ class OnEvents(commands.Cog):
         is fully active.
         """
         print("Bot is fully deployed and is now online!")
+        self.birthday_check.start()
 
     @commands.Cog.listener()
     async def on_member_join(self, member: Member):
@@ -43,10 +43,6 @@ class OnEvents(commands.Cog):
         current_date = datetime.date.today()
         today = current_date.strftime("%d.%m")
 
-        """
-        Needs to get looked at - using self.client.guilds[0] returns index out of range exception.
-        This would mean that the self.client.guilds list is empty for some reason.
-        """
         guild_id = self.client.guilds[0].id
         guild = self.client.get_guild(guild_id)
         #member = get_member_by_id(guild=guild, id=)
