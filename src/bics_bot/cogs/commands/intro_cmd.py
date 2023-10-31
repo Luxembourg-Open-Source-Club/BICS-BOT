@@ -10,7 +10,7 @@ from bics_bot.config.server_ids import (
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
-import re
+from dateutil.parser import parse, ParserError
 import json
 
 
@@ -94,10 +94,21 @@ class IntroCmd(commands.Cog):
                 ephemeral=True,
             )
             return
-
-        valid_pattern = r"^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.\d{4}$"
-        # Check if entered birthday format is valid
-        if re.match(valid_pattern, birthday) == None and len(birthday) > 0:
+        
+        # Check if entered birthday is valid
+        try:
+            birthday_parsed = parse(birthday, dayfirst=True)
+        except (ValueError, ParserError):
+            msg = (
+                "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
+            )
+            await interaction.response.send_message(
+                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                ephemeral=True,
+            )
+            return
+    
+        if birthday_parsed.strftime("%d.%m.%Y") != birthday or len(birthday_parsed.strftime("%Y")) != 4:
             msg = (
                 "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
             )
