@@ -1,7 +1,9 @@
-from nextcord import Member
+from nextcord import Member, guild
 from nextcord.ext import commands, tasks
-
+import nextcord
 from bics_bot.embeds.welcome_embed import WelcomeEmbed
+from bics_bot.utils.server_utilities import get_member_by_id
+from bics_bot.config.server_ids import GUILD_BICS_ID
 
 import json
 import datetime
@@ -41,11 +43,22 @@ class OnEvents(commands.Cog):
         current_date = datetime.date.today()
         today = current_date.strftime("%d.%m")
 
+        """
+        Needs to get looked at - using self.client.guilds[0] returns index out of range exception.
+        This would mean that the self.client.guilds list is empty for some reason.
+        """
+        guild_id = self.client.guilds[0].id
+        guild = self.client.get_guild(guild_id)
+        #member = get_member_by_id(guild=guild, id=)
         for birthday in data.keys():
-            birthday = birthday.split(".")[0:2]
-            birthday = ".".join(birthday)
-            if birthday == today:
-                print("Happy birthday")
+            birthday_f = birthday.split(".")[0:2]
+            birthday_f = ".".join(birthday_f)
+            if str(birthday_f) == str(today):
+                id = data[birthday][0]
+                print(id)
+                print(guild.members)
+                member = get_member_by_id(guild=guild, id=id)
+                print(f"Happy birthday, {member.display_name}")
 
 
 def setup(client):
