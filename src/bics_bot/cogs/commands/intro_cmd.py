@@ -96,27 +96,28 @@ class IntroCmd(commands.Cog):
             return
         
         # Check if entered birthday is valid
-        try:
-            birthday_parsed = parse(birthday, dayfirst=True)
-        except (ValueError, ParserError):
-            msg = (
-                "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
-            )
-            await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
-                ephemeral=True,
-            )
-            return
-    
-        if birthday_parsed.strftime("%d.%m.%Y") != birthday or len(birthday_parsed.strftime("%Y")) != 4:
-            msg = (
-                "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
-            )
-            await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
-                ephemeral=True,
-            )
-            return
+        if len(birthday) > 0:
+            try:
+                birthday_parsed = parse(birthday, dayfirst=True)
+            except (ValueError, ParserError):
+                msg = (
+                    "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
+                )
+                await interaction.response.send_message(
+                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                    ephemeral=True,
+                )
+                return
+        
+            if birthday_parsed.strftime("%d.%m.%Y") != birthday or len(birthday_parsed.strftime("%Y")) != 4:
+                msg = (
+                    "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
+                )
+                await interaction.response.send_message(
+                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                    ephemeral=True,
+                )
+                return
 
         # Retrieving the roles
         roles = {
