@@ -1,0 +1,23 @@
+In this message you can find all the links related to BSP, such as the BMT tool.
+
+> Be aware that these links are subjective to changes. If that is the case, please let a staff member know in order to update them. Thanks.
+### General Links 🔗
+
+
+- **Mini BMT:** https://docs.google.com/presentation/d/1WOM1Ar2TMHOAnPMSWZBoIPSzV-DhqD8iMbubTAkZdxc/edit#slide=id.ge717729f34_1_0
+- **BSP Reference Document:** https://www.dropbox.com/sh/ix052p0yq0omtvu/AADL1vomaUhNNi7LaVUMwJWka?dl=0&lst
+- **BSP FAQ:** https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vQL58Blyu7uPkC6XyX8HHbgPiiy96yT1zjdUhXNqzcQt3cMpr08pHogB2lZU5qB9lbXakEUVz4lhpwA/pubhtml?gid=836031026&single=true&pli=1
+- **BSP Declaration:** https://forms.office.com/Pages/ResponsePage.aspx?id=lZxaRJ0PU0mdsbxKRd0SIJLrg3822EtCpsSwGaQZf_9UOUlDVFc0SFBJWkoxNldEVE5UNEFHR1dTTC4u
+- **BSP Submission:** https://forms.office.com/Pages/ResponsePage.aspx?id=lZxaRJ0PU0mdsbxKRd0SIJLrg3822EtCpsSwGaQZf_9UNFpBWVNUUzdRVlIzMVdGTzhCUzBNWlVSQS4u
+- **BSP Critical Deadlines:** https://docs.google.com/spreadsheets/d/1py9PXCw7U3FzfQUFKbWVqEfs1bVMRSuwbUqqZImTS9w/edit#gid=1535412709
+- **BSP Propositions:** https://docs.google.com/spreadsheets/d/1py9PXCw7U3FzfQUFKbWVqEfs1bVMRSuwbUqqZImTS9w/edit#gid=629766706
+- **BSP Submissions Verification:** https://docs.google.com/spreadsheets/d/1py9PXCw7U3FzfQUFKbWVqEfs1bVMRSuwbUqqZImTS9w/edit#gid=0
+- **Creation of Direct Download Links Guide:** https://docs.google.com/presentation/d/1Fh5y5jzzNBToQz6UKdsNzYR_oG4TaBTw/edit#slide=id.p1
+- **BSP Report Template:** https://github.com/nicolasguelfi/lu.uni.course.bics.global/tree/master/lu.uni.course.bics.all.projects.template.reports
+
+### Useful Tools 🪓
+
+
+- **Online Latex Editor:** https://www.overleaf.com/project
+- **Plagiarism Checker Tool (from uni)**:  https://moodle.uni.lu/mod/assign/view.php?id=260020
+- **Google Search for Scientific Papers:** https://scholar.google.com/
