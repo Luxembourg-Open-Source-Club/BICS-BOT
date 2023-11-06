@@ -7,6 +7,9 @@
 **/useful_links**
 - This command is used to view a list of some links that might be useful for a BICS student, such as the BSP enrolment form.
 
+**/bsp**
+- This command will send a message back with a list of relevant links for BSP.
+
 **/enroll**
 - This command is used for students who wish to get viewing permissions to the text channels of their courses.
 
