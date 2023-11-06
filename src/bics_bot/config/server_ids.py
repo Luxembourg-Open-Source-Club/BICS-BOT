@@ -1,7 +1,7 @@
 """Contains the defaults ids for the BICS server"""
 
 # Guilds
-GUILD_BICS_ID = 1160944734106288228 # changed original guild id to test guild id (temporary change)
+GUILD_BICS_ID = 753535223798562886
 GUILD_BICS_CLONE_ID = 1071868591487590460
 
 # Roles

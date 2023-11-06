@@ -36,8 +36,8 @@ class OnEvents(commands.Cog):
         """This method represents the loop that checks if any members have
         a birthday on the current date.
         """
-        filename = "./bics_bot/config/birthdays.json"
-        with open(filename, "r") as file:
+        file_name = "./bics_bot/config/birthdays.json"
+        with open(file_name, "r") as file:
             data = json.load(file)
 
         current_date = datetime.date.today()
@@ -45,11 +45,10 @@ class OnEvents(commands.Cog):
 
         guild_id = self.client.guilds[0].id
         guild = self.client.get_guild(guild_id)
-        #member = get_member_by_id(guild=guild, id=)
         for birthday in data.keys():
-            birthday_f = birthday.split(".")[0:2]
-            birthday_f = ".".join(birthday_f)
-            if str(birthday_f) == str(today):
+            birthday_formatted = birthday.split(".")[0:2]
+            birthday_formatted = ".".join(birthday_formatted)
+            if birthday_formatted == today:
                 id = data[birthday][0]
                 print(id)
                 print(guild.members)

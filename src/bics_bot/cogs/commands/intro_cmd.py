@@ -134,8 +134,8 @@ class IntroCmd(commands.Cog):
 
         # Storing the user's birthday in JSON file
         if len(birthday) > 0:
-            filename = "./bics_bot/config/birthdays.json"
-            with open(filename, "r") as file:
+            file_name = "./bics_bot/config/birthdays.json"
+            with open(file_name, "r") as file:
                 data = json.load(file)
 
             # Check if the user has already added their birthday before
@@ -153,7 +153,7 @@ class IntroCmd(commands.Cog):
                 data[birthday] = [user.id]
 
             # Write the updated data back to the JSON file
-            with open(filename, "w") as file:
+            with open(file_name, "w") as file:
                 json.dump(data, file, indent=4)
         
         # Changing the nickname to Name + Surname initial
