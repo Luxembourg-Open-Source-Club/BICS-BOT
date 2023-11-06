@@ -11,6 +11,7 @@ from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
 from dateutil.parser import parse, ParserError
+import os
 import json
 
 
@@ -135,8 +136,15 @@ class IntroCmd(commands.Cog):
         # Storing the user's birthday in JSON file
         if len(birthday) > 0:
             file_name = "./bics_bot/config/birthdays.json"
-            with open(file_name, "r") as file:
-                data = json.load(file)
+
+            # Check if the JSON file exists
+            if not os.path.isfile(file_name):
+                # If the file doesn't exist, create an empty JSON object
+                data = {}
+            else:
+                # If the file exists, open it for reading and load the data
+                with open(file_name, "r") as file:
+                    data = json.load(file)
 
             # Check if the user has already added their birthday before
             for _, ids in data.items():

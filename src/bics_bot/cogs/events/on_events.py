@@ -5,6 +5,7 @@ from bics_bot.embeds.welcome_embed import WelcomeEmbed
 from bics_bot.utils.server_utilities import get_member_by_id, get_channel_id_by_name
 from bics_bot.config.server_ids import GUILD_BICS_ID
 
+import os
 import json
 import datetime
 import random
@@ -57,8 +58,15 @@ class OnEvents(commands.Cog):
         general_id = get_channel_id_by_name(guild=guild, name="general")
 
         file_name = "./bics_bot/config/birthdays.json"
-        with open(file_name, "r") as file:
-            data = json.load(file)
+
+        # Check if the JSON file exists
+        if not os.path.isfile(file_name):
+            # If the file doesn't exist, create an empty JSON object
+            data = {}
+        else:
+            # If the file exists, open it for reading and load the data
+            with open(file_name, "r") as file:
+                data = json.load(file)
 
         current_date = datetime.date.today()
         today = current_date.strftime("%d.%m")

@@ -5,6 +5,7 @@ from nextcord.ext import commands
 from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
 
 from dateutil.parser import parse, ParserError
+import os
 import json
 
 
@@ -69,9 +70,16 @@ class BirthdayCmd(commands.Cog):
             return
 
         # Storing the user's birthday in JSON file
-        filename = "./bics_bot/config/birthdays.json"
-        with open(filename, "r") as file:
-            data = json.load(file)
+        file_name = "./bics_bot/config/birthdays.json"
+
+        # Check if the JSON file exists
+        if not os.path.isfile(file_name):
+            # If the file doesn't exist, create an empty JSON object
+            data = {}
+        else:
+            # If the file exists, open it for reading and load the data
+            with open(file_name, "r") as file:
+                data = json.load(file)
 
         # Check if the user has already added their birthday before
         for _, ids in data.items():
@@ -88,7 +96,7 @@ class BirthdayCmd(commands.Cog):
             data[birthday] = [user.id]
 
         # Write the updated data back to the JSON file
-        with open(filename, "w") as file:
+        with open(file_name, "w") as file:
             json.dump(data, file, indent=4)
 
         await interaction.response.send_message(
