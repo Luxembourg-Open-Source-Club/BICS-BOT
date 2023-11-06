@@ -268,7 +268,6 @@ class CoursesDropdownView(nextcord.ui.View):
             )
 
         embed = LoggerEmbed(
-            f"{'Enrollment' if self.operation else 'Unenrollment'} Status",
             f"You have been successfully {'**enrolled**' if self.operation else '**unenrolled**'} from the selected courses!",
         )
         await interaction.response.send_message(embed=embed, ephemeral=True)

@@ -23,6 +23,8 @@ Please refer to the [contribution documentation](https://github.com/Luxembourg-O
   
 - `/useful_links`: This command is used to view a list of some links that might be useful for a BICS student, such as the BSP enrollment form.
 
+- `/bsp`: This command will send a message back with a list of relevant links for BSP.
+
 - `/intro` (Only for new members): Allows a new member to get the **Student** role, to change your server useername to comply with the server format (Example: John Doe -> John D), and to introduce themselves. This command can only be used in the introduction channel (`#starting-up`).
 
 - `/enroll`: This command is used for students who wish to get viewing permissions to the text channels of their courses.

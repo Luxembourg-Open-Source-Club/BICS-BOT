@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
-from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
+from bics_bot.embeds.logger_embed import LogLevel, LoggerEmbed
 from bics_bot.config.server_ids import (
     CATEGORY_STUDY_GROUPS,
 )
@@ -58,7 +58,7 @@ class StudyGroupCmd(commands.Cog):
             # The user has no roles. So he must first use this command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -66,7 +66,7 @@ class StudyGroupCmd(commands.Cog):
             # The user has the incoming role and thus not allowed to use this command
             msg = "You are not allowed to create study groups, you aren't a student :)"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -79,9 +79,8 @@ class StudyGroupCmd(commands.Cog):
             if not char.isalnum() and not char == "-":
                 await interaction.response.send_message(
                     embed=LoggerEmbed(
-                        "Warning",
                         f"Do not use {char} in group name.",
-                        WARNING_LEVEL,
+                        LogLevel.WARNING,
                     ),
                     ephemeral=True,
                 )
@@ -94,9 +93,8 @@ class StudyGroupCmd(commands.Cog):
             if channel.name == group_name:
                 await interaction.response.send_message(
                     embed=LoggerEmbed(
-                        "Warning",
                         "Group name already in use. Enter a more unique group name.",
-                        WARNING_LEVEL,
+                        LogLevel.ERROR,
                     ),
                     ephemeral=True,
                 )
@@ -106,9 +104,8 @@ class StudyGroupCmd(commands.Cog):
         if not members:
             await interaction.response.send_message(
                 embed=LoggerEmbed(
-                    "Warning",
                     f"You need to enter users by mentioning them (use `@`).",
-                    WARNING_LEVEL,
+                    LogLevel.ERROR,
                 ),
                 ephemeral=True,
             )
@@ -139,7 +136,6 @@ class StudyGroupCmd(commands.Cog):
 
         await interaction.response.send_message(
             embed=LoggerEmbed(
-                "Confirmation",
                 f"Text channel **{text_channel.name}** and voice channel **{voice_channel.name}** have been created.\n\nUsers *{member_names}* have been given access.",
             ),
             ephemeral=True,
@@ -167,7 +163,7 @@ class StudyGroupCmd(commands.Cog):
             # The user has no roles. So he must first use this command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.ERROR),
                 ephemeral=True,
             )
             return
@@ -175,7 +171,7 @@ class StudyGroupCmd(commands.Cog):
             # The user has the incoming role and thus not allowed to use this command
             msg = "You are not allowed to create study groups, you aren't a student :)"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.ERROR),
                 ephemeral=True,
             )
             return
@@ -201,7 +197,7 @@ class StudyGroupCmd(commands.Cog):
             # The user has no roles. So he must first use this command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.ERROR),
                 ephemeral=True,
             )
             return
@@ -209,7 +205,7 @@ class StudyGroupCmd(commands.Cog):
             # The user has the incoming role and thus not allowed to use this command
             msg = "You are not allowed to invite user to study groups, you aren't a student :)"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -218,9 +214,8 @@ class StudyGroupCmd(commands.Cog):
         if not members:
             await interaction.response.send_message(
                 embed=LoggerEmbed(
-                    "Warning",
                     f"You need to enter users by mentioning them (use `@`).",
-                    WARNING_LEVEL,
+                    LogLevel.WARNING,
                 ),
                 ephemeral=True,
             )

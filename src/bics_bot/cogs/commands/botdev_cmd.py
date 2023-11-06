@@ -2,8 +2,7 @@ import nextcord
 from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
-from bics_bot.embeds.logger_embed import LoggerEmbed
-from bics_bot.embeds.logger_embed import WARNING_LEVEL
+from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
 
 
 class BotDevCmd(commands.Cog):
@@ -44,7 +43,7 @@ class BotDevCmd(commands.Cog):
             # The user has no roles. So he must first use the /intro command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
         elif role in user_roles:
@@ -52,7 +51,7 @@ class BotDevCmd(commands.Cog):
             msg = "The role **BotDev** has been removed"
             await user.remove_roles(role)
             await interaction.response.send_message(
-                embed=LoggerEmbed("Role Status", msg),
+                embed=LoggerEmbed(msg),
                 ephemeral=True,
             )
         else:
@@ -60,7 +59,7 @@ class BotDevCmd(commands.Cog):
             msg = "The role **BotDev** has been added"
             await user.add_roles(role)
             await interaction.response.send_message(
-                embed=LoggerEmbed("Role Status", msg),
+                embed=LoggerEmbed(msg),
                 ephemeral=True,
             )
 
