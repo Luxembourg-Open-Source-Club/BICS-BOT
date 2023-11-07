@@ -1,4 +1,4 @@
-from nextcord import Member , Message
+from nextcord import Member
 from nextcord.ext import commands, tasks
 
 from bics_bot.embeds.welcome_embed import WelcomeEmbed
