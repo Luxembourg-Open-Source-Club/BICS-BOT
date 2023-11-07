@@ -60,13 +60,11 @@ class OnEvents(commands.Cog):
         file_name = "./bics_bot/config/birthdays.json"
 
         # Check if the JSON file exists
-        if not os.path.isfile(file_name):
-            # If the file doesn't exist, create an empty JSON object
-            data = {}
-        else:
-            # If the file exists, open it for reading and load the data
+        try:
             with open(file_name, "r") as file:
                 data = json.load(file)
+        except FileNotFoundError:
+            data = {}
 
         current_date = datetime.date.today()
         today = current_date.strftime("%d.%m")

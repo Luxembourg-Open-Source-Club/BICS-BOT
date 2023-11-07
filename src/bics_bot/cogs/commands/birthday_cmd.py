@@ -2,7 +2,7 @@ import nextcord
 from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
-from bics_bot.embeds.logger_embed import WARNING_LEVEL, LoggerEmbed
+from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
 
 from dateutil.parser import parse, ParserError
 import os
@@ -41,7 +41,7 @@ class BirthdayCmd(commands.Cog):
             # The user has no roles. So he must first use the /intro command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
         )
             return
@@ -54,7 +54,7 @@ class BirthdayCmd(commands.Cog):
                 "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
             )
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -64,7 +64,7 @@ class BirthdayCmd(commands.Cog):
                 "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
             )
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -73,13 +73,11 @@ class BirthdayCmd(commands.Cog):
         file_name = "./bics_bot/config/birthdays.json"
 
         # Check if the JSON file exists
-        if not os.path.isfile(file_name):
-            # If the file doesn't exist, create an empty JSON object
-            data = {}
-        else:
-            # If the file exists, open it for reading and load the data
+        try:
             with open(file_name, "r") as file:
                 data = json.load(file)
+        except FileNotFoundError:
+            data = {}
 
         # Check if the user has already added their birthday before
         for _, ids in data.items():
@@ -99,11 +97,9 @@ class BirthdayCmd(commands.Cog):
         with open(file_name, "w") as file:
             json.dump(data, file, indent=4)
 
+        msg = f"Birthday Added\n Your birthday ({birthday}) has been added to your profile."
         await interaction.response.send_message(
-            embed=LoggerEmbed(
-                "Birthday Added",
-                f"Your birthday ({birthday}) has been added to your profile.",
-            ),
+            embed=LoggerEmbed(msg, LogLevel.INFO),
             ephemeral=True,
         )
 

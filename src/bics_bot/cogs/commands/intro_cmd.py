@@ -104,7 +104,7 @@ class IntroCmd(commands.Cog):
                     "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
                 )
                 await interaction.response.send_message(
-                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                    embed=LoggerEmbed(msg, LogLevel.WARNING),
                     ephemeral=True,
                 )
                 return
@@ -114,7 +114,7 @@ class IntroCmd(commands.Cog):
                     "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
                 )
                 await interaction.response.send_message(
-                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                    embed=LoggerEmbed(msg, LogLevel.WARNING),
                     ephemeral=True,
                 )
                 return
@@ -137,13 +137,11 @@ class IntroCmd(commands.Cog):
             file_name = "./bics_bot/config/birthdays.json"
 
             # Check if the JSON file exists
-            if not os.path.isfile(file_name):
-                # If the file doesn't exist, create an empty JSON object
-                data = {}
-            else:
-                # If the file exists, open it for reading and load the data
+            try:
                 with open(file_name, "r") as file:
                     data = json.load(file)
+            except FileNotFoundError:
+                data = {}
 
             # Check if the user has already added their birthday before
             for _, ids in data.items():
