@@ -1,4 +1,4 @@
-from nextcord import Member
+from nextcord import Member , Message
 from nextcord.ext import commands, tasks
 
 from bics_bot.embeds.welcome_embed import WelcomeEmbed
@@ -39,6 +39,9 @@ class OnEvents(commands.Cog):
         a birthday on the current date.
         """
         def birthday_message(member):
+            if member.id in (241589375190827018, 332622290665603072):
+                return f"Happy Birthday to the one and only {member.mention}!\n @everyone Wish the King 👑 a happy birthday, or 👻 NG 👻 will curse you until the end of times ☠️☠️☠️☠️"
+
             messages = [
                 f"Happy Birthday, {member.mention}! 🎂🎉 You're like a fine wine - you get better with age, but your jokes are still as cheesy as ever. Cheers to another year of dad-level humor and unforgettable moments! 😄🍷🎁",
                 f"{member.mention}, another year older and wiser? Nah, you're just another year closer to getting those senior discounts! Happy Birthday, you ageless wonder! 🎂🎉🎁😂",
@@ -51,6 +54,7 @@ class OnEvents(commands.Cog):
                 f"Happy Birthday, {member.mention}! 🎂🎈 Time to party like you're 29 (again)! 🎉 Age is just a number, and you're nailing it!",
                 f"{member.mention}, you're the real MVP of birthdays! 🎂🎉 May your day be filled with epic moments, awesome surprises, and lots of cake. Happy Birthday!"
             ]
+
             return random.choice(messages)
 
         guild_id = self.client.guilds[0].id
