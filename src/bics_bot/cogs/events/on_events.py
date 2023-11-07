@@ -69,11 +69,11 @@ class OnEvents(commands.Cog):
         current_date = datetime.date.today()
         today = current_date.strftime("%d.%m")
 
-        for birthday in data.keys():
+        for birthday, ids in data.items():
             birthday_formatted = birthday.split(".")[0:2]
             birthday_formatted = ".".join(birthday_formatted)
             if birthday_formatted == today:
-                for id in data[birthday]:
+                for id in ids:
                     member = get_member_by_id(guild=guild, id=id)
                     await self.client.get_channel(general_id).send(birthday_message(member))
 
