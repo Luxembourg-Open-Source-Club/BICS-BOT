@@ -1,21 +1,27 @@
 from nextcord import Embed
 from nextcord import Colour
+from enum import Enum
 
-INFO_LEVEL = "INFO"
-WARNING_LEVEL = "WARN"
-ERROR_LEVEL = "ERROR"
+
+class LogLevel(Enum):
+    INFO = "Information"
+    WARNING = "Warning"
+    ERROR = "Error"
+
 
 level_colors = {
-    "INFO": Colour.green(),
-    "WARN": Colour.yellow(),
-    "ERROR": Colour.red(),
+    "Information": Colour.green(),
+    "Warning": Colour.yellow(),
+    "Error": Colour.red(),
 }
 
 
 class LoggerEmbed(Embed):
     """Discord embed that can be used to send information in form of a log"""
 
-    def __init__(self, status, message, level=INFO_LEVEL):
+    def __init__(self, message, level=LogLevel.INFO):
         super().__init__(
-            colour=level_colors[level], title=status, description=message
+            colour=level_colors[level.value],
+            title=level.value,
+            description=message,
         )

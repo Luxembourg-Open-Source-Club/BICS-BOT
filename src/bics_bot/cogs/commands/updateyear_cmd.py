@@ -1,8 +1,7 @@
 from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
-from bics_bot.embeds.logger_embed import LoggerEmbed
-from bics_bot.embeds.logger_embed import WARNING_LEVEL
+from bics_bot.embeds.logger_embed import LogLevel, LoggerEmbed
 from bics_bot.config.server_ids import (
     ROLE_YEAR2_ID,
     ROLE_YEAR3_ID,
@@ -47,7 +46,7 @@ class UpdateYearCmd(commands.Cog):
         if not isAdmin:
             msg = "Sorry, this command is under development and reserved for admins only."
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
@@ -57,7 +56,7 @@ class UpdateYearCmd(commands.Cog):
             if role.name == "Erasmus":
                 msg = "This command is only available for full **UniLu** students"
                 await interaction.response.send_message(
-                    embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                    embed=LoggerEmbed(msg, LogLevel.WARNING),
                     ephemeral=True,
                 )
                 return

@@ -75,7 +75,6 @@ class CalendarCmd(commands.Cog):
 
         await interaction.response.send_message(
             embed=LoggerEmbed(
-                "Confirmation",
                 f"Data added to calendar.\n\nType: {type}\nCourse: {course}\nGraded: {graded}\nDeadline Date: {deadline_date}\nDeadline Time: {deadline_time}\nLocation: {location}",
             ),
             ephemeral=True,

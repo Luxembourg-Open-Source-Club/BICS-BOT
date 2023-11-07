@@ -1,6 +1,6 @@
-from nextcord import Member, guild
+from nextcord import Member
 from nextcord.ext import commands, tasks
-import nextcord
+
 from bics_bot.embeds.welcome_embed import WelcomeEmbed
 from bics_bot.utils.server_utilities import get_member_by_id, get_channel_id_by_name
 from bics_bot.config.server_ids import GUILD_BICS_ID

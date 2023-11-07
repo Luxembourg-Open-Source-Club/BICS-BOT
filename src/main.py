@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os
+import os, sys
 from dotenv import load_dotenv
 import nextcord
 from nextcord.ext import commands
@@ -61,6 +61,10 @@ def main() -> None:
     Returns:
         None
     """
+
+    # Setting the CWD to the directory containing main.py
+    os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
+
     bot = commands.Bot(
         command_prefix="!",
         description=read_txt("./bics_bot/texts/bot_description.txt"),

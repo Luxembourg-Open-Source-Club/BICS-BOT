@@ -2,8 +2,7 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
-from bics_bot.embeds.logger_embed import LoggerEmbed
-from bics_bot.embeds.logger_embed import WARNING_LEVEL
+from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
 from bics_bot.config.server_ids import (
     ROLE_INTRO_LIST,
 )
@@ -77,7 +76,7 @@ class IntroCmd(commands.Cog):
                 f"Oops something went wrong! Make sure you are on <#{intro_channel_id}> to send the **/intro** command",
             )
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.ERROR),
                 ephemeral=True,
             )
             return
@@ -91,7 +90,7 @@ class IntroCmd(commands.Cog):
                 f"You have already introduced yourself! In case you have a role that you think should be changed feel free to ping an <@&{server_ids['roles']['admin']}>",
             )
             await interaction.response.send_message(
-                embed=LoggerEmbed("Warning", msg, WARNING_LEVEL),
+                embed=LoggerEmbed(msg, LogLevel.ERROR),
                 ephemeral=True,
             )
             return
@@ -176,7 +175,7 @@ class IntroCmd(commands.Cog):
             msg = msg + read_txt("./bics_bot/texts/introduction.txt")
 
         await interaction.response.send_message(
-            embed=LoggerEmbed("Introduction Status", msg),
+            embed=LoggerEmbed(msg),
             ephemeral=True,
         )
 
