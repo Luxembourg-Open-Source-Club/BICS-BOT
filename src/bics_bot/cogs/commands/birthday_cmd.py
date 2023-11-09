@@ -5,14 +5,13 @@ from nextcord.ext import commands
 from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
 
 from dateutil.parser import parse, ParserError
-import os
 import json
 
 
 class BirthdayCmd(commands.Cog):
     """This class represents the command </birthday>
 
-    The </bithday> command allows users to enter their birthday so
+    The </birthday> command allows users to enter their birthday so
     the bot can remind people on the server about that user's birthday.
 
     Attributes:
@@ -22,6 +21,39 @@ class BirthdayCmd(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    def validate_birthday(self, birthday):
+        """Validate the entered birthday format."""
+        try:
+            birthday_parsed = parse(birthday, dayfirst=True)
+        except (ValueError, ParserError):
+            return False
+
+        return (
+            birthday_parsed.strftime("%d.%m.%Y") == birthday
+            and len(birthday_parsed.strftime("%Y")) == 4
+        )
+
+    def store_birthday(self, file_name, birthday, user_id):
+        """Store user birthday data in a JSON file."""
+        try:
+            with open(file_name, "r") as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            data = {}
+
+        for _, ids in data.items():
+            if user_id in ids:
+                ids.remove(user_id)
+                break
+
+        if birthday in data:
+            data[birthday].append(user_id)
+        else:
+            data[birthday] = [user_id]
+
+        with open(file_name, "w") as file:
+            json.dump(data, file, indent=4)
+
     @application_command.slash_command(
         description="Receive birthday greetings from fellow BiCS students",
     )
@@ -29,7 +61,7 @@ class BirthdayCmd(commands.Cog):
         self,
         interaction: Interaction,
         birthday: str = nextcord.SlashOption(
-            description="Your birthday in the format DD.MM.YYYY (e.g., 05.06.1990).",
+            description="Your birthday in the format DD.MM.YYYY (e.g., 05.06.2000).",
             required=True
         ),
     ) -> None:
@@ -46,23 +78,9 @@ class BirthdayCmd(commands.Cog):
         )
             return
 
-        # Check if entered birthday is valid
-        try:
-            birthday_parsed = parse(birthday, dayfirst=True)
-        except (ValueError, ParserError):
-            msg = (
-                "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
-            )
-            await interaction.response.send_message(
-                embed=LoggerEmbed(msg, LogLevel.WARNING),
-                ephemeral=True,
-            )
-            return
-    
-        if birthday_parsed.strftime("%d.%m.%Y") != birthday or len(birthday_parsed.strftime("%Y")) != 4:
-            msg = (
-                "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
-            )
+        # Check if entered birthday is valid using the validation function
+        if not self.validate_birthday(birthday):
+            msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
             await interaction.response.send_message(
                 embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
@@ -71,31 +89,7 @@ class BirthdayCmd(commands.Cog):
 
         # Storing the user's birthday in JSON file
         file_name = "./bics_bot/config/birthdays.json"
-
-        # Check if the JSON file exists
-        try:
-            with open(file_name, "r") as file:
-                data = json.load(file)
-        except FileNotFoundError:
-            data = {}
-
-        # Check if the user has already added their birthday before
-        for _, ids in data.items():
-            if user.id in ids:
-                # If the user ID is found for another existing birthday, remove it
-                ids.remove(user.id)
-                break
-
-        if birthday in data:
-            # If the new birthday already exists but the user ID doesn't, append the new user ID
-            data[birthday].append(user.id)
-        else:
-            # If the new birthday is not in the data, create a new array with the user ID
-            data[birthday] = [user.id]
-
-        # Write the updated data back to the JSON file
-        with open(file_name, "w") as file:
-            json.dump(data, file, indent=4)
+        self.store_birthday(file_name, birthday, user.id)
 
         msg = f"Birthday Added\n Your birthday ({birthday}) has been added to your profile."
         await interaction.response.send_message(

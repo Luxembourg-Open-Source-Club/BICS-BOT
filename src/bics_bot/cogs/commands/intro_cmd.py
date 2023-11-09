@@ -10,7 +10,6 @@ from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
 from dateutil.parser import parse, ParserError
-import os
 import json
 
 
