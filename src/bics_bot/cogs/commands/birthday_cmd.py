@@ -7,6 +7,38 @@ from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
 from dateutil.parser import parse, ParserError
 import json
 
+def is_valid_birthday(birthday):
+    """Validate the entered birthday format."""
+    try:
+        birthday_parsed = parse(birthday, dayfirst=True)
+    except (ValueError, ParserError):
+        return False
+
+    return (
+        birthday_parsed.strftime("%d.%m.%Y") == birthday
+        and len(birthday_parsed.strftime("%Y")) == 4
+    )
+
+def store_birthday(file_name, birthday, user_id):
+    """Store user's birthday in a JSON file."""
+    try:
+        with open(file_name, "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        data = {}
+
+    for _, ids in data.items():
+        if user_id in ids:
+            ids.remove(user_id)
+            break
+
+    if birthday in data:
+        data[birthday].append(user_id)
+    else:
+        data[birthday] = [user_id]
+
+    with open(file_name, "w") as file:
+        json.dump(data, file, indent=4)
 
 class BirthdayCmd(commands.Cog):
     """This class represents the command </birthday>
@@ -20,39 +52,6 @@ class BirthdayCmd(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-
-    def validate_birthday(self, birthday):
-        """Validate the entered birthday format."""
-        try:
-            birthday_parsed = parse(birthday, dayfirst=True)
-        except (ValueError, ParserError):
-            return False
-
-        return (
-            birthday_parsed.strftime("%d.%m.%Y") == birthday
-            and len(birthday_parsed.strftime("%Y")) == 4
-        )
-
-    def store_birthday(self, file_name, birthday, user_id):
-        """Store user birthday data in a JSON file."""
-        try:
-            with open(file_name, "r") as file:
-                data = json.load(file)
-        except FileNotFoundError:
-            data = {}
-
-        for _, ids in data.items():
-            if user_id in ids:
-                ids.remove(user_id)
-                break
-
-        if birthday in data:
-            data[birthday].append(user_id)
-        else:
-            data[birthday] = [user_id]
-
-        with open(file_name, "w") as file:
-            json.dump(data, file, indent=4)
 
     @application_command.slash_command(
         description="Receive birthday greetings from fellow BiCS students",
@@ -78,8 +77,8 @@ class BirthdayCmd(commands.Cog):
         )
             return
 
-        # Check if entered birthday is valid using the validation function
-        if not self.validate_birthday(birthday):
+        # Check if entered birthday is valid
+        if not is_valid_birthday(birthday):
             msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
             await interaction.response.send_message(
                 embed=LoggerEmbed(msg, LogLevel.WARNING),
@@ -89,7 +88,7 @@ class BirthdayCmd(commands.Cog):
 
         # Storing the user's birthday in JSON file
         file_name = "./bics_bot/config/birthdays.json"
-        self.store_birthday(file_name, birthday, user.id)
+        store_birthday(file_name, birthday, user.id)
 
         msg = f"Birthday Added\n Your birthday ({birthday}) has been added to your profile."
         await interaction.response.send_message(

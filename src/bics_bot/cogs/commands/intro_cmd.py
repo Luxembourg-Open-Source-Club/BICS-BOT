@@ -9,8 +9,7 @@ from bics_bot.config.server_ids import (
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
-from dateutil.parser import parse, ParserError
-import json
+from bics_bot.cogs.commands.birthday_cmd import is_valid_birthday, store_birthday
 
 
 class IntroCmd(commands.Cog):
@@ -95,28 +94,13 @@ class IntroCmd(commands.Cog):
             return
         
         # Check if entered birthday is valid
-        if len(birthday) > 0:
-            try:
-                birthday_parsed = parse(birthday, dayfirst=True)
-            except (ValueError, ParserError):
-                msg = (
-                    "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
-                )
-                await interaction.response.send_message(
-                    embed=LoggerEmbed(msg, LogLevel.WARNING),
-                    ephemeral=True,
-                )
-                return
-        
-            if birthday_parsed.strftime("%d.%m.%Y") != birthday or len(birthday_parsed.strftime("%Y")) != 4:
-                msg = (
-                    "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
-                )
-                await interaction.response.send_message(
-                    embed=LoggerEmbed(msg, LogLevel.WARNING),
-                    ephemeral=True,
-                )
-                return
+        if not is_valid_birthday(birthday):
+            msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
+            await interaction.response.send_message(
+                embed=LoggerEmbed(msg, LogLevel.WARNING),
+                ephemeral=True,
+            )
+            return
 
         # Retrieving the roles
         roles = {
@@ -134,31 +118,7 @@ class IntroCmd(commands.Cog):
         # Storing the user's birthday in JSON file
         if len(birthday) > 0:
             file_name = "./bics_bot/config/birthdays.json"
-
-            # Check if the JSON file exists
-            try:
-                with open(file_name, "r") as file:
-                    data = json.load(file)
-            except FileNotFoundError:
-                data = {}
-
-            # Check if the user has already added their birthday before
-            for _, ids in data.items():
-                if user.id in ids:
-                    # If the user ID is found for another existing birthday, remove it
-                    ids.remove(user.id)
-                    break
-
-            if birthday in data:
-                # If the new birthday already exists but the user ID doesn't, append the new user ID
-                data[birthday].append(user.id)
-            else:
-                # If the new birthday is not in the data, create a new array with the user ID
-                data[birthday] = [user.id]
-
-            # Write the updated data back to the JSON file
-            with open(file_name, "w") as file:
-                json.dump(data, file, indent=4)
+            store_birthday(file_name, birthday, user.id)
         
         # Changing the nickname to Name + Surname initial
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
