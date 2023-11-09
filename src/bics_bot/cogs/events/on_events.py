@@ -40,13 +40,13 @@ class OnEvents(commands.Cog):
         """
         def birthday_message(member):
             if member.id in (241589375190827018, 332622290665603072):
-                return f"Happy Birthday to the one and only {member.mention}!\n @everyone Wish the King 👑 a happy birthday, or 👻 NG 👻 will curse you until the end of times ☠️☠️☠️☠️"
+                return f"Happy Birthday to the one and only {member.mention}!\n @everyone Wish the King 👑 a happy birthday\n Or 👻 NG 👻 will curse you until the end of times ☠️☠️☠️☠️"
 
             messages = [
-                f"Happy Birthday, {member.mention}! 🎂🎉 You're like a fine wine - you get better with age, but your jokes are still as cheesy as ever. Cheers to another year of dad-level humor and unforgettable moments! 😄🍷🎁",
-                f"{member.mention}, another year older and wiser? Nah, you're just another year closer to getting those senior discounts! Happy Birthday, you ageless wonder! 🎂🎉🎁😂",
-                f"Happy Birthday to the ultimate code ninja, {member.mention}! 🎂🎉👾 May your code be bug-free, your coffee be strong, and your algorithms always sort things out perfectly. Have an error-free day! 🎈😄 #BirthdayOverflowError",
-                f"{member.mention}, on your special day, remember one thing - you're not getting older; you're leveling up! 🎮🎂🎁 Happy Birthday!",
+                f"Happy Birthday, {member.mention}!\nEven if your programming skills are trash, we still like you <3",
+                f"{member.mention}, another year in BiCS?\n Nah, you're just trolling you should have lost your will to live since you joined the program. Happy Birthday tho!",
+                f"Still didn't finished BiCS {member.mention}?\n Sorry for that, anyway, Happy Birthday!",
+                f"{member.mention}, on your special day, remember one thing - your BSP is not finished yet!\n Happy Birthday ^^ !",
                 f"Cheers to the birthday legend, {member.mention}! 🎂🎉 May your day be filled with cake, joy, and as many 'just one more slice' moments as your heart desires! 🍰🎈😁",
                 f"{member.mention}, you're officially one year more fabulous! 🎉🥂 Don't count the candles; just enjoy the glow they bring. Happy Birthday, superstar!",
                 f"Happy Birthday, {member.mention}! 🎂🎉 On this special day, may your life be as fantastic as a software update that takes no time to install and brings you only great features!",
