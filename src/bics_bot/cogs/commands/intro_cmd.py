@@ -95,7 +95,7 @@ class IntroCmd(commands.Cog):
         
         # Check if entered birthday is valid
         if not is_valid_birthday(birthday):
-            msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**"
+            msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**."
             await interaction.response.send_message(
                 embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
