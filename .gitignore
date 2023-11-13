@@ -131,3 +131,5 @@ dmypy.json
 nohup.*
 
 calendar.csv
+
+db/
