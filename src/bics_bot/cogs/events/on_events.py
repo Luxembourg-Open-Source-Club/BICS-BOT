@@ -31,7 +31,7 @@ class OnEvents(commands.Cog):
 
         await member.send(embed=WelcomeEmbed(member.display_name, server.name))
 
-    @tasks.loop(seconds=5)#time=datetime.time(hour=7, minute=0, tzinfo=datetime.timezone(datetime.timedelta(hours=1), name="CEST")))
+    @tasks.loop(time=datetime.time(hour=7, minute=0, tzinfo=datetime.timezone(datetime.timedelta(hours=1), name="CEST")))
     async def birthday_check(self):
         """This method represents the loop that checks if any members have
         a birthday on the current date.
@@ -43,7 +43,7 @@ class OnEvents(commands.Cog):
             file_name = "./bics_bot/texts/birthday_messages.txt"
 
             with open(file_name, "r") as file:
-                if member.id in (0, 332622290665603072):
+                if member.id in (241589375190827018, 332622290665603072):
                     message = file.readline()
                 else:
                     messages = file.readlines()[1:]
