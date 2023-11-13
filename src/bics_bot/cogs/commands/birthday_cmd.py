@@ -87,7 +87,7 @@ class BirthdayCmd(commands.Cog):
             return
 
         # Storing the user's birthday in JSON file
-        file_name = "./bics_bot/config/birthdays.json"
+        file_name = "../db/birthdays.json"
         store_birthday(file_name, birthday, user.id)
 
         msg = f"Birthday Added\nYour birthday ({birthday}) has been recorded."

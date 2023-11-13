@@ -117,7 +117,7 @@ class IntroCmd(commands.Cog):
 
         # Storing the user's birthday in JSON file
         if len(birthday) > 0:
-            file_name = "./bics_bot/config/birthdays.json"
+            file_name = "../db/birthdays.json"
             store_birthday(file_name, birthday, user.id)
         
         # Changing the nickname to Name + Surname initial

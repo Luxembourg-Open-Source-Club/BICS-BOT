@@ -25,7 +25,7 @@ Please refer to the [contribution documentation](https://github.com/Luxembourg-O
 
 - `/bsp`: This command will send a message back with a list of relevant links for BSP.
 
-- `/intro` (Only for new members): Allows a new member to get the **Student** role, to change your server useername to comply with the server format (Example: John Doe -> John D), and to introduce themselves. This command can only be used in the introduction channel (`#starting-up`).
+- `/intro` (Only for new members): Allows a new member to get the **Student** role, to change your server useername to comply with the server format (Example: John Doe -> John D), and to introduce themselves. Additionally, it presents the option for the member to add their birthday. This command can only be used in the introduction channel (`#starting-up`).
 
 - `/enroll`: This command is used for students who wish to get viewing permissions to the text channels of their courses.
 
@@ -38,6 +38,8 @@ Please refer to the [contribution documentation](https://github.com/Luxembourg-O
 - `/calendar_delete`: This command is used to let a student delete entries they have made from the calendar
 
 - `/create_study_group`: This command is used to let students create private text and voice channel for their study groups.
+
+- `/birthday`: This command allows the user to add their birthday, with the intention of automatically receiving a birthday greeting when the date arrives.
 
 ### Role Commands
 
