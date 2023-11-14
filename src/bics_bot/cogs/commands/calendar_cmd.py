@@ -102,6 +102,16 @@ class CalendarCmd(commands.Cog):
         description="Allow students to remove a HW/exam from the calendar.",
     )
     async def calendar_delete(self, interaction: Interaction) -> None:
+        """This method allows student to delete an event.
+
+        It calls the calendar_view method and allows the student to choose
+        an event or multiple events to delete from the list.
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+        Returns:
+            None
+        """
         calendar = Calendar()
 
         view = CalendarView(interaction.user, interaction.guild, calendar)
