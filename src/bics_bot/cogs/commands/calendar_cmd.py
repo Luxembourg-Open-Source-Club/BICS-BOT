@@ -114,6 +114,17 @@ class CalendarCmd(commands.Cog):
         description="Allow students to view their own calendar.",
     )
     async def calendar_view(self, interaction: Interaction) -> None:
+        """Shows the events concerning the student on the calendar.
+
+        All the courses enrolled in by the student will be retrieved and
+        compared to the courses of the event. If the course of an event is
+        not part of the enrolled in course, it will not be showed.
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+        Returns:
+            None
+        """
         enrolled_courses = self.get_courses_enrolled(
             interaction.user,
             interaction.guild,
