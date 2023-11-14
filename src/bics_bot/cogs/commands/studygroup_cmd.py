@@ -193,6 +193,15 @@ class StudyGroupCmd(commands.Cog):
             required=True,
         ),
     ) -> None:
+        """ 
+        The </studygroup_invite> will allow student to invite other students to their study group
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+            names: Strings containing @ to add one or multiple members
+        Returns:
+            None
+        """
         if len(interaction.user.roles) == 1:
             # The user has no roles. So he must first use this command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
