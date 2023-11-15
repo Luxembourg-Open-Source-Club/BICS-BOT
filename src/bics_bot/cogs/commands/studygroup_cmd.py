@@ -243,6 +243,16 @@ class StudyGroupCmd(commands.Cog):
     async def get_members(
         self, interaction: Interaction, names: str
     ) -> list[Interaction.user]:
+        """
+        This method allows to get a list of members in the discord channel. It helps check if students
+        to be invited to a study group are part of the discord channel.
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+            names: String describing names to get.
+        Returns:
+            list of memebers
+        """
         members: list[Interaction.user] = []
         ids = [
             int(name.strip("<@>"))
