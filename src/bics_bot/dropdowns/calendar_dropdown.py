@@ -9,6 +9,14 @@ from bics_bot.utils.channels_utils import (
 
 
 class EventsDropdown(nextcord.ui.Select):
+    """
+    This class creates dropdown of events for use when trying to delete events in calendar.
+
+    Attributes:
+        user: The user that needs the events dropdown
+        guild: The channels needed to check the courses in which user is enrolled
+        calendar: The calendar to be used
+    """
     def __init__(self, user, guild, calendar: Calendar):
         self.option_to_row = {}
         self._options = self._get_options(user, guild, calendar)
@@ -22,6 +30,16 @@ class EventsDropdown(nextcord.ui.Select):
         )
 
     def _get_options(self, user, guild, calendar):
+        """
+        This method allows to get the options of events to delete in the dropdown for user
+
+        Args:
+            user: The user that needs the dropdown
+            guild: The channels in which to check for the user
+            calendar: Calendar used
+        Returns:
+            list of options to show in dropdown
+        """
         options = []
         enrolled_courses = self.get_courses_enrolled(user, guild)
         for entry in calendar.retrieve_entries():
