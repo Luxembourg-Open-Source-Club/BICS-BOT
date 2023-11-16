@@ -111,7 +111,13 @@ class CalendarView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
-        
+        """
+        This method allows the user to confirm options
+
+        Args:
+            button: the button to click
+            interaction: Interaction needed for the click of the button
+        """
         for entry in self.events.values:
             if (
                 self.events.option_to_row[entry]
