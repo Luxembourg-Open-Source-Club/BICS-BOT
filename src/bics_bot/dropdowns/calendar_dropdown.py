@@ -89,6 +89,14 @@ class EventsDropdown(nextcord.ui.Select):
 
 
 class CalendarView(nextcord.ui.View):
+    """
+    This class allows user to confirm elements selected in dropdown
+
+    Attributes:
+        user: The user that needs the events dropdown
+        guild: The channels needed to check the courses in which user is enrolled
+        calendar: The calendar to be used
+    """
     def __init__(self, user, guild, calendar: Calendar):
         super().__init__(timeout=5000)
         self.events = EventsDropdown(user, guild, calendar)
@@ -103,6 +111,7 @@ class CalendarView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        
         for entry in self.events.values:
             if (
                 self.events.option_to_row[entry]
