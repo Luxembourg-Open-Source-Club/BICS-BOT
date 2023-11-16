@@ -144,6 +144,13 @@ class CalendarView(nextcord.ui.View):
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows for user to cancel options
+
+        Args:
+            button: the cancel button
+            interaction: Interaction needed for cancel button
+        """
         await interaction.response.send_message(
             "Canceled operation. No changes made.", ephemeral=True
         )
