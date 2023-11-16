@@ -251,7 +251,7 @@ class StudyGroupCmd(commands.Cog):
             interaction: Required by the API. Gives meta information about the interaction.
             names: String describing names to get.
         Returns:
-            list of memebers
+            list of members
         """
         members: list[Interaction.user] = []
         ids = [
@@ -268,6 +268,13 @@ class StudyGroupCmd(commands.Cog):
         return members
 
     def get_overwrites(self, members: list[Interaction.user]):
+        """
+        This method allows new members of a study group to access said group.
+        Args:
+            members: A list of new members
+        Returns:
+            dictionary containing new members and their access rights 
+        """
         overwrites = {}
         for member in members:
             overwrites[member] = nextcord.PermissionOverwrite(
