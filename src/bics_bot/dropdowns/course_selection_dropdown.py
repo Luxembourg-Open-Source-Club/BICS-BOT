@@ -107,6 +107,15 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
 
 class Year2CoursesDropdown(nextcord.ui.Select):
+    """
+    This class allows a dropdown of courses of year 2.
+    It allows user to select one or multiple courses from year 2 to enroll in.
+
+    Attributes:
+        enrolled_courses: A dictionary of courses to enroll or unenroll in
+        enroll: A boolean to determine the enrolment
+        text_channels: Text channels of courses
+    """
     def __init__(
         self,
         enrolled_courses: dict[str, bool],
