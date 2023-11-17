@@ -399,6 +399,13 @@ class CoursesDropdownView(nextcord.ui.View):
     async def give_course_permissions(
         self, courses: dict[str], interaction: Interaction
     ):
+        """
+        This method gives students access to their respective enrolled in courses.
+
+        Args:
+            courses: A dictionnary of courses channels
+            interaction: Required by the API. Gives meta information about the interaction
+        """
         for text_channel in interaction.guild.text_channels:
             if text_channel.name in courses:
                 if (
