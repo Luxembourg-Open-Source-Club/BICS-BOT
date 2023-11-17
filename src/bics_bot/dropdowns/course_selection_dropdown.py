@@ -134,12 +134,26 @@ class Year2CoursesDropdown(nextcord.ui.Select):
         )
 
     def _get_options(self, enrolled_courses: dict[str, bool], enroll: bool):
+        """
+        This method allows  to get the option (enroll or unenroll) from 
+        a student.
+
+        Args:
+            enrolled_courses: A dictionary of courses to enroll or unenroll in
+            enroll: A boolean to determine the enrolment
+        """
         if enroll:
             return self.enrolling(enrolled_courses)
         else:
             return self.unenrolling(enrolled_courses)
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
+        """
+        This method allows the enrolment process. 
+
+        Args:
+            enrolled_courses: A dictionary of courses to enroll or unenroll in
+        """
         options = []
         for value in self.text_channels["year2"]["winter"]:
             if unfilter_course_name(value) not in enrolled_courses:
@@ -162,6 +176,12 @@ class Year2CoursesDropdown(nextcord.ui.Select):
         return options
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
+        """
+        This method allows the enrolment process. 
+
+        Args:
+            enrolled_courses: A dictionary of courses to enroll or unenroll in
+        """
         options = []
         for value in self.text_channels["year2"]["winter"]:
             if unfilter_course_name(value) in enrolled_courses:
