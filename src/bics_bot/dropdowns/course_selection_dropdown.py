@@ -9,6 +9,15 @@ from bics_bot.utils.channels_utils import (
 
 
 class Year1CoursesDropdown(nextcord.ui.Select):
+    """
+    This class allows a dropdown of courses of year 1.
+    It allows user to select one or multiple courses from year 1 to enroll in.
+
+    Attributes:
+        enrolled_courses: A dictionary of courses to enroll or unenroll in
+        enroll: A boolean to determine the enrolment
+        text_channels: Text channels of courses
+    """
     def __init__(
         self,
         enrolled_courses: dict[str, bool],
@@ -27,6 +36,7 @@ class Year1CoursesDropdown(nextcord.ui.Select):
         )
 
     def _get_options(self, enrolled_courses: dict[str, bool], enroll: bool):
+        
         if enroll:
             return self.enrolling(enrolled_courses)
         else:
