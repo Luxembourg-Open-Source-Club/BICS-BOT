@@ -36,7 +36,14 @@ class Year1CoursesDropdown(nextcord.ui.Select):
         )
 
     def _get_options(self, enrolled_courses: dict[str, bool], enroll: bool):
-        
+        """
+        This method allows  to get the option (enroll or unenroll) from 
+        a student.
+
+        Args:
+            enrolled_courses: A dictionary of courses to enroll or unenroll in
+            enroll: A boolean to determine the enrolment
+        """
         if enroll:
             return self.enrolling(enrolled_courses)
         else:
