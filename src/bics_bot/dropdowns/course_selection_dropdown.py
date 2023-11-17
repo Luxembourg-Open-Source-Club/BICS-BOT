@@ -50,6 +50,13 @@ class Year1CoursesDropdown(nextcord.ui.Select):
             return self.unenrolling(enrolled_courses)
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
+        """
+        This method allows the enrolment process. Set enroll for a course 
+        in enrolled_courses or add a course to enrolled_courses.
+
+        Args:
+            enrolled_courses: A dictionary of courses to enroll or unenroll in
+        """
         options = []
         for value in self.text_channels["year1"]["winter"]:
             if unfilter_course_name(value) not in enrolled_courses:
@@ -72,6 +79,7 @@ class Year1CoursesDropdown(nextcord.ui.Select):
         return options
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
+        
         options = []
         for value in self.text_channels["year1"]["winter"]:
             if unfilter_course_name(value) in enrolled_courses:
