@@ -346,6 +346,13 @@ class CoursesDropdownView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to confirm courses selected in the dropdown.
+
+        Args:
+            button: The confirm button
+            interaction: The interaction with the button
+        """
         if len(self.year1_dropdown._options) > 0:
             await self.give_course_permissions(
                 [unfilter_course_name(v) for v in self.year1_dropdown.values],
