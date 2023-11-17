@@ -400,7 +400,7 @@ class CoursesDropdownView(nextcord.ui.View):
         self, courses: dict[str], interaction: Interaction
     ):
         """
-        This method gives students access to their respective enrolled in courses.
+        This method set permissions for students according to their respective enrolled in courses.
 
         Args:
             courses: A dictionnary of courses channels
@@ -417,7 +417,21 @@ class CoursesDropdownView(nextcord.ui.View):
                     await self.unenroll_course(interaction.user, text_channel)
 
     async def enroll_course(self, user, text_channel):
+        """
+        This method is used in give_course_permissions to give access to the right text channels
+
+        Args:
+            user: The user that enrolled
+            tex_channel: The text_channel of a course
+        """
         await text_channel.set_permissions(target=user, read_messages=True)
 
     async def unenroll_course(self, user, text_channel):
+        """
+        This method is used in give_course_permissions to revoke access to the right text channels
+
+        Args:
+            user: The user that unenrolled
+            tex_channel: The text_channel of a course
+        """
         await text_channel.set_permissions(target=user, overwrite=None)
