@@ -303,6 +303,14 @@ class Year3CoursesDropdown(nextcord.ui.Select):
 
 
 class CoursesDropdownView(nextcord.ui.View):
+    """
+    This class allows to view all dropdown courses.
+
+    Attributes:
+        enrolled_courses: A dictionary of courses to enroll or unenroll in
+        enroll: A boolean to determine the enrolment
+        text_channels: Text channels of courses
+    """
     def __init__(
         self,
         enrolled_courses: dict[str, bool],
