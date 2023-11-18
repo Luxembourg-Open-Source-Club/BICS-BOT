@@ -24,6 +24,12 @@ class StudyGroupDropdown(nextcord.ui.Select):
         )
 
     def _get_options(self, interaction: Interaction):
+        """
+        This method allows to get related channels of a group that wants to be deleted
+
+        Args:
+            interaction: Required by API, gives meta information about interaction
+        """
         options = []
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
         for channel in category.text_channels:
