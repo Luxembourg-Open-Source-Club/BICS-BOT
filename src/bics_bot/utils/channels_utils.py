@@ -38,6 +38,9 @@ def retrieve_courses_text_channels_names(
 
 
 def read_csv():
+    """
+    Reads the csv file to order informations.
+    """
     fields = []
     rows = []
     with open(CALENDAR_FILE_PATH, "r") as csvfile:
