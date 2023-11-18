@@ -39,6 +39,14 @@ class StudyGroupDropdown(nextcord.ui.Select):
 
 
 class StudyGroupInviteView(nextcord.ui.View):
+    """
+    This class allows to show dropdown of members a user might invite to study group.
+
+    Attributes:
+        interaction: Gives meta information about interaction
+        members: members in the discord server
+        overwrites: members permissions
+    """
     def __init__(self, interaction: Interaction, members, overwrites):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)
