@@ -90,6 +90,9 @@ class Calendar:
         self._import_calendar()
 
     def retrieve_entries(self):
+        """
+        Retrieves entries.
+        """
         return self.entries
 
     def add_entry(
@@ -102,6 +105,9 @@ class Calendar:
         location,
         year,
     ):
+        """
+        Adds entry to the list of entries we need.
+        """
         self.entries.append(
             CalendarEntry(
                 type,
@@ -115,11 +121,20 @@ class Calendar:
         )
 
     def remove_entry(self, entry):
+        """
+        Removes entry from the list of entries we need.
+        """
         for i, e in enumerate(self.entries):
             if e == entry:
                 self.entries.pop(i)
 
     async def update_caledar_text_channel(self, interaction):
+        """
+        Updates the calendar text channel from the entries.
+
+        Args:
+            interaction: Gives meta information about the interaction.
+        """
         channel = None
         if (
             get_user_year(interaction.user) == "Year 1"
@@ -166,6 +181,9 @@ class Calendar:
                 csvwriter.writerow(entry.as_list())
 
     def __str__(self) -> str:
+        """
+        Shows the calendar.
+        """
         msg = "***__THE BICS CALENDAR__***\n"
         for entry in self.entries:
             msg += f"{entry}\n"
