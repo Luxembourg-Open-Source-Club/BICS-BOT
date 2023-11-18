@@ -6,6 +6,12 @@ from bics_bot.config.server_ids import CATEGORY_STUDY_GROUPS
 
 
 class StudyGroupDropdown(nextcord.ui.Select):
+    """
+    This class allows a dropdown of groups if a user wants to delete a study group.
+
+    Attributes:
+        interaction: Required by API. Gives meta information about the interaction.
+    """
     def __init__(self, interaction: Interaction):
         self._options = self._get_options(interaction)
 
