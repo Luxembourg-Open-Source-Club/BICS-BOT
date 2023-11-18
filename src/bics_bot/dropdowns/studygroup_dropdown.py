@@ -127,6 +127,13 @@ class StudyGroupLeaveView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to confirm deletion of selected study group in the dropdown.
+
+        Args:
+            button: The confirm button
+            interaction: The interaction with the button
+        """
         for value in self.groups.values:
             for channel in interaction.guild.get_channel(
                 CATEGORY_STUDY_GROUPS
@@ -147,6 +154,13 @@ class StudyGroupLeaveView(nextcord.ui.View):
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to cancel the deletion of selected study group in the dropdown.
+
+        Args:
+            button: The confirm button
+            interaction: The interaction with the button
+        """
         await interaction.response.send_message(
             "Canceled operation. No changes made.", ephemeral=True
         )
