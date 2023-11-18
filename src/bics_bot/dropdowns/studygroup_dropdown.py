@@ -108,6 +108,12 @@ class StudyGroupInviteView(nextcord.ui.View):
 
 
 class StudyGroupLeaveView(nextcord.ui.View):
+    """
+    This class allows to confirm or cancel the study group delete action.
+
+    Attributes:
+        interaction: Gives meta information about interaction
+    """
     def __init__(self, interaction: Interaction):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)
