@@ -8,8 +8,7 @@ PATH_CALENDAR = "./bics_bot/data/calendar.csv"
 
 class CalendarEntry:
     """
-    This class allows to get calendar entries to put into the calendar from 
-    </calendar_add> command.
+    This class allows to get calendar entries to put into or remove from the calendar.
 
     Attributes:
         type: type of event to add in calendar
@@ -74,6 +73,9 @@ class CalendarEntry:
 
 
 class Calendar:
+    """
+    This class allows to enter or even delete entries into the calendar.
+    """
     def __init__(self) -> None:
         self.entries: list(CalendarEntry) = []
         self.fields = [
