@@ -52,6 +52,9 @@ def read_csv():
 
 
 def get_user_year(user) -> str:
+    """
+    Get the string describing the year of the user.
+    """
     for role in user.roles:
         if role.name.startswith("Year"):
             return role.name
