@@ -7,6 +7,19 @@ PATH_CALENDAR = "./bics_bot/data/calendar.csv"
 
 
 class CalendarEntry:
+    """
+    This class allows to get calendar entries to put into the calendar from 
+    </calendar_add> command.
+
+    Attributes:
+        type: type of event to add in calendar
+        course: course related to the event
+        graded: is it graded or not
+        deadline_date: deadline_date of the event
+        deadline_time: deadline_time of the event
+        location: room of the event
+        year: corresponding class year of the event
+    """
     def __init__(
         self,
         type,
