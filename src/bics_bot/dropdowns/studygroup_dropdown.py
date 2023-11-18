@@ -62,6 +62,13 @@ class StudyGroupInviteView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to confirm selected members in the dropdown.
+
+        Args:
+            button: The confirm button
+            interaction: The interaction with the button
+        """
         for value in self.groups.values:
             for channel in interaction.guild.get_channel(
                 CATEGORY_STUDY_GROUPS
