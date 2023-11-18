@@ -61,6 +61,9 @@ def get_user_year(user) -> str:
 
 
 def get_unixtime(deadline_date: str, deadline_time: str) -> int:
+    """
+    Get unix time from deadline date and time.
+    """
     deadline_date = deadline_date.split(".")
     deadline_time = deadline_time.split(":")
     d = datetime.datetime(
