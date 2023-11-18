@@ -94,6 +94,13 @@ class StudyGroupInviteView(nextcord.ui.View):
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to cancel the selection of members in the dropdown.
+
+        Args:
+            button: The cancel button
+            interaction: The interaction with the button
+        """
         await interaction.response.send_message(
             "Canceled operation. No changes made.", ephemeral=True
         )
