@@ -192,8 +192,14 @@ def retrieve_courses_text_channels(
 
 
 def filter_course_name(text):
+    """
+    Filters course name to ignore case.
+    """
     return " ".join([t.capitalize() for t in text.split("-")])
 
 
 def unfilter_course_name(text):
+    """
+    Unfilter course name
+    """
     return "-".join(text.lower().split(" "))
