@@ -39,6 +39,9 @@ class CalendarEntry:
         self.year = year
 
     def get_columns(self) -> str:
+        """
+        This method gets columns of the entry.
+        """
         return [
             "type",
             "course",
@@ -50,6 +53,9 @@ class CalendarEntry:
         ]
 
     def as_list(self):
+        """
+        This method allows to get the columns of entry as a list.
+        """
         return [
             self.type,
             self.course,
@@ -60,6 +66,9 @@ class CalendarEntry:
         ]
 
     def __str__(self) -> str:
+        """
+        This method transforms the deadline_date and deadline_time into unix_time
+        """
         unix_time = get_unixtime(self.deadline_date, self.deadline_time)
         return f"{self.course} **{self.type}** on <t:{unix_time}:F>"
 
