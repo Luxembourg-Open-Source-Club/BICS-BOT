@@ -4,7 +4,13 @@ from nextcord import Guild, Role
 
 def get_role_id_by_name(guild: Guild, name: str):
     """
-    TODO: Missing docstrings
+    Get the id of a role given the name of it.
+
+    Args:
+        guild: Channels and users
+        name: Role name
+    Returns:
+        Role id
     """
     for role in guild.roles:
         if role.name == name:
@@ -14,7 +20,13 @@ def get_role_id_by_name(guild: Guild, name: str):
 
 def get_category_id_by_name(guild: Guild, name: str):
     """
-    TODO: Missing docstrings
+    Get the id of a category given the name of it.
+
+    Args:
+        guild: Channels and users
+        name: Category name
+    Returns:
+        Category id
     """
     for category in guild.categories:
         if category.name == name:
@@ -24,7 +36,13 @@ def get_category_id_by_name(guild: Guild, name: str):
 
 def get_channel_id_by_name(guild: Guild, name: str):
     """
-    TODO: Missing docstrings
+    Get the id of a channel given the name of it.
+
+    Args:
+        guild: Channels and users
+        name: Channel name
+    Returns:
+        Channel id
     """
     for channel in guild.channels:
         if channel.name == name:
@@ -34,7 +52,12 @@ def get_channel_id_by_name(guild: Guild, name: str):
 
 def retrieve_server_ids(guild: Guild):
     """
-    TODO: Missing docstrings
+    Get the ids in a server.
+
+    Args:
+        guild: Channels and users
+    Returns:
+        list of ids
     """
     with open("./bics_bot/config/server_ids.yaml", "r") as f:
         server_ids = yaml.safe_load(f)

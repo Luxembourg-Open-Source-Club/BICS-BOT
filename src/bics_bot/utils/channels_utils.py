@@ -38,6 +38,9 @@ def retrieve_courses_text_channels_names(
 
 
 def read_csv():
+    """
+    Reads the csv file to order informations.
+    """
     fields = []
     rows = []
     with open(CALENDAR_FILE_PATH, "r") as csvfile:
@@ -49,12 +52,29 @@ def read_csv():
 
 
 def get_user_year(user) -> str:
+    """
+    Get the string describing the year of the user.
+
+    Args:
+        user: The user
+    Returns:
+        string describing year of user
+    """
     for role in user.roles:
         if role.name.startswith("Year"):
             return role.name
 
 
 def get_unixtime(deadline_date: str, deadline_time: str) -> int:
+    """
+    Get unix time from deadline date and time.
+
+    Args:
+        deadline_date: The deadline date.
+        deadline_time: The deadline time to add to the calendar.
+    Returns:
+        integer describing unix time
+    """
     deadline_date = deadline_date.split(".")
     deadline_time = deadline_time.split(":")
     d = datetime.datetime(
@@ -172,8 +192,14 @@ def retrieve_courses_text_channels(
 
 
 def filter_course_name(text):
+    """
+    Filters course name to ignore case.
+    """
     return " ".join([t.capitalize() for t in text.split("-")])
 
 
 def unfilter_course_name(text):
+    """
+    Unfilter course name
+    """
     return "-".join(text.lower().split(" "))

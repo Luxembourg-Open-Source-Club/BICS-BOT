@@ -9,6 +9,14 @@ from bics_bot.utils.channels_utils import (
 
 
 class EventsDropdown(nextcord.ui.Select):
+    """
+    This class creates dropdown of events for use when trying to delete events in calendar.
+
+    Attributes:
+        user: The user that needs the events dropdown
+        guild: The channels needed to check the courses in which user is enrolled
+        calendar: The calendar to be used
+    """
     def __init__(self, user, guild, calendar: Calendar):
         self.option_to_row = {}
         self._options = self._get_options(user, guild, calendar)
@@ -22,6 +30,16 @@ class EventsDropdown(nextcord.ui.Select):
         )
 
     def _get_options(self, user, guild, calendar):
+        """
+        This method allows to get the options of events to delete in the dropdown for user
+
+        Args:
+            user: The user that needs the dropdown
+            guild: The channels in which to check for the user
+            calendar: Calendar used
+        Returns:
+            list of options to show in dropdown
+        """
         options = []
         enrolled_courses = self.get_courses_enrolled(user, guild)
         for entry in calendar.retrieve_entries():
@@ -71,6 +89,14 @@ class EventsDropdown(nextcord.ui.Select):
 
 
 class CalendarView(nextcord.ui.View):
+    """
+    This class allows user to confirm elements selected in dropdown
+
+    Attributes:
+        user: The user that needs the events dropdown
+        guild: The channels needed to check the courses in which user is enrolled
+        calendar: The calendar to be used
+    """
     def __init__(self, user, guild, calendar: Calendar):
         super().__init__(timeout=5000)
         self.events = EventsDropdown(user, guild, calendar)
@@ -85,6 +111,13 @@ class CalendarView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows the user to confirm options
+
+        Args:
+            button: the button to click
+            interaction: Interaction needed for the click of the button
+        """
         for entry in self.events.values:
             if (
                 self.events.option_to_row[entry]
@@ -111,6 +144,13 @@ class CalendarView(nextcord.ui.View):
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows for user to cancel options
+
+        Args:
+            button: the cancel button
+            interaction: Interaction needed for cancel button
+        """
         await interaction.response.send_message(
             "Canceled operation. No changes made.", ephemeral=True
         )

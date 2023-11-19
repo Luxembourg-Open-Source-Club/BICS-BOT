@@ -65,6 +65,24 @@ class CalendarCmd(commands.Cog):
             default="",
         ),
     ) -> None:
+        """This method allows students to add an event (HW/Midterm/Quiz/Final) into the calendar.
+
+        The student also has to enter the course for which it is, if it is graded or not,
+        the deadline date in the format Day.Month.Year and the deadline time in the format Hour:Minute (On a 24-hour clock).
+
+        The student may optionally add the location(room) for the event.
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+            type: A string describing the type of the event. It is either Homework,Midterm,Quiz or Final
+            course: A string describing the course of the event.
+            graded: A boolean to tell if the event is graded or not. Options being True or False
+            deadline_date: A string describing the date of the event. Example: 05.06.2023
+            deadline_time: A string describing the time of the event. Example: 13:15
+            location: A string describing the room. Example: MSA 3.050. Optional argument
+        Returns:
+            None
+        """
         year = get_user_year(interaction.user)
         calendar = Calendar()
         calendar.add_entry(
@@ -84,6 +102,16 @@ class CalendarCmd(commands.Cog):
         description="Allow students to remove a HW/exam from the calendar.",
     )
     async def calendar_delete(self, interaction: Interaction) -> None:
+        """This method allows student to delete an event.
+
+        It calls the calendar_view method and allows the student to choose
+        an event or multiple events to delete from the list.
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+        Returns:
+            None
+        """
         calendar = Calendar()
 
         view = CalendarView(interaction.user, interaction.guild, calendar)
@@ -96,6 +124,17 @@ class CalendarCmd(commands.Cog):
         description="Allow students to view their own calendar.",
     )
     async def calendar_view(self, interaction: Interaction) -> None:
+        """Shows the events concerning the student on the calendar.
+
+        All the courses enrolled in by the student will be retrieved and
+        compared to the courses of the event. If the course of an event is
+        not part of the enrolled in course, it will not be showed.
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+        Returns:
+            None
+        """
         enrolled_courses = self.get_courses_enrolled(
             interaction.user,
             interaction.guild,

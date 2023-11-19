@@ -6,6 +6,12 @@ from bics_bot.config.server_ids import CATEGORY_STUDY_GROUPS
 
 
 class StudyGroupDropdown(nextcord.ui.Select):
+    """
+    This class allows a dropdown of groups if a user wants to delete a study group.
+
+    Attributes:
+        interaction: Required by API. Gives meta information about the interaction.
+    """
     def __init__(self, interaction: Interaction):
         self._options = self._get_options(interaction)
 
@@ -18,6 +24,12 @@ class StudyGroupDropdown(nextcord.ui.Select):
         )
 
     def _get_options(self, interaction: Interaction):
+        """
+        This method allows to get related channels of a group that wants to be deleted
+
+        Args:
+            interaction: Required by API, gives meta information about interaction
+        """
         options = []
         category = interaction.guild.get_channel(CATEGORY_STUDY_GROUPS)
         for channel in category.text_channels:
@@ -27,6 +39,14 @@ class StudyGroupDropdown(nextcord.ui.Select):
 
 
 class StudyGroupInviteView(nextcord.ui.View):
+    """
+    This class allows to show dropdown of members a user might invite to study group.
+
+    Attributes:
+        interaction: Gives meta information about interaction
+        members: members in the discord server
+        overwrites: members permissions
+    """
     def __init__(self, interaction: Interaction, members, overwrites):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)
@@ -42,6 +62,13 @@ class StudyGroupInviteView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to confirm selected members in the dropdown.
+
+        Args:
+            button: The confirm button
+            interaction: The interaction with the button
+        """
         for value in self.groups.values:
             for channel in interaction.guild.get_channel(
                 CATEGORY_STUDY_GROUPS
@@ -67,6 +94,13 @@ class StudyGroupInviteView(nextcord.ui.View):
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to cancel the selection of members in the dropdown.
+
+        Args:
+            button: The cancel button
+            interaction: The interaction with the button
+        """
         await interaction.response.send_message(
             "Canceled operation. No changes made.", ephemeral=True
         )
@@ -74,6 +108,12 @@ class StudyGroupInviteView(nextcord.ui.View):
 
 
 class StudyGroupLeaveView(nextcord.ui.View):
+    """
+    This class allows to confirm or cancel the study group delete action.
+
+    Attributes:
+        interaction: Gives meta information about interaction
+    """
     def __init__(self, interaction: Interaction):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)
@@ -87,6 +127,13 @@ class StudyGroupLeaveView(nextcord.ui.View):
     async def confirm_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to confirm deletion of selected study group in the dropdown.
+
+        Args:
+            button: The confirm button
+            interaction: The interaction with the button
+        """
         for value in self.groups.values:
             for channel in interaction.guild.get_channel(
                 CATEGORY_STUDY_GROUPS
@@ -107,6 +154,13 @@ class StudyGroupLeaveView(nextcord.ui.View):
     async def cancel_callback(
         self, button: nextcord.Button, interaction: nextcord.Interaction
     ):
+        """
+        This method allows to cancel the deletion of selected study group in the dropdown.
+
+        Args:
+            button: The confirm button
+            interaction: The interaction with the button
+        """
         await interaction.response.send_message(
             "Canceled operation. No changes made.", ephemeral=True
         )
