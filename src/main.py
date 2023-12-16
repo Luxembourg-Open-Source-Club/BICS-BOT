@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import os, sys
+import os
+import sys
 from dotenv import load_dotenv
 import nextcord
 from nextcord.ext import commands
