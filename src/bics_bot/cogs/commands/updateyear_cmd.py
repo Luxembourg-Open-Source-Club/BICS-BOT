@@ -2,11 +2,7 @@ from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
 from bics_bot.embeds.logger_embed import LogLevel, LoggerEmbed
-from bics_bot.config.server_ids import (
-    ROLE_YEAR2_ID,
-    ROLE_YEAR3_ID,
-    ROLE_ALUMNI_ID,
-)
+from bics_bot.utils.server_utilities import get_role_id_by_name
 
 
 class UpdateYearCmd(commands.Cog):
@@ -51,24 +47,37 @@ class UpdateYearCmd(commands.Cog):
             )
             return
 
+        await interaction.response.defer()
+
         members = user.guild.members
         for member in members:
             for role in member.roles:
                 if role.name == "Year 1":
                     await member.remove_roles(role)
                     await member.add_roles(
-                        interaction.guild.get_role(ROLE_YEAR2_ID)
+                        interaction.guild.get_role(
+                            get_role_id_by_name(interaction.guild, "Year 2")
+                        )
                     )
                 elif role.name == "Year 2":
                     await member.remove_roles(role)
                     await member.add_roles(
-                        interaction.guild.get_role(ROLE_YEAR3_ID)
+                        interaction.guild.get_role(
+                            interaction.guild, get_role_id_by_name("Year 3")
+                        )
                     )
                 elif role.name == "Year 3":
                     await member.remove_roles(role)
                     await member.add_roles(
-                        interaction.guild.get_role(ROLE_ALUMNI_ID)
+                        interaction.guild.get_role(
+                            interaction.guild, get_role_id_by_name("Alumni")
+                        )
                     )
+
+        msg = "All students have been updated to the next year"
+        await interaction.edit_original_message(
+            embed=LoggerEmbed(msg, LogLevel.INFO)
+        )
 
 
 def setup(client):
