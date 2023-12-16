@@ -18,6 +18,7 @@ class Year1CoursesDropdown(nextcord.ui.Select):
         enroll: A boolean to determine the enrolment
         text_channels: Text channels of courses
     """
+
     def __init__(
         self,
         enrolled_courses: dict[str, bool],
@@ -37,7 +38,7 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
     def _get_options(self, enrolled_courses: dict[str, bool], enroll: bool):
         """
-        This method allows  to get the option (enroll or unenroll) from 
+        This method allows  to get the option (enroll or unenroll) from
         a student.
 
         Args:
@@ -51,7 +52,7 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
         """
-        This method allows the enrolment process. 
+        This method allows the enrolment process.
 
         Args:
             enrolled_courses: A dictionary of courses to enroll or unenroll in
@@ -79,7 +80,7 @@ class Year1CoursesDropdown(nextcord.ui.Select):
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
         """
-        This method allows the unenrolment process. 
+        This method allows the unenrolment process.
 
         Args:
             enrolled_courses: A dictionary of courses to enroll or unenroll in
@@ -116,6 +117,7 @@ class Year2CoursesDropdown(nextcord.ui.Select):
         enroll: A boolean to determine the enrolment
         text_channels: Text channels of courses
     """
+
     def __init__(
         self,
         enrolled_courses: dict[str, bool],
@@ -135,7 +137,7 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 
     def _get_options(self, enrolled_courses: dict[str, bool], enroll: bool):
         """
-        This method allows  to get the option (enroll or unenroll) from 
+        This method allows  to get the option (enroll or unenroll) from
         a student.
 
         Args:
@@ -149,7 +151,7 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
         """
-        This method allows the enrolment process. 
+        This method allows the enrolment process.
 
         Args:
             enrolled_courses: A dictionary of courses to enroll or unenroll in
@@ -177,7 +179,7 @@ class Year2CoursesDropdown(nextcord.ui.Select):
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
         """
-        This method allows the enrolment process. 
+        This method allows the enrolment process.
 
         Args:
             enrolled_courses: A dictionary of courses to enroll or unenroll in
@@ -214,6 +216,7 @@ class Year3CoursesDropdown(nextcord.ui.Select):
         enroll: A boolean to determine the enrolment
         text_channels: Text channels of courses
     """
+
     def __init__(
         self,
         enrolled_courses: dict[str, bool],
@@ -233,13 +236,13 @@ class Year3CoursesDropdown(nextcord.ui.Select):
 
     def _get_options(self, enrolled_courses: dict[str, bool], enroll: bool):
         """
-        This method allows  to get the option (enroll or unenroll) from 
+        This method allows  to get the option (enroll or unenroll) from
         a student.
 
         Args:
             enrolled_courses: A dictionary of courses to enroll or unenroll in
             enroll: A boolean to determine the enrolment
-        """ 
+        """
         if enroll:
             return self.enrolling(enrolled_courses)
         else:
@@ -247,7 +250,7 @@ class Year3CoursesDropdown(nextcord.ui.Select):
 
     def enrolling(self, enrolled_courses: dict[str, bool]):
         """
-        This method allows the enrolment process. 
+        This method allows the enrolment process.
 
         Args:
             enrolled_courses: A dictionary of courses to enroll or unenroll in
@@ -275,7 +278,7 @@ class Year3CoursesDropdown(nextcord.ui.Select):
 
     def unenrolling(self, enrolled_courses: dict[str, bool]):
         """
-        This method allows the enrolment process. 
+        This method allows the enrolment process.
 
         Args:
             enrolled_courses: A dictionary of courses to enroll or unenroll in
@@ -311,6 +314,7 @@ class CoursesDropdownView(nextcord.ui.View):
         enroll: A boolean to determine the enrolment
         text_channels: Text channels of courses
     """
+
     def __init__(
         self,
         enrolled_courses: dict[str, bool],

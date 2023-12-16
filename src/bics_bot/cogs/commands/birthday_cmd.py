@@ -7,6 +7,7 @@ from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
 from dateutil.parser import parse, ParserError
 import json
 
+
 def is_valid_birthday(birthday):
     """Validate the entered birthday format."""
     try:
@@ -18,6 +19,7 @@ def is_valid_birthday(birthday):
         birthday_parsed.strftime("%d.%m.%Y") == birthday
         and len(birthday_parsed.strftime("%Y")) == 4
     )
+
 
 def store_birthday(file_name, birthday, user_id):
     """Store user's birthday in a JSON file."""
@@ -40,6 +42,7 @@ def store_birthday(file_name, birthday, user_id):
     with open(file_name, "w") as file:
         json.dump(data, file, indent=4)
 
+
 class BirthdayCmd(commands.Cog):
     """This class represents the command </birthday>
 
@@ -61,10 +64,9 @@ class BirthdayCmd(commands.Cog):
         interaction: Interaction,
         birthday: str = nextcord.SlashOption(
             description="Your birthday in the format DD.MM.YYYY (e.g., 05.06.2000)",
-            required=True
+            required=True,
         ),
     ) -> None:
-        
         user = interaction.user
         user_roles = user.roles
 
@@ -74,7 +76,7 @@ class BirthdayCmd(commands.Cog):
             await interaction.response.send_message(
                 embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
-        )
+            )
             return
 
         # Check if entered birthday is valid

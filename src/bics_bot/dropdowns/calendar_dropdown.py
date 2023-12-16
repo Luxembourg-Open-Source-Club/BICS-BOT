@@ -17,6 +17,7 @@ class EventsDropdown(nextcord.ui.Select):
         guild: The channels needed to check the courses in which user is enrolled
         calendar: The calendar to be used
     """
+
     def __init__(self, user, guild, calendar: Calendar):
         self.option_to_row = {}
         self._options = self._get_options(user, guild, calendar)
@@ -97,6 +98,7 @@ class CalendarView(nextcord.ui.View):
         guild: The channels needed to check the courses in which user is enrolled
         calendar: The calendar to be used
     """
+
     def __init__(self, user, guild, calendar: Calendar):
         super().__init__(timeout=5000)
         self.events = EventsDropdown(user, guild, calendar)

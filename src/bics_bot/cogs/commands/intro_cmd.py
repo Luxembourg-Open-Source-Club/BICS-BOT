@@ -9,7 +9,10 @@ from bics_bot.config.server_ids import (
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
-from bics_bot.cogs.commands.birthday_cmd import is_valid_birthday, store_birthday
+from bics_bot.cogs.commands.birthday_cmd import (
+    is_valid_birthday,
+    store_birthday,
+)
 
 
 class IntroCmd(commands.Cog):
@@ -45,7 +48,7 @@ class IntroCmd(commands.Cog):
         birthday: str = nextcord.SlashOption(
             description="(OPTIONAL) Your birthday in the format DD.MM.YYYY",
             required=False,
-            default=""
+            default="",
         ),
     ) -> None:
         """
@@ -92,7 +95,7 @@ class IntroCmd(commands.Cog):
                 ephemeral=True,
             )
             return
-        
+
         # Check if entered birthday is valid
         if not is_valid_birthday(birthday):
             msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**."
@@ -119,7 +122,7 @@ class IntroCmd(commands.Cog):
         if len(birthday) > 0:
             file_name = "../db/birthdays.json"
             store_birthday(file_name, birthday, user.id)
-        
+
         # Changing the nickname to Name + Surname initial
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
         msg = f"""Welcome on board **{name.capitalize()} {surname.capitalize()}**!

@@ -193,7 +193,7 @@ class StudyGroupCmd(commands.Cog):
             required=True,
         ),
     ) -> None:
-        """ 
+        """
         The </studygroup_invite> will allow student to invite other students to their study group
 
         Args:
@@ -273,7 +273,7 @@ class StudyGroupCmd(commands.Cog):
         Args:
             members: A list of new members
         Returns:
-            dictionary containing new members and their access rights 
+            dictionary containing new members and their access rights
         """
         overwrites = {}
         for member in members:

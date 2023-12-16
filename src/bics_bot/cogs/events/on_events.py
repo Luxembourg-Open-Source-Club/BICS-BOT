@@ -2,11 +2,15 @@ from nextcord import Member
 from nextcord.ext import commands, tasks
 
 from bics_bot.embeds.welcome_embed import WelcomeEmbed
-from bics_bot.utils.server_utilities import get_member_by_id, get_channel_id_by_name
+from bics_bot.utils.server_utilities import (
+    get_member_by_id,
+    get_channel_id_by_name,
+)
 
 import json
 import datetime
 import random
+
 
 class OnEvents(commands.Cog):
     """This class contains the events that should be triggered."""
@@ -31,11 +35,18 @@ class OnEvents(commands.Cog):
 
         await member.send(embed=WelcomeEmbed(member.display_name, server.name))
 
-    @tasks.loop(time=datetime.time(hour=7, minute=0, tzinfo=datetime.timezone(datetime.timedelta(hours=1), name="CEST")))
+    @tasks.loop(
+        time=datetime.time(
+            hour=7,
+            minute=0,
+            tzinfo=datetime.timezone(datetime.timedelta(hours=1), name="CEST"),
+        )
+    )
     async def birthday_check(self):
         """This method represents the loop that checks if any members have
         a birthday on the current date.
         """
+
         def birthday_message(member):
             """This method reads a random birthday message from a text file
             and returns in a proper format with replaced placeholders.
@@ -49,7 +60,9 @@ class OnEvents(commands.Cog):
                     messages = file.readlines()[1:]
                     message = random.choice(messages)
 
-            message = message.replace(r"\n", "\n").format(member = member.mention)
+            message = message.replace(r"\n", "\n").format(
+                member=member.mention
+            )
 
             return message
 
@@ -75,7 +88,9 @@ class OnEvents(commands.Cog):
             if birthday_formatted == today:
                 for id in ids:
                     member = get_member_by_id(guild=guild, id=id)
-                    await self.client.get_channel(general_id).send(birthday_message(member))
+                    await self.client.get_channel(general_id).send(
+                        birthday_message(member)
+                    )
 
 
 def setup(client):
