@@ -193,6 +193,15 @@ class StudyGroupCmd(commands.Cog):
             required=True,
         ),
     ) -> None:
+        """ 
+        The </studygroup_invite> will allow student to invite other students to their study group
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+            names: Strings containing @ to add one or multiple members
+        Returns:
+            None
+        """
         if len(interaction.user.roles) == 1:
             # The user has no roles. So he must first use this command
             msg = "You haven't yet introduced yourself! Make sure you use the **/intro** command first"
@@ -234,6 +243,16 @@ class StudyGroupCmd(commands.Cog):
     async def get_members(
         self, interaction: Interaction, names: str
     ) -> list[Interaction.user]:
+        """
+        This method allows to get a list of members in the discord channel. It helps check if students
+        to be invited to a study group are part of the discord channel.
+
+        Args:
+            interaction: Required by the API. Gives meta information about the interaction.
+            names: String describing names to get.
+        Returns:
+            list of members
+        """
         members: list[Interaction.user] = []
         ids = [
             int(name.strip("<@>"))
@@ -249,6 +268,13 @@ class StudyGroupCmd(commands.Cog):
         return members
 
     def get_overwrites(self, members: list[Interaction.user]):
+        """
+        This method allows new members of a study group to access said group.
+        Args:
+            members: A list of new members
+        Returns:
+            dictionary containing new members and their access rights 
+        """
         overwrites = {}
         for member in members:
             overwrites[member] = nextcord.PermissionOverwrite(
