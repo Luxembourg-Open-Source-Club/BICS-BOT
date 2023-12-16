@@ -3,9 +3,6 @@ from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
 from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
-from bics_bot.config.server_ids import (
-    ROLE_INTRO_LIST,
-)
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
@@ -43,7 +40,14 @@ class IntroCmd(commands.Cog):
         ),
         year: str = nextcord.SlashOption(
             description="The year you will be in. In case you plan on joining the University choose **incoming**",
-            choices=ROLE_INTRO_LIST,
+            choices=[
+                "year-1",
+                "year-2",
+                "year-3",
+                "alumni",
+                "erasmus",
+                "incoming",
+            ],
         ),
         birthday: str = nextcord.SlashOption(
             description="(OPTIONAL) Your birthday in the format DD.MM.YYYY",
@@ -62,9 +66,6 @@ class IntroCmd(commands.Cog):
             name: The first name of the student
             surname: The last name of the student.
             year: The promotion of the student.
-
-        Returns:
-            None
         """
 
         server_ids = retrieve_server_ids(interaction.guild)
