@@ -44,7 +44,7 @@ class OnEvents(commands.Cog):
     )
     async def birthday_check(self):
         """This method represents the loop that checks if any members have
-        a birthday on the current date.
+        a birthday on the current date. This check is done once a day at 7am.
         """
 
         def birthday_message(member):
