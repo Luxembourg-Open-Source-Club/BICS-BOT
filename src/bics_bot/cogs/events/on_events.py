@@ -70,7 +70,7 @@ class OnEvents(commands.Cog):
         guild = self.client.get_guild(guild_id)
         general_id = get_channel_id_by_name(guild=guild, name="general")
 
-        file_name = "../db/birthdays.json"
+        file_name = "./db/birthdays.json"
 
         # Check if the JSON file exists
         try:

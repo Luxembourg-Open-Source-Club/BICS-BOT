@@ -98,7 +98,7 @@ class IntroCmd(commands.Cog):
             return
 
         # Check if entered birthday is valid
-        if not is_valid_birthday(birthday):
+        if birthday != "" and not is_valid_birthday(birthday):
             msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**."
             await interaction.response.send_message(
                 embed=LoggerEmbed(msg, LogLevel.WARNING),
@@ -121,7 +121,7 @@ class IntroCmd(commands.Cog):
 
         # Storing the user's birthday in JSON file
         if len(birthday) > 0:
-            file_name = "../db/birthdays.json"
+            file_name = "./db/birthdays.json"
             store_birthday(file_name, birthday, user.id)
 
         # Changing the nickname to Name + Surname initial
