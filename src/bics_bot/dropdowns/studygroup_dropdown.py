@@ -12,6 +12,7 @@ class StudyGroupDropdown(nextcord.ui.Select):
     Attributes:
         interaction: Required by API. Gives meta information about the interaction.
     """
+
     def __init__(self, interaction: Interaction):
         self._options = self._get_options(interaction)
 
@@ -47,6 +48,7 @@ class StudyGroupInviteView(nextcord.ui.View):
         members: members in the discord server
         overwrites: members permissions
     """
+
     def __init__(self, interaction: Interaction, members, overwrites):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)
@@ -114,6 +116,7 @@ class StudyGroupLeaveView(nextcord.ui.View):
     Attributes:
         interaction: Gives meta information about interaction
     """
+
     def __init__(self, interaction: Interaction):
         super().__init__(timeout=5000)
         self.groups = StudyGroupDropdown(interaction)

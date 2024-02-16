@@ -2,11 +2,7 @@ from nextcord import application_command, Interaction
 from nextcord.ext import commands
 
 from bics_bot.embeds.logger_embed import LogLevel, LoggerEmbed
-from bics_bot.config.server_ids import (
-    ROLE_YEAR2_ID,
-    ROLE_YEAR3_ID,
-    ROLE_ALUMNI_ID,
-)
+from bics_bot.utils.server_utilities import get_role_id_by_name
 
 
 class UpdateYearCmd(commands.Cog):
@@ -44,58 +40,44 @@ class UpdateYearCmd(commands.Cog):
             if role.name == "Admin":
                 isAdmin = True
         if not isAdmin:
-            msg = "Sorry, this command is under development and reserved for admins only."
+            msg = "Sorry, this command is only available for admins"
             await interaction.response.send_message(
                 embed=LoggerEmbed(msg, LogLevel.WARNING),
                 ephemeral=True,
             )
             return
 
-        user = interaction.user
-        for role in user.roles:
-            if role.name == "Erasmus":
-                msg = "This command is only available for full **UniLu** students"
-                await interaction.response.send_message(
-                    embed=LoggerEmbed(msg, LogLevel.WARNING),
-                    ephemeral=True,
-                )
-                return
-        old_role = ""
-        new_role = ""
+        await interaction.response.defer()
+
         members = user.guild.members
         for member in members:
             for role in member.roles:
-                # if role.name == "Incoming":
-                #     old_role = role
-                #     new_role = interaction.guild.get_role(ROLE_YEAR1_ID)
-                #     await member.remove_roles(role)
-                #     await member.add_roles(new_role)
                 if role.name == "Year 1":
-                    old_role = role
-                    new_role = interaction.guild.get_role(ROLE_YEAR2_ID)
                     await member.remove_roles(role)
                     await member.add_roles(
-                        interaction.guild.get_role(ROLE_YEAR2_ID)
+                        interaction.guild.get_role(
+                            get_role_id_by_name(interaction.guild, "Year 2")
+                        )
                     )
                 elif role.name == "Year 2":
-                    old_role = role
-                    new_role = interaction.guild.get_role(ROLE_YEAR3_ID)
                     await member.remove_roles(role)
                     await member.add_roles(
-                        interaction.guild.get_role(ROLE_YEAR3_ID)
+                        interaction.guild.get_role(
+                            interaction.guild, get_role_id_by_name("Year 3")
+                        )
                     )
                 elif role.name == "Year 3":
-                    old_role = role
-                    new_role = interaction.guild.get_role(ROLE_ALUMNI_ID)
                     await member.remove_roles(role)
                     await member.add_roles(
-                        interaction.guild.get_role(ROLE_ALUMNI_ID)
+                        interaction.guild.get_role(
+                            interaction.guild, get_role_id_by_name("Alumni")
+                        )
                     )
-            # msg = f"Your year role has been updated from {old_role.name} to {new_role.name}"
-            # await interaction.response.send_message(
-            #     embed=LoggerEmbed("Role Status", msg),
-            #     ephemeral=True,
-            # )
+
+        msg = "All students have been updated to the next year"
+        await interaction.edit_original_message(
+            embed=LoggerEmbed(msg, LogLevel.INFO)
+        )
 
 
 def setup(client):

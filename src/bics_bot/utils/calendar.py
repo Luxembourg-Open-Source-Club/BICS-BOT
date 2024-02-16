@@ -19,6 +19,7 @@ class CalendarEntry:
         location: room of the event
         year: corresponding class year of the event
     """
+
     def __init__(
         self,
         type,
@@ -76,6 +77,7 @@ class Calendar:
     """
     This class allows to enter or even delete entries into the calendar.
     """
+
     def __init__(self) -> None:
         self.entries: list(CalendarEntry) = []
         self.fields = [

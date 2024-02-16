@@ -88,7 +88,8 @@ def retrieve_server_ids(guild: Guild):
             config["channels"][name] = channel_id
     return config
 
-def get_member_by_id(guild: Guild, id:int):
+
+def get_member_by_id(guild: Guild, id: int):
     """
     Search for a guild member based on an id.
     Returns the Member object if there is a matching id in the guild, otherwise returns None.

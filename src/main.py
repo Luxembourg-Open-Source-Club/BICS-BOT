@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import os, sys
+import os
+import sys
 from dotenv import load_dotenv
 import nextcord
 from nextcord.ext import commands
@@ -13,9 +14,6 @@ load_dotenv()
 def get_intents() -> nextcord.Intents:
     """
     Loading the intents of the bot. Intents are the capabilities of the bot.
-
-    Args:
-        None
 
     Returns:
         intents: The intent settings chosen.
@@ -34,9 +32,6 @@ def load_extensions(bot: commands.Bot) -> None:
 
     Args:
         bot: the bot object
-
-    Returns:
-        None
     """
     for filename in os.listdir("./bics_bot/cogs/events"):
         if filename.endswith(".py") and filename != "__init__.py":
@@ -54,12 +49,6 @@ def main() -> None:
     This function initializes the bot by setting its command prefix, description,
     and intents. It also loads necessary extensions and runs the bot using the
     provided bot token.
-
-    Args:
-        None
-
-    Returns:
-        None
     """
 
     # Setting the CWD to the directory containing main.py

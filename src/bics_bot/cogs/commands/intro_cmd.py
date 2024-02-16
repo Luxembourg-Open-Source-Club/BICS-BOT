@@ -3,13 +3,13 @@ from nextcord.ext import commands
 from nextcord import application_command, Interaction
 
 from bics_bot.embeds.logger_embed import LoggerEmbed, LogLevel
-from bics_bot.config.server_ids import (
-    ROLE_INTRO_LIST,
-)
 from bics_bot.utils.file_manipulation import read_txt
 from bics_bot.utils.server_utilities import retrieve_server_ids
 
-from bics_bot.cogs.commands.birthday_cmd import is_valid_birthday, store_birthday
+from bics_bot.cogs.commands.birthday_cmd import (
+    is_valid_birthday,
+    store_birthday,
+)
 
 
 class IntroCmd(commands.Cog):
@@ -40,12 +40,19 @@ class IntroCmd(commands.Cog):
         ),
         year: str = nextcord.SlashOption(
             description="The year you will be in. In case you plan on joining the University choose **incoming**",
-            choices=ROLE_INTRO_LIST,
+            choices=[
+                "year-1",
+                "year-2",
+                "year-3",
+                "alumni",
+                "erasmus",
+                "incoming",
+            ],
         ),
         birthday: str = nextcord.SlashOption(
             description="(OPTIONAL) Your birthday in the format DD.MM.YYYY",
             required=False,
-            default=""
+            default="",
         ),
     ) -> None:
         """
@@ -59,9 +66,6 @@ class IntroCmd(commands.Cog):
             name: The first name of the student
             surname: The last name of the student.
             year: The promotion of the student.
-
-        Returns:
-            None
         """
 
         server_ids = retrieve_server_ids(interaction.guild)
@@ -92,9 +96,9 @@ class IntroCmd(commands.Cog):
                 ephemeral=True,
             )
             return
-        
+
         # Check if entered birthday is valid
-        if not is_valid_birthday(birthday):
+        if birthday != "" and not is_valid_birthday(birthday):
             msg = "You entered an invalid birthday. Please follow the format **DD.MM.YYYY**."
             await interaction.response.send_message(
                 embed=LoggerEmbed(msg, LogLevel.WARNING),
@@ -117,9 +121,9 @@ class IntroCmd(commands.Cog):
 
         # Storing the user's birthday in JSON file
         if len(birthday) > 0:
-            file_name = "../db/birthdays.json"
+            file_name = "./db/birthdays.json"
             store_birthday(file_name, birthday, user.id)
-        
+
         # Changing the nickname to Name + Surname initial
         await user.edit(nick=f"{name.capitalize()} {surname[0].upper()}")
         msg = f"""Welcome on board **{name.capitalize()} {surname.capitalize()}**!
