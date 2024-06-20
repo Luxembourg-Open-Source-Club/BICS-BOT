@@ -1,4 +1,4 @@
-from nextcord import Member
+from nextcord import Member, AllowedMentions
 from nextcord.ext import commands, tasks
 from nextcord import Message, File
 
@@ -29,7 +29,8 @@ class OnEvents(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message:Message):
-        if message.author.id == 186111829628551168:
+        r1 = random.randint(0,2499)
+        if r1 == 69:
             r = random.randint(0,2)
             monkey_map = {
                     0: "../resources/monkes/monkey-confused.png",
@@ -37,8 +38,10 @@ class OnEvents(commands.Cog):
                     2: "../resources/monkes/juice_monkey.jpg",
                     }
             await message.channel.send(
+                content="@everyone MONKEY TIME!!!! HAVE A MONKEY",
                 file=File(monkey_map[r]),
-                reference=message
+                reference=message,
+                allowed_mentions=AllowedMentions(everyone=True)
             )
 
     @commands.Cog.listener()
