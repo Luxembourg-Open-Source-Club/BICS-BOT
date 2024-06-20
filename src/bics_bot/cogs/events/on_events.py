@@ -1,5 +1,6 @@
 from nextcord import Member
 from nextcord.ext import commands, tasks
+from nextcord import Message, File
 
 from bics_bot.embeds.welcome_embed import WelcomeEmbed
 from bics_bot.utils.server_utilities import (
@@ -25,6 +26,20 @@ class OnEvents(commands.Cog):
         """
         print("Bot is fully deployed and is now online!")
         self.birthday_check.start()
+
+    @commands.Cog.listener()
+    async def on_message(self, message:Message):
+        if message.author.id == 186111829628551168:
+            r = random.randint(0,2)
+            monkey_map = {
+                    0: "../resources/monkes/monkey-confused.png",
+                    1: "../resources/monkes/ryan_gosling_monkey_drive.jpg",
+                    2: "../resources/monkes/juice_monkey.jpg",
+                    }
+            await message.channel.send(
+                file=File(monkey_map[r]),
+                reference=message
+            )
 
     @commands.Cog.listener()
     async def on_member_join(self, member: Member):
