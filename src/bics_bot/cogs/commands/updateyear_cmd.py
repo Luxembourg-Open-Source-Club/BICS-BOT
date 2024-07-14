@@ -63,14 +63,14 @@ class UpdateYearCmd(commands.Cog):
                     await member.remove_roles(role)
                     await member.add_roles(
                         interaction.guild.get_role(
-                            interaction.guild, get_role_id_by_name("Year 3")
+                            get_role_id_by_name(interaction.guild, "Year 3")
                         )
                     )
                 elif role.name == "Year 3":
                     await member.remove_roles(role)
                     await member.add_roles(
                         interaction.guild.get_role(
-                            interaction.guild, get_role_id_by_name("Alumni")
+                            get_role_id_by_name(interaction.guild, "Alumni")
                         )
                     )
 
