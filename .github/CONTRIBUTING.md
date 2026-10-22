@@ -22,7 +22,7 @@ In this guide you will get an overview of how to set up your development environ
 
 ## Pre-Requisites
 - Linux (recommended) or macOS are fine. Use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) if on Windows. 
-- Python3.9>=
+- Python 3.12+
 
 Check out our [technical guide](https://github.com/Luxembourg-Open-Source-Club/guides/tree/main) for help with setting up your OS, and learning about `git` and `bash` (Linux terminal) if you are unfamiliar with these software.
 
